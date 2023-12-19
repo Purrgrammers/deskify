@@ -5,7 +5,10 @@ type MapContextProviderProps = {
 };
 
 type MapContextProps = {
-    
+    rooms: Room[];
+    addRoom: (room: Room) => void;
+    desks: Desk[];
+    addDesk: (desk: Desk) => void;
 };
 
 type Room = {
@@ -21,13 +24,16 @@ type Desk = {
     y: number;
     length: number;
     width: number;
-    name: string
 }
 
-export const MapContext = createContext<MapContextProps>({});
+export const MapContext = createContext<MapContextProps>({
+    rooms: [],
+    addRoom: () => {},
+    desks: [],
+    addDesk: () => {}
+});
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
-
     const [rooms, setRooms] = useState<Room[]>([])
     const [desks, setDesks] = useState<Desk[]>([])
 
