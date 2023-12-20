@@ -1,9 +1,13 @@
-import BookingMap from "@/components/BookingMap"
+import dynamic from "next/dynamic";
+
+const BookingCanvas = dynamic(() => import('@/components/BookingCanvas'), {
+  ssr: false,
+});
 
 const BookingPage = () => {
   return (
     <div id="bookingWrapper" className="h-screen"> 
-    <BookingMap></BookingMap>
+    <BookingCanvas></BookingCanvas>
     </div>
   )
 }

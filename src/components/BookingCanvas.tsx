@@ -1,8 +1,9 @@
 "use client";
 
-import { Desk, MapContext, Room } from "@/contexts/MapContext";
+import { Desk, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Layer, Path, Rect, Stage } from "react-konva";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -45,59 +46,54 @@ const BookingMap = () => {
       }
     };
     getMapData();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const container = document.querySelector("#bookingWrapper") as HTMLDivElement;
+
   return (
     <>
-      <div
+      <Stage
+        width={container.offsetWidth}
+        height={container.offsetHeight}
+        name="stage"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100%",
           backgroundPositionY: 120,
         }}
-        className="h-screen w-screen"
       >
-        {rooms.map((room) => (
-          <div
-            key={room.id}
-            className="border border-2 border-black border-solid absolute"
-            style={{
-              left: `${room.x}px`,
-              top: `${room.y}px`,
-              height: "50px",
-              width: "50px",
-              transform: `scaleX(${room.scaleX}) scaleY(${room.scaleY}`,
-            }}
-          ></div>
-        ))}
-        {desks.map((desk) => (
-          <svg
-            key={desk.id}
-            style={{
-                left: `${desk.x}px`,
-                top: `${desk.y}px`,
-                height: "50px",
-                width: "50px",
-                transform: `scaleX(${desk.scaleX}) scaleY(${desk.scaleY}`,
-              }}
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="absolute"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
+        <Layer>
+          {rooms.map((room) => (
+            <Rect
+              key={`room-${room.id}`}
+              name="room"
+              width={room.width}
+              height={room.height}
+              scaleX={room.scaleX}
+              scaleY={room.scaleY}
+              x={room.x}
+              y={room.y}
+              stroke="black"
             />
-          </svg>
-        ))}
-      </div>
+          ))}
+          {desks.map((desk) => (
+            <Path
+              key={`desk-${desk.id}`}
+              name="desk"
+              data="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
+              width={desk.width}
+              height={desk.height}
+              scaleX={desk.scaleX}
+              scaleY={desk.scaleY}
+              x={desk.x}
+              y={desk.y}
+              stroke="black"
+            />
+          ))}
+        </Layer>
+      </Stage>
     </>
   );
 };
