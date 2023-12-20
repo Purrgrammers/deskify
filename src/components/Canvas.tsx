@@ -1,62 +1,91 @@
 "use client";
 import { KonvaEventObject } from "konva/lib/Node";
-import { DragEvent, useRef } from "react";
-import { useState } from "react";
-import { Stage, Layer, Rect, Transformer } from "react-konva";
+import { Shape, ShapeConfig } from "konva/lib/Shape";
+import { useEffect, useRef, useState } from "react";
+import { Stage, Layer, Rect, Transformer, Path } from "react-konva";
 
 const Canvas = () => {
-  const [rooms, setRooms] = useState([{ id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1},
-    { id: 2, x: 376.9999999999998, y: 165.99999999999983, width: 50, height: 50, scaleX: 3.360000000000005, scaleY: 3.2200000000000037}]);
-  const [desks, setDesks] = useState([{ id: 1, x: 50, y: 50 }]);
+  const [rooms, setRooms] = useState([
+    { id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
+  ]);
+  const [desks, setDesks] = useState([
+    { id: 1, x: 120, y: 50, width: 100, height: 100, scaleX: 1, scaleY: 1 },
+  ]);
+  const [focus, setFocus] = useState<Shape<ShapeConfig> | null>(null);
 
   const trRef = useRef(null);
 
-  const handleDragged = (e: KonvaEventObject<DragEvent>, id: number) => {
+  useEffect(() => {
+    if (focus) {
+      // @ts-expect-error just let me do it
+      trRef.current?.nodes([focus]);
+      // @ts-expect-error just let me do it
+      trRef.current?.getLayer().batchDraw();
+    }
+  }, [focus]);
+
+  const handleDraggedRoom = (target: Shape<ShapeConfig>, id: number) => {
     const draggedElementIndex = rooms.findIndex((room) => room.id === id);
     rooms[draggedElementIndex] = {
       ...rooms[draggedElementIndex],
-      x: e.target.x(),
-      y: e.target.y(),
+      x: target.x(),
+      y: target.y(),
     };
-    console.log(rooms[draggedElementIndex]);
   };
 
-  const handleTransform = (e: KonvaEventObject<Event>, id: number) => {
-    console.log(e.target.attrs)
+  const handleTransformRoom = (target: Shape<ShapeConfig>, id: number) => {
     const transformedElementIndex = rooms.findIndex((room) => room.id === id);
     rooms[transformedElementIndex] = {
       ...rooms[transformedElementIndex],
-      scaleX: e.target.attrs.scaleX,
-      scaleY: e.target.attrs.scaleY,
-      x: e.target.attrs.x,
-      y: e.target.attrs.y
+      scaleX: target.attrs.scaleX,
+      scaleY: target.attrs.scaleY,
+      x: target.attrs.x,
+      y: target.attrs.y,
     };
+  };
 
+  const handleDraggedDesk = (target: Shape<ShapeConfig>, id: number) => {
+    const draggedElementIndex = desks.findIndex((desk) => desk.id === id);
+    desks[draggedElementIndex] = {
+      ...desks[draggedElementIndex],
+      x: target.x(),
+      y: target.y(),
+    };
+  };
+
+  const handleTransformDesk = (target: Shape<ShapeConfig>, id: number) => {
+    const transformedElementIndex = desks.findIndex((desk) => desk.id === id);
+    desks[transformedElementIndex] = {
+      ...desks[transformedElementIndex],
+      scaleX: target.attrs.scaleX,
+      scaleY: target.attrs.scaleY,
+      x: target.attrs.x,
+      y: target.attrs.y,
+    };
   };
 
   const handleFocus = (e: KonvaEventObject<MouseEvent>) => {
-    // @ts-expect-error just let me do it
-    trRef.current?.nodes([e.target]);
-    // @ts-expect-error just let me do it
-    trRef.current?.getLayer().batchDraw();
+    console.log(e.target);
+    if (e.target.attrs.name === "stage") {
+      setFocus(null);
+    } else {
+      setFocus(e.target as Shape<ShapeConfig>);
+    }
   };
-  
-  const handleBlur = (e: KonvaEventObject<MouseEvent>) => {
-    console.log(e.target)
-  }
-
-
 
   return (
     <>
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
+        name="stage"
+        onClick={(e) => handleFocus(e)}
       >
         <Layer>
           {rooms.map((room) => (
             <Rect
               key={room.id}
+              name="room"
               width={room.width}
               height={room.height}
               scaleX={room.scaleX}
@@ -65,16 +94,64 @@ const Canvas = () => {
               y={room.y}
               stroke="black"
               draggable
-              onClick={(e) => handleFocus(e)}
               onDragStart={() => {
-                setRooms([...rooms, { id: rooms.length + 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 }]);
+                setRooms([
+                  ...rooms,
+                  {
+                    id: rooms.length + 1,
+                    x: 50,
+                    y: 50,
+                    width: 50,
+                    height: 50,
+                    scaleX: 1,
+                    scaleY: 1,
+                  },
+                ]);
               }}
               onDragEnd={(e) => {
-                handleDragged(e, room.id);
+                handleDraggedRoom(e.target as Shape<ShapeConfig>, room.id);
               }}
-              onTransformEnd={(e) => handleTransform(e, room.id)}
+              onTransformEnd={(e) =>
+                handleTransformRoom(e.target as Shape<ShapeConfig>, room.id)
+              }
             />
           ))}
+          {desks.map((desk) => (
+            <Path
+              key={desk.id}
+              name="desk"
+              data="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
+              width={desk.width}
+              height={desk.height}
+              scaleX={desk.scaleX}
+              scaleY={desk.scaleY}
+              x={desk.x}
+              y={desk.y}
+              stroke="black"
+              draggable
+              onDragStart={() => {
+                setDesks([
+                  ...desks,
+                  {
+                    id: desks.length + 1,
+                    x: 120,
+                    y: 50,
+                    width: 50,
+                    height: 50,
+                    scaleX: 1,
+                    scaleY: 1,
+                  },
+                ]);
+              }}
+              onDragEnd={(e) => {
+                handleDraggedDesk(e.target as Shape<ShapeConfig>, desk.id);
+              }}
+              onTransformEnd={(e) =>
+                handleTransformDesk(e.target as Shape<ShapeConfig>, desk.id)
+              }
+            />
+          ))}
+          {focus && (
             <Transformer
               ref={trRef}
               rotateEnabled={false}
@@ -87,6 +164,7 @@ const Canvas = () => {
               flipEnabled={false}
               ignoreStroke={true}
             />
+          )}
         </Layer>
       </Stage>
     </>
