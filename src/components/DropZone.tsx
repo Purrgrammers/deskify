@@ -3,6 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import toast, { Toaster } from "react-hot-toast";
 
 const fileTypes = ["JPG", "JPEG", "PNG"];
 
@@ -10,6 +12,9 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const uploadSuccess = () => toast("Your picture has been uploaded.");
+const uploadFail = () => toast("Something went wrong, try again.");
 
 const DropZone = () => {
   const [file, setFile] = useState<File>();
@@ -28,9 +33,9 @@ const DropZone = () => {
       const { data, error } = await supabase.storage
         .from("MapImages")
         .upload(filePath, file);
-
       if (data) {
         console.log("File uploaded to Supabase:", data);
+        setPreviewUrl("");
       } else {
         console.error("Upload error:", error);
       }
@@ -43,10 +48,17 @@ const DropZone = () => {
         name="picture"
         types={fileTypes}
       />
+
       {previewUrl && (
-        <Image src={previewUrl} alt="Preview" width={150} height={150} />
+        <div className="flex justify-center mt-4">
+          <Image src={previewUrl} alt="Preview" width={250} height={250} />
+        </div>
       )}
-      <button onClick={handleSubmit}>Submit</button>
+      <div className="flex justify-end mt-5">
+        <div>
+          <Button onClick={handleSubmit}>Submit</Button>
+        </div>
+      </div>
     </>
   );
 };
