@@ -10,37 +10,61 @@ const fileTypes = ["JPG", "JPEG", "PNG"];
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
-
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+//Toasters
 const uploadSuccess = () => toast.success("Your picture has been uploaded.");
 const missingFile = () => toast.error("You need to upload a file.");
 const uploadFail = (error: Error) =>
   toast.error(`${error.message}. Try another picture.`);
+
+const uploadImgToDb = async (userId: number, url: string) => {
+  const { data, error } = await supabase
+    .from("Maps")
+    .insert({ userId, img: url })
+    .select("id");
+  //returns created mapId.
+  return data;
+};
 
 const DropZone = () => {
   const [file, setFile] = useState<File>();
   const [previewUrl, setPreviewUrl] = useState("");
 
   const handleUpload = async (file: File) => {
-    // Create a local URL for preview
+    // Create a local URL only for preview
     const fileUrl = URL.createObjectURL(file);
     setPreviewUrl(fileUrl);
+    // Saves file to state
     setFile(file); // Save file for later submission
   };
 
   const handleSubmit = async () => {
+    // Show toster when user try to submit without picture
     if (!file) {
       missingFile();
       return;
     }
     const filePath = `uploads/${file.name}`;
     try {
-      const { data, error } = await supabase.storage
+      // Uploads picture to bucket
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from("MapImages")
         .upload(filePath, file);
-      if (error) throw error;
+      if (uploadError) throw uploadError;
+
+      // Gets public URL of the file from bucket
+      const { data } = supabase.storage
+        .from("MapImages")
+        .getPublicUrl(filePath);
+      const publicUrl = data.publicUrl;
+      console.log("Public URL:", publicUrl);
+
+      // Uploads userId and public URL to database and saves created mapId
+      const mapId = await uploadImgToDb(1, publicUrl);
       console.log("File uploaded to Supabase:", data);
+      console.log("This is id of created map:", mapId);
+
       setPreviewUrl("");
       uploadSuccess();
     } catch (error) {
