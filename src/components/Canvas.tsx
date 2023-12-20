@@ -187,7 +187,7 @@ const Canvas = () => {
               anchorStroke={"#869ee3"}
               anchorCornerRadius={15}
               anchorStrokeWidth={1}
-              anchorSize={10}
+              anchorSize={7}
               keepRatio={false}
               flipEnabled={false}
               ignoreStroke={true}

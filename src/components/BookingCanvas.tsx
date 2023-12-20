@@ -5,6 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { useEffect, useState } from "react";
 import { Layer, Path, Rect, Stage } from "react-konva";
+import BookingDetails from "./BookingDetails";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -106,6 +107,7 @@ const BookingMap = () => {
           ))}
         </Layer>
       </Stage>
+      <BookingDetails type="desk" id={1} available={true}/>
     </>
   );
 };
