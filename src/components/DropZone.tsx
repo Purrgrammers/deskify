@@ -5,6 +5,7 @@ import { FileUploader } from "react-drag-drop-files";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const fileTypes = ["JPG", "JPEG", "PNG"];
 
@@ -30,6 +31,7 @@ const uploadImgToDb = async (userId: number, url: string) => {
 const DropZone = () => {
   const [file, setFile] = useState<File>();
   const [previewUrl, setPreviewUrl] = useState("");
+  const router = useRouter()
 
   const handleUpload = async (file: File) => {
     // Create a local URL only for preview

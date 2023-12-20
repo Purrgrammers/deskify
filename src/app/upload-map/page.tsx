@@ -1,6 +1,10 @@
+'use client'
+
 import DropZone from "@/components/DropZone";
+import { MapContextProvider } from "@/contexts/MapContext";
 const Upload = () => {
   return (
+    <MapContextProvider>
     <div className="flex flex-col">
       <h1 className="text-xl m-4">Upload your Office floor plan</h1>
       <div className="mx-4 my-2 text-center">
@@ -14,6 +18,7 @@ const Upload = () => {
         <DropZone />
       </div>
     </div>
+    </MapContextProvider>
   );
 };
 
