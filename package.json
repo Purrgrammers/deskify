@@ -20,6 +20,7 @@
     "react-dom": "^18",
     "react-drag-drop-files": "^2.3.10",
     "react-dropzone": "^14.2.3",
+    "react-hot-toast": "^2.4.1",
     "react-konva": "^18.2.10",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7"
