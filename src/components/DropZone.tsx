@@ -14,6 +14,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const uploadSuccess = () => toast.success("Your picture has been uploaded.");
+const missingFile = () => toast.error("You need to upload a file.");
 const uploadFail = () => toast.error("Something went wrong, try again.");
 
 const DropZone = () => {
@@ -28,19 +29,21 @@ const DropZone = () => {
   };
 
   const handleSubmit = async () => {
-    if (file) {
-      const filePath = `uploads/${file.name}`;
+    if (!file) {
+      missingFile();
+      return;
+    }
+    const filePath = `uploads/${file.name}`;
+    try {
       const { data, error } = await supabase.storage
         .from("MapImages")
         .upload(filePath, file);
-      if (data) {
-        console.log("File uploaded to Supabase:", data);
-        setPreviewUrl("");
-        uploadSuccess();
-      } else {
-        console.error("Upload error:", error);
-        uploadFail();
-      }
+      if (error) throw error;
+      console.log("File uploaded to Supabase:", data);
+      setPreviewUrl("");
+      uploadSuccess();
+    } catch {
+      uploadFail();
     }
   };
   return (
