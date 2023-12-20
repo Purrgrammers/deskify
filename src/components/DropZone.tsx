@@ -13,8 +13,8 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const uploadSuccess = () => toast("Your picture has been uploaded.");
-const uploadFail = () => toast("Something went wrong, try again.");
+const uploadSuccess = () => toast.success("Your picture has been uploaded.");
+const uploadFail = () => toast.error("Something went wrong, try again.");
 
 const DropZone = () => {
   const [file, setFile] = useState<File>();
@@ -36,13 +36,35 @@ const DropZone = () => {
       if (data) {
         console.log("File uploaded to Supabase:", data);
         setPreviewUrl("");
+        uploadSuccess();
       } else {
         console.error("Upload error:", error);
+        uploadFail();
       }
     }
   };
   return (
     <>
+      <Toaster
+        containerStyle={{
+          top: 20,
+          left: 20,
+          bottom: 20,
+          right: 20,
+        }}
+        toastOptions={{
+          success: {
+            style: {
+              background: "#a3cfac",
+            },
+          },
+          error: {
+            style: {
+              background: "#f6b2b5",
+            },
+          },
+        }}
+      />
       <FileUploader
         handleChange={(file: File) => handleUpload(file)}
         name="picture"
