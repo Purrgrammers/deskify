@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import success from "../../success.png";
+import success from "../../successcopy.png";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
