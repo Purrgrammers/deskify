@@ -1,12 +1,12 @@
 import DropZone from "@/components/DropZone";
 const Upload = () => {
   return (
-    <>
-      <h1 className="text-xl mt-4">Uppload your Office floor plan</h1>
-      <div className="m-3 mt-7">
+    <div className="flex flex-col">
+      <h1 className="text-xl m-4">Uppload your Office floor plan</h1>
+      <div className="m-4 mt-7">
         <DropZone />
       </div>
-    </>
+    </div>
   );
 };
 

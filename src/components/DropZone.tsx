@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 const fileTypes = ["JPG", "JPEG", "PNG"];
 
@@ -44,9 +45,13 @@ const DropZone = () => {
         types={fileTypes}
       />
       {previewUrl && (
-        <Image src={previewUrl} alt="Preview" width={150} height={150} />
+        <Image src={previewUrl} alt="Preview" width={250} height={250} />
       )}
-      <button onClick={handleSubmit}>Submit</button>
+      <div className="flex justify-end mt-5">
+        <div>
+          <Button onClick={handleSubmit}>Button</Button>
+        </div>
+      </div>
     </>
   );
 };
