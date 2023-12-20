@@ -2,7 +2,7 @@ import DropZone from "@/components/DropZone";
 const Upload = () => {
   return (
     <div className="flex flex-col">
-      <h1 className="text-xl m-4">Uppload your Office floor plan</h1>
+      <h1 className="text-xl m-4">Upload your Office floor plan</h1>
       <div className="mx-4 my-2 text-center">
         <p>
           Upload your floor plan image for an effortless mapping of your office
