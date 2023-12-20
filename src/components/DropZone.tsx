@@ -44,12 +44,15 @@ const DropZone = () => {
         name="picture"
         types={fileTypes}
       />
+
       {previewUrl && (
-        <Image src={previewUrl} alt="Preview" width={250} height={250} />
+        <div className="flex justify-center mt-4">
+          <Image src={previewUrl} alt="Preview" width={250} height={250} />
+        </div>
       )}
       <div className="flex justify-end mt-5">
         <div>
-          <Button onClick={handleSubmit}>Button</Button>
+          <Button onClick={handleSubmit}>Submit</Button>
         </div>
       </div>
     </>
