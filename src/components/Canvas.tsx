@@ -1,17 +1,41 @@
 "use client";
 import { MapContext } from "@/contexts/MapContext";
+import { createClient } from "@supabase/supabase-js";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Stage, Layer, Rect, Transformer, Path } from "react-konva";
+import { useStrictMode } from "react-konva";
+import { Button } from "./ui/button";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const Canvas = () => {
   const [focus, setFocus] = useState<Shape<ShapeConfig> | null>(null);
-
+  const [backgroundImage, setBackgroundImage] = useState("");
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
+  useStrictMode(true);
+
   const trRef = useRef(null);
+
+  useEffect(() => {
+    const getImage = async () => {
+      const { data, error } = await supabase
+        .from("Maps")
+        .select("img")
+        .eq("id", "1");
+      if (data) {
+        console.log(data[0].img);
+        setBackgroundImage(data[0].img);
+      }
+    };
+    getImage();
+  }, []);
 
   useEffect(() => {
     if (focus) {
@@ -29,6 +53,7 @@ const Canvas = () => {
       x: target.x(),
       y: target.y(),
     };
+    updateRooms(rooms);
   };
 
   const handleTransformRoom = (target: Shape<ShapeConfig>, id: number) => {
@@ -40,6 +65,7 @@ const Canvas = () => {
       x: target.attrs.x,
       y: target.attrs.y,
     };
+    updateRooms(rooms);
   };
 
   const handleDraggedDesk = (target: Shape<ShapeConfig>, id: number) => {
@@ -49,6 +75,7 @@ const Canvas = () => {
       x: target.x(),
       y: target.y(),
     };
+    updateDesks(desks);
   };
 
   const handleTransformDesk = (target: Shape<ShapeConfig>, id: number) => {
@@ -60,6 +87,7 @@ const Canvas = () => {
       x: target.attrs.x,
       y: target.attrs.y,
     };
+    updateDesks(desks);
   };
 
   const handleFocus = (e: KonvaEventObject<MouseEvent>) => {
@@ -71,13 +99,36 @@ const Canvas = () => {
     }
   };
 
+  const handleCreateMap = async() => {
+    const { error: roomError } = await supabase
+    .from('Rooms')
+    .insert(rooms)
+    if(roomError) {
+      console.log('roomerror', roomError)
+    }
+    const { error: deskError } = await supabase
+    .from('Desks')
+    .insert(desks)
+    if(deskError) {
+      console.log('deskerror', deskError)
+    }
+  }
+
+  const container = document.querySelector("#canvas-wrapper") as HTMLDivElement;
+
   return (
     <>
       <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={container.offsetWidth}
+        height={container.offsetHeight}
         name="stage"
         onClick={(e) => handleFocus(e)}
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100%",
+          backgroundPositionY: 120,
+        }}
       >
         <Layer>
           {rooms.map((room) => (
@@ -139,6 +190,10 @@ const Canvas = () => {
           )}
         </Layer>
       </Stage>
+      <div className="m-4 flex gap-4 justify-end">
+        <Button variant="secondary">Back</Button>
+        <Button onClick={handleCreateMap}>Create map</Button>
+      </div>
     </>
   );
 };

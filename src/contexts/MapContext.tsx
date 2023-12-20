@@ -11,8 +11,6 @@ type MapContextProps = {
   desks: Desk[];
   updateDesks: (desks: Desk[]) => void;
   addDesk: () => void;
-  image: string;
-  updateImage: (url: string) => void;
 };
 
 type Room = {
@@ -24,6 +22,7 @@ type Room = {
   scaleX: number;
   scaleY: number;
   name?: string;
+  mapId: number
 };
 
 type Desk = {
@@ -34,6 +33,7 @@ type Desk = {
   width: number;
   scaleX: number;
   scaleY: number;
+  mapId: number;
 };
 
 export const MapContext = createContext<MapContextProps>({
@@ -43,18 +43,15 @@ export const MapContext = createContext<MapContextProps>({
   desks: [],
   updateDesks: () => {},
   addDesk: () => {},
-  image: "",
-  updateImage: () => {},
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
   const [rooms, setRooms] = useState<Room[]>([
-    { id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
+    { id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1, mapId: 1 },
   ]);
   const [desks, setDesks] = useState<Desk[]>([
-    { id: 1, x: 120, y: 50, width: 100, height: 100, scaleX: 1, scaleY: 1 },
+    { id: 1, x: 120, y: 50, width: 100, height: 100, scaleX: 1, scaleY: 1, mapId: 1 },
   ]);
-  const [image, setImage] = useState("hello");
 
   const updateRooms = (rooms: Room[]) => {
     setRooms(rooms);
@@ -75,6 +72,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         height: 50,
         scaleX: 1,
         scaleY: 1,
+        mapId: 1
       },
     ]);
   };
@@ -90,13 +88,9 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         height: 50,
         scaleX: 1,
         scaleY: 1,
+        mapId: 1
       },
     ]);
-  };
-
-  const updateImage = (url: string) => {
-    console.log("context", url);
-    setImage("url");
   };
 
   return (
@@ -108,8 +102,6 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         desks,
         updateDesks,
         addDesk,
-        image,
-        updateImage,
       }}
     >
       {props.children}

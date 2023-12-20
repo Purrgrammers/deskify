@@ -10,14 +10,15 @@ const Canvas = dynamic(() => import('@/components/Canvas'), {
 
 
 const CreateMap = ()=> {
+  
   return (
     <>
     <MapContextProvider>
     <h1 className='text-2xl'>Create your office map</h1>
     <p>Drag and drop bookable rooms and desks onto your map</p>
+    <div id='canvas-wrapper' className='border-2 border-solid border-black h-screen'>
     <Canvas></Canvas>
-    <Button variant="secondary">Back</Button>
-    <Button>Create map</Button>
+    </div>
     </MapContextProvider>
     </>
   );
