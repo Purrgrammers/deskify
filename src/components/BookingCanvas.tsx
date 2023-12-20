@@ -2,6 +2,7 @@
 
 import { Desk, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
+import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { useEffect, useState } from "react";
 import { Layer, Path, Rect, Stage } from "react-konva";
 
@@ -36,7 +37,7 @@ const BookingMap = () => {
         .select("img")
         .eq("id", "1");
       if (imgError) {
-        console.log(deskError);
+        console.log(imgError);
       }
       setRooms(roomData as Room[]);
       setDesks(deskData as Desk[]);
@@ -50,6 +51,14 @@ const BookingMap = () => {
   }, []);
 
   const container = document.querySelector("#bookingWrapper") as HTMLDivElement;
+
+  const handleBookRoom = (target: Shape<ShapeConfig>, id: number) => {
+    console.log(target.attrs, id)
+  }
+
+  const handleBookDesk = (target: Shape<ShapeConfig>, id: number) => {
+    console.log(target.attrs, id)
+  }
 
   return (
     <>
@@ -76,6 +85,7 @@ const BookingMap = () => {
               x={room.x}
               y={room.y}
               stroke="black"
+              onClick={(e) => handleBookRoom(e.target as Shape<ShapeConfig>, room.id)}
             />
           ))}
           {desks.map((desk) => (
@@ -90,6 +100,8 @@ const BookingMap = () => {
               x={desk.x}
               y={desk.y}
               stroke="black"
+              fill="white"
+              onClick={(e) => handleBookDesk(e.target as Shape<ShapeConfig>, desk.id)}
             />
           ))}
         </Layer>

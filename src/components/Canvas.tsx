@@ -168,6 +168,7 @@ const Canvas = () => {
               x={desk.x}
               y={desk.y}
               stroke="black"
+              fill="white"
               draggable
               onDragStart={() => addDesk()}
               onDragEnd={(e) => {
