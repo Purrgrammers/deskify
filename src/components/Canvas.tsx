@@ -118,7 +118,7 @@ const Canvas = () => {
     }
   }
 
-  const container = document.querySelector("#canvas-wrapper") as HTMLDivElement;
+  const container = document.querySelector("#canvasWrapper") as HTMLDivElement;
 
   return (
     <>
