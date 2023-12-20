@@ -97,6 +97,10 @@ const Canvas = () => {
     } else {
       setFocus(e.target as Shape<ShapeConfig>);
     }
+
+    if (e.target.attrs.name === 'room') {
+      
+    }
   };
 
   const handleCreateMap = async() => {

@@ -16,7 +16,7 @@ const CreateMap = ()=> {
     <MapContextProvider>
     <h1 className='text-2xl'>Create your office map</h1>
     <p>Drag and drop bookable rooms and desks onto your map</p>
-    <div id='canvas-wrapper' className='border-2 border-solid border-black h-screen'>
+    <div id='canvas-wrapper' className='h-screen'>
     <Canvas></Canvas>
     </div>
     </MapContextProvider>
