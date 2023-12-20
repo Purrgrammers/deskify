@@ -81,7 +81,8 @@ const DropZone = () => {
         </div>
       )}
       <div className="flex justify-end mt-5">
-        <div>
+        <div className="flex gap-2">
+          <Button variant="outline">Skip</Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </div>
       </div>
