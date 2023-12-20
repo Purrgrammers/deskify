@@ -15,7 +15,8 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const uploadSuccess = () => toast.success("Your picture has been uploaded.");
 const missingFile = () => toast.error("You need to upload a file.");
-const uploadFail = () => toast.error("Something went wrong, try again.");
+const uploadFail = (error: Error) =>
+  toast.error(`${error.message}. Try another picture.`);
 
 const DropZone = () => {
   const [file, setFile] = useState<File>();
@@ -42,8 +43,8 @@ const DropZone = () => {
       console.log("File uploaded to Supabase:", data);
       setPreviewUrl("");
       uploadSuccess();
-    } catch {
-      uploadFail();
+    } catch (error) {
+      uploadFail(error as Error);
     }
   };
   return (
