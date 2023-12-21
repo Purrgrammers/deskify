@@ -1,4 +1,11 @@
+import { createClient } from "@supabase/supabase-js";
 import { createContext, useState } from "react";
+import toast from "react-hot-toast";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 type MapContextProviderProps = {
   children: React.ReactNode;
@@ -11,6 +18,12 @@ type MapContextProps = {
   desks: Desk[];
   updateDesks: (desks: Desk[]) => void;
   addDesk: () => void;
+  bookings: Booking[]
+  updateBookings: (bookingData: Booking[]) => void
+  bookRoom: (id: number) => void
+  bookDesk: (id: number) => void
+  date: Date | undefined
+  updateDate: (date: Date) => void
 };
 
 export type Room = {
@@ -36,6 +49,14 @@ export type Desk = {
   mapId: number;
 };
 
+export type Booking = {
+  id: number;
+  userId: number;
+  deskId?: number;
+  roomId?: number;
+  date: Date
+};
+
 export const MapContext = createContext<MapContextProps>({
   rooms: [],
   updateRooms: () => {},
@@ -43,6 +64,12 @@ export const MapContext = createContext<MapContextProps>({
   desks: [],
   updateDesks: () => {},
   addDesk: () => {},
+  bookings: [],
+  updateBookings: () => {},
+  bookRoom: () => {},
+  bookDesk: () => {},
+  date: undefined,
+  updateDate: () => {}
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
@@ -52,6 +79,40 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [desks, setDesks] = useState<Desk[]>([
     { id: 1, x: 120, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1, mapId: 1 },
   ]);
+  const [date, setDate] = useState<Date | undefined>();
+  const [bookings, setBookings] = useState<Booking[]>([]);
+
+  const bookRoom = async(id: number) => {
+    const { data, error } = await supabase
+        .from("Bookings")
+        .insert({userId: 1, roomId: id, date: date?.toLocaleDateString("en-CA")})
+      if(error) {
+        toast.error("Error booking room");
+        console.log(error)
+      } else {
+        toast.success("Your room has been booked");
+      }
+  }
+
+  const bookDesk = async(id: number) => {
+    const { data, error } = await supabase
+        .from("Bookings")
+        .insert({userId: 1, deskId: id, date: date})
+      if(error) {
+        toast.error("Error booking desk");
+        console.log(error)
+      } else {
+        toast.success("Your desk has been booked");
+      }
+  }
+
+  const updateBookings = (bookingData: Booking[]) => {
+    setBookings(bookingData);
+  };
+
+  const updateDate = (date: Date) => {
+    setDate(date);
+  };
 
   const updateRooms = (rooms: Room[]) => {
     setRooms(rooms);
@@ -102,6 +163,12 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         desks,
         updateDesks,
         addDesk,
+        bookings,
+        updateBookings,
+        bookRoom,
+        bookDesk,
+        date,
+        updateDate
       }}
     >
       {props.children}

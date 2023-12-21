@@ -1,17 +1,33 @@
+import { useContext } from "react";
 import { Button } from "./ui/button";
+import { MapContext } from "@/contexts/MapContext";
 
 type BookingDetailsProps = {
-    type: string;
-    available: boolean,
-    id: number
+    element: {
+      type: string;
+      booked: boolean,
+      id: number
+    }
 }
 
 
-const BookingDetails = ({type, id, available}: BookingDetailsProps) => {
+const BookingDetails = ({element}: BookingDetailsProps) => {
+
+  const { bookRoom, bookDesk } = useContext(MapContext)
+
+  const handleBooking = () => {
+    if(element.type === 'Room') {
+      bookRoom(element.id)
+    }
+    if(element.type === 'Desk') {
+      bookDesk(element.id)
+    }
+  }
+
   return (
     <div className="flex gap-6 items-center pl-10 pb-10">
-        <p>{`${type} ${id}: `} <span className={available? 'text-green-600': 'text-red-600'}>{available? 'Available': 'Booked'}</span></p>
-        <Button size='xs'>Book</Button>
+        <p>{`${element.type} ${element.id}: `} <span className={element.booked? 'text-red-600': 'text-green-600'}>{element.booked? 'Booked': 'Available'}</span></p>
+        <Button disabled={element.booked? true: false} size='xs' onClick={handleBooking}>Book</Button>
     </div>
   )
 }
