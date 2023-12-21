@@ -107,9 +107,15 @@ const Canvas = ({mapId}: {mapId: number}) => {
   };
 
   const handleCreateMap = async() => {
-    const roomData = rooms.map(({id, ...keepAttrs}) => keepAttrs)
-    const deskData = desks.map(({id, ...keepAttrs}) => keepAttrs)
+    const roomData = rooms
+    .filter((room) => room.y !== 50)
+    .map(({id, ...keepAttrs}) => keepAttrs)
+
+    const deskData = desks
+    .filter((desk) => desk.y !== 50)
+    .map(({id, ...keepAttrs}) => keepAttrs)
     console.log(roomData, deskData)
+
     const { error: roomError } = await supabase
     .from('Rooms')
     .insert(roomData)
