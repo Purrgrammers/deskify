@@ -16,7 +16,7 @@ import { MapContext } from "@/contexts/MapContext";
 
 const DatePicker = () => {
   const [date, setDate] = useState<Date>();
-  const { updateBookings } = useContext(MapContext);
+  const { updateBookings, updateDate } = useContext(MapContext);
 
   useEffect(() => {
     const getBookings = async () => {
@@ -24,6 +24,7 @@ const DatePicker = () => {
         return;
       }
       const selectedDate = date?.toLocaleDateString("en-CA");
+      updateDate(date)
       const { data, error } = await supabase
         .from("Bookings")
         .select()

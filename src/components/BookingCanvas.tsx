@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { Layer, Path, Rect, Stage } from "react-konva";
 import BookingDetails from "./BookingDetails";
 import DatePicker from "./DatePicker";
+import { KonvaEventObject } from "konva/lib/Node";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -26,7 +27,7 @@ const BookingMap = () => {
   const [bookedRooms, setBookedRooms] = useState<(number | undefined)[]>([]);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [focusElement, setFocusElement] = useState<FocusElement | undefined>()
-  const { bookings } = useContext(MapContext)
+  const { bookings, date } = useContext(MapContext)
 
   useEffect(() => {
     const getMapData = async () => {
@@ -66,30 +67,33 @@ const BookingMap = () => {
     const filteredDesks = bookings
     .filter(booking => booking.deskId)
     .map(booking => booking.deskId); 
-    console.log(filteredDesks) 
     setBookedDesks(filteredDesks)
 
     const filteredRooms = bookings
     .filter(booking => booking.roomId)
     .map(booking => booking.roomId); 
-    console.log(filteredRooms) 
     setBookedRooms(filteredRooms) 
   }, [bookings])
 
   const container = document.querySelector("#bookingWrapper") as HTMLDivElement;
 
-  const handleBookRoom = (target: Shape<ShapeConfig>, id: number) => {
+  const handleClickRoom = (target: Shape<ShapeConfig>, id: number) => {
     const booked = bookedRooms.includes(id)
     const type = target.attrs.name.replace(target.attrs.name[0], target.attrs.name[0].toUpperCase())
     setFocusElement({type, id, booked})
   }
 
-  const handleBookDesk = (target: Shape<ShapeConfig>, id: number) => {
+  const handleClickDesk = (target: Shape<ShapeConfig>, id: number) => {
     const booked = bookedDesks.includes(id)
     const type = target.attrs.name.replace(target.attrs.name[0], target.attrs.name[0].toUpperCase())
     setFocusElement({type, id, booked})
-
   }
+
+  const handleFocus = (e: KonvaEventObject<MouseEvent>) => {
+    if (e.target.attrs.name === "stage") {
+      setFocusElement(undefined);
+    }
+  };
 
   return (
     <>
@@ -100,6 +104,7 @@ const BookingMap = () => {
         width={container.offsetWidth}
         height={container.offsetHeight}
         name="stage"
+        onClick={(e) => handleFocus(e)}
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundRepeat: "no-repeat",
@@ -119,7 +124,7 @@ const BookingMap = () => {
               x={room.x}
               y={room.y}
               stroke={bookedRooms.includes(room.id)? "red": "green"}
-              onClick={(e) => handleBookRoom(e.target as Shape<ShapeConfig>, room.id)}
+              onClick={(e) => handleClickRoom(e.target as Shape<ShapeConfig>, room.id)}
             />
           ))}
           {desks.map((desk) => (
@@ -135,7 +140,7 @@ const BookingMap = () => {
               y={desk.y}
               stroke={bookedDesks.includes(desk.id)? "red": "green"}
               fill="white"
-              onClick={(e) => handleBookDesk(e.target as Shape<ShapeConfig>, desk.id)}
+              onClick={(e) => handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)}
             />
           ))}
         </Layer>
