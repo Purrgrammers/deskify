@@ -13,12 +13,19 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+type FocusElement = {
+  type: string;
+  booked: boolean,
+  id: number
+}
+
 const BookingMap = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
   const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
   const [bookedRooms, setBookedRooms] = useState<(number | undefined)[]>([]);
   const [backgroundImage, setBackgroundImage] = useState("");
+  const [focusElement, setFocusElement] = useState<FocusElement | undefined>()
   const { bookings } = useContext(MapContext)
 
   useEffect(() => {
@@ -72,11 +79,16 @@ const BookingMap = () => {
   const container = document.querySelector("#bookingWrapper") as HTMLDivElement;
 
   const handleBookRoom = (target: Shape<ShapeConfig>, id: number) => {
-    console.log(target.attrs, id)
+    const booked = bookedRooms.includes(id)
+    const type = target.attrs.name.replace(target.attrs.name[0], target.attrs.name[0].toUpperCase())
+    setFocusElement({type, id, booked})
   }
 
   const handleBookDesk = (target: Shape<ShapeConfig>, id: number) => {
-    console.log(target.attrs, id)
+    const booked = bookedDesks.includes(id)
+    const type = target.attrs.name.replace(target.attrs.name[0], target.attrs.name[0].toUpperCase())
+    setFocusElement({type, id, booked})
+
   }
 
   return (
@@ -128,7 +140,10 @@ const BookingMap = () => {
           ))}
         </Layer>
       </Stage>
-      <BookingDetails type="desk" id={1} available={true}/>
+      {focusElement && 
+        <BookingDetails element={focusElement}/>
+      }
+
     </>
   );
 };
