@@ -20,10 +20,11 @@ type BookingProps = {
     date: string;
     userId: number;
     deskId: number;
+    roomId: number;
   };
 };
 
-const MyBooking = ({ booking }: BookingProps) => {
+const Booking = ({ booking }: BookingProps) => {
   const handleClick = async () => {
     const { error } = await supabase
       .from("Bookings")
@@ -34,7 +35,9 @@ const MyBooking = ({ booking }: BookingProps) => {
     <>
       <TableRow>
         <TableCell className="font-medium">{booking.date}</TableCell>
-        <TableCell>{booking.deskId}</TableCell>
+        <TableCell>
+          {booking.deskId ? booking.deskId : booking.roomId}
+        </TableCell>
         <TableCell className="text-right w-[25px]" align="right">
           <Trash2 onClick={handleClick} className="trash-hover" />
         </TableCell>
@@ -43,4 +46,4 @@ const MyBooking = ({ booking }: BookingProps) => {
   );
 };
 
-export default MyBooking;
+export default Booking;
