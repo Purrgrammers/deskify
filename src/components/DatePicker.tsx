@@ -10,18 +10,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useContext, useEffect, useState } from "react";
+import { SetStateAction, useContext, useEffect, useState } from "react";
 import { supabase } from "./BookingCanvas";
 import { MapContext } from "@/contexts/MapContext";
+import { SelectSingleEventHandler } from "react-day-picker";
 
 const DatePicker = () => {
-  const [date, setDate] = useState<Date>();
+  const today = new Date()
+  const [date, setDate] = useState<Date>(today);
   const { updateBookings, updateDate } = useContext(MapContext);
 
   useEffect(() => {
     const getBookings = async () => {
       if (!date) {
-        return;
+        return
       }
       const selectedDate = date?.toLocaleDateString("en-CA");
       updateDate(date)
@@ -58,7 +60,7 @@ const DatePicker = () => {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={setDate as SelectSingleEventHandler}
           initialFocus
         />
       </PopoverContent>
