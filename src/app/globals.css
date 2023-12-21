@@ -80,3 +80,11 @@
   right: 10px; /* Adjust this value as needed */
   transform: translateX(-100%);
 }
+
+.trash-hover {
+  cursor: pointer; /* Changes the cursor to a pointer */
+}
+
+.trash-hover:hover {
+  color: rgb(242, 114, 114); /* Changes the color to red on hover */
+}
