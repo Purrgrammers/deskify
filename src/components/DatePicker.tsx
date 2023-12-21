@@ -1,20 +1,41 @@
-"use client"
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
- 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+"use client";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { useState } from "react"
- 
+} from "@/components/ui/popover";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
 const DatePicker = () => {
-  const [date, setDate] = useState<Date>()
- 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  const [date, setDate] = useState<Date>();
+
+  useEffect(() => {
+    const getBookings = async() => {
+      const selectedDate = date?.toLocaleDateString('en-CA')
+      const { data, error} = await supabase
+        .from("Bookings")
+        .select()
+        .eq("date", selectedDate);
+      if(error) {
+        console.log(error)
+      }
+      console.log(data)
+    }
+    getBookings()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date]);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -38,7 +59,7 @@ const DatePicker = () => {
         />
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};
 
-export default DatePicker
+export default DatePicker;
