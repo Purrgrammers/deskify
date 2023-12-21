@@ -43,23 +43,24 @@ const Bookings = () => {
   return (
     <>
       <h1 className="text-2xl my-6 mx-4">Bookings</h1>
-
-      <Table>
-        <TableCaption>A list of your booked desks and rooms.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[200px]">Date</TableHead>
-            <TableHead>Table</TableHead>
-            <TableHead className="text-right">Remove</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {bookings.map((booking) => (
-            // Pass each memory to the Memory component
-            <MyBooking key={booking.id} booking={booking} />
-          ))}
-        </TableBody>
-      </Table>
+      <div className="flex justify-center mx-4">
+        <Table className="mx-auto">
+          <TableCaption>A list of your booked desks and rooms.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[150px]">Date</TableHead>
+              <TableHead>Table</TableHead>
+              <TableHead className="pl-0">Remove</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {bookings.map((booking) => (
+              // Pass each memory to the Memory component
+              <MyBooking key={booking.id} booking={booking} />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </>
   );
 };
