@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Booking from "@/components/Booking";
+import { BookingProvider } from "@/contexts/BookingContext";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -41,49 +42,60 @@ const Bookings = () => {
     };
     fetchAllBookings();
   }, []);
+
+  const removeBookingFromState = (bookingId: string) => {
+    setBookings((currentBookings) =>
+      currentBookings.filter((b) => b.id !== bookingId)
+    );
+  };
   return (
     <>
-      <h1 className="text-2xl my-6 mx-4">Bookings</h1>
-      <div className="flex flex-col justify-center mx-4">
-        <h2>Your booked desks:</h2>
-        <Table className="mx-auto">
-          <TableCaption>A list of your booked desks.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[150px]">Date</TableHead>
-              <TableHead>Desk</TableHead>
-              <TableHead className="pl-0">Remove</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {bookings.map((booking) =>
-              // Pass each memory to the Memory component
-              booking.roomId ? (
-                <Booking key={booking.id} booking={booking} />
-              ) : null
-            )}
-          </TableBody>
-        </Table>
-        <h2>Your booked rooms:</h2>
-        <Table className="mx-auto">
-          <TableCaption>A list of your booked rooms.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[150px]">Date</TableHead>
-              <TableHead>Room</TableHead>
-              <TableHead className="pl-0">Remove</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {bookings.map((booking) =>
-              // Pass each memory to the Memory component
-              booking.deskId ? (
-                <Booking key={booking.id} booking={booking} />
-              ) : null
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <BookingProvider
+        initialBookings={bookings}
+        removeBookingFromState={removeBookingFromState}
+      >
+        <h1 className="text-2xl my-6 mx-4">Bookings</h1>
+        <div className="flex flex-col justify-center mx-4">
+          <h2>Your booked desks:</h2>
+          <Table className="mx-auto">
+            <TableCaption>A list of your booked desks.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[150px]">Date</TableHead>
+                <TableHead>Desk</TableHead>
+                <TableHead className="pl-0">Remove</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {bookings.map((booking) =>
+                // Pass each memory to the Memory component
+                booking.roomId ? (
+                  <Booking key={booking.id} booking={booking} />
+                ) : null
+              )}
+            </TableBody>
+          </Table>
+          <h2>Your booked rooms:</h2>
+          <Table className="mx-auto">
+            <TableCaption>A list of your booked rooms.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[150px]">Date</TableHead>
+                <TableHead>Room</TableHead>
+                <TableHead className="pl-0">Remove</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {bookings.map((booking) =>
+                // Pass each memory to the Memory component
+                booking.deskId ? (
+                  <Booking key={booking.id} booking={booking} />
+                ) : null
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </BookingProvider>
     </>
   );
 };
