@@ -13,7 +13,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const Canvas = () => {
+const Canvas = ({mapId}: {mapId: number}) => {
   const [focus, setFocus] = useState<Shape<ShapeConfig> | null>(null);
   const [backgroundImage, setBackgroundImage] = useState("");
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
@@ -23,18 +23,21 @@ const Canvas = () => {
 
   const trRef = useRef(null);
 
+  console.log(mapId, 'map id')
+
   useEffect(() => {
     const getImage = async () => {
       const { data, error } = await supabase
         .from("Maps")
         .select("img")
-        .eq("id", "1");
+        .eq("id", mapId);
       if (data) {
         console.log(data[0].img);
         setBackgroundImage(data[0].img);
       }
     };
     getImage();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

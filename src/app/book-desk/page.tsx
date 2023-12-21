@@ -1,6 +1,5 @@
 'use client'
 
-
 import dynamic from "next/dynamic";
 import { MapContextProvider } from "@/contexts/MapContext";
 import { Toaster } from "react-hot-toast";

@@ -1,16 +1,19 @@
 
 'use client';
-import { Button } from '@/components/ui/button';
 import { MapContextProvider } from '@/contexts/MapContext';
 import dynamic from 'next/dynamic';
+import { usePathname, useRouter } from 'next/navigation';
 
 const Canvas = dynamic(() => import('@/components/Canvas'), {
   ssr: false,
 });
 
 
-const CreateMap = ()=> {
-  
+const CreateMap = () => {
+  const router = useRouter()
+  const path = usePathname()
+  const id = path.replace('/create-map/', '')
+
   return (
     <>
     <MapContextProvider>
@@ -19,7 +22,7 @@ const CreateMap = ()=> {
     <p>Drag and drop bookable rooms and desks onto your map</p>
     </div>
     <div id='canvasWrapper' className='h-screen'>
-    <Canvas></Canvas>
+    <Canvas mapId={Number(id)}></Canvas>
     </div>
     </MapContextProvider>
     </>
