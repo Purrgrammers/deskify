@@ -10,30 +10,33 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { useContext, useEffect, useState } from "react";
+import { supabase } from "./BookingCanvas";
+import { MapContext } from "@/contexts/MapContext";
 
 const DatePicker = () => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
-
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
   const [date, setDate] = useState<Date>();
+  const { updateBookings } = useContext(MapContext);
 
   useEffect(() => {
-    const getBookings = async() => {
-      const selectedDate = date?.toLocaleDateString('en-CA')
-      const { data, error} = await supabase
+    const getBookings = async () => {
+      if (!date) {
+        return;
+      }
+      const selectedDate = date?.toLocaleDateString("en-CA");
+      const { data, error } = await supabase
         .from("Bookings")
         .select()
         .eq("date", selectedDate);
-      if(error) {
-        console.log(error)
+      if (error) {
+        console.log(error);
+        return;
       }
-      console.log(data)
-    }
-    getBookings()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+      updateBookings(data);
+      console.log(data);
+    };
+    getBookings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   return (

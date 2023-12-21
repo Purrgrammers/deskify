@@ -11,6 +11,8 @@ type MapContextProps = {
   desks: Desk[];
   updateDesks: (desks: Desk[]) => void;
   addDesk: () => void;
+  bookings: Booking[]
+  updateBookings: (bookingData: Booking[]) => void
 };
 
 export type Room = {
@@ -36,6 +38,14 @@ export type Desk = {
   mapId: number;
 };
 
+export type Booking = {
+  id: number;
+  userId: number;
+  deskId?: number;
+  roomId?: number;
+  date: Date
+};
+
 export const MapContext = createContext<MapContextProps>({
   rooms: [],
   updateRooms: () => {},
@@ -43,6 +53,9 @@ export const MapContext = createContext<MapContextProps>({
   desks: [],
   updateDesks: () => {},
   addDesk: () => {},
+  bookings: [],
+  updateBookings: () => {},
+  
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
@@ -52,6 +65,11 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [desks, setDesks] = useState<Desk[]>([
     { id: 1, x: 120, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1, mapId: 1 },
   ]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+
+  const updateBookings = (bookingData: Booking[]) => {
+    setBookings(bookingData);
+  };
 
   const updateRooms = (rooms: Room[]) => {
     setRooms(rooms);
@@ -102,6 +120,8 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         desks,
         updateDesks,
         addDesk,
+        bookings,
+        updateBookings
       }}
     >
       {props.children}
