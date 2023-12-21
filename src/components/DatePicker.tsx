@@ -36,7 +36,6 @@ const DatePicker = () => {
         return;
       }
       updateBookings(data);
-      console.log(data);
     };
     getBookings();
     // eslint-disable-next-line react-hooks/exhaustive-deps

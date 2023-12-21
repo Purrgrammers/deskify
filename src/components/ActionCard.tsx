@@ -8,16 +8,18 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 type ActionCardProps = {
   img: string;
   title: string;
   description: string;
   btnText: string;
-  reverse?: boolean
+  reverse?: boolean;
+  href: string
 };
 
-const ActionCard = ({ img, title, description, btnText, reverse }: ActionCardProps) => {
+const ActionCard = ({ img, title, description, btnText, reverse, href }: ActionCardProps) => {
 
     const imgPlacement = reverse? 'flex-row-reverse': 'flex-row'
     const btnPlacement = reverse? 'place-self-start': 'place-self-end'
@@ -29,7 +31,9 @@ const ActionCard = ({ img, title, description, btnText, reverse }: ActionCardPro
         <div className="flex flex-col">
           <CardTitle>{title}</CardTitle>
           <CardDescription className="my-2">{description}</CardDescription>
+          <Link href={`/${href}`} passHref>
           <Button className={`${btnPlacement}`}>{btnText}</Button>
+          </Link>
         </div>
       </CardContent>
     </Card>

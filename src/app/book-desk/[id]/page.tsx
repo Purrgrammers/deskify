@@ -1,15 +1,19 @@
 'use client'
 
-
 import dynamic from "next/dynamic";
 import { MapContextProvider } from "@/contexts/MapContext";
 import { Toaster } from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 const BookingCanvas = dynamic(() => import('@/components/BookingCanvas'), {
   ssr: false,
 });
 
 const BookingPage = () => {
+
+  const path = usePathname()
+  const id = path.replace('/book-desk/', '')
+
   return (
     <>
     <MapContextProvider>
@@ -19,7 +23,7 @@ const BookingPage = () => {
     <p>Select an available desk or room to book</p>
     </div>
     <div id="bookingWrapper" className="h-screen flex flex-col"> 
-    <BookingCanvas></BookingCanvas>
+    <BookingCanvas mapId={Number(id)}></BookingCanvas>
     </div>
     </MapContextProvider>
     </>

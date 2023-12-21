@@ -20,7 +20,7 @@ type FocusElement = {
   id: number
 }
 
-const BookingMap = () => {
+const BookingMap = ({mapId}: {mapId: number}) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
   const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
@@ -34,21 +34,21 @@ const BookingMap = () => {
       const { data: roomData, error: roomError } = await supabase
         .from("Rooms")
         .select()
-        .eq("mapId", "1");
+        .eq("mapId", mapId);
       if (roomError) {
         console.log(roomError);
       }
       const { data: deskData, error: deskError } = await supabase
         .from("Desks")
         .select()
-        .eq("mapId", "1");
+        .eq("mapId", mapId);
       if (deskError) {
         console.log(deskError);
       }
       const { data: imgData, error: imgError } = await supabase
         .from("Maps")
         .select("img")
-        .eq("id", "1");
+        .eq("id", mapId);
       if (imgError) {
         console.log(imgError);
       }
