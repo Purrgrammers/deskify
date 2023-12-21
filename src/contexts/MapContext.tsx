@@ -13,7 +13,7 @@ type MapContextProps = {
   addDesk: () => void;
 };
 
-type Room = {
+export type Room = {
   id: number;
   x: number;
   y: number;
@@ -25,7 +25,7 @@ type Room = {
   mapId: number
 };
 
-type Desk = {
+export type Desk = {
   id: number;
   x: number;
   y: number;
@@ -50,7 +50,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     { id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1, mapId: 1 },
   ]);
   const [desks, setDesks] = useState<Desk[]>([
-    { id: 1, x: 120, y: 50, width: 100, height: 100, scaleX: 1, scaleY: 1, mapId: 1 },
+    { id: 1, x: 120, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1, mapId: 1 },
   ]);
 
   const updateRooms = (rooms: Room[]) => {

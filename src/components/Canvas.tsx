@@ -118,7 +118,7 @@ const Canvas = () => {
     }
   }
 
-  const container = document.querySelector("#canvas-wrapper") as HTMLDivElement;
+  const container = document.querySelector("#canvasWrapper") as HTMLDivElement;
 
   return (
     <>
@@ -168,6 +168,7 @@ const Canvas = () => {
               x={desk.x}
               y={desk.y}
               stroke="black"
+              fill="white"
               draggable
               onDragStart={() => addDesk()}
               onDragEnd={(e) => {
@@ -186,7 +187,7 @@ const Canvas = () => {
               anchorStroke={"#869ee3"}
               anchorCornerRadius={15}
               anchorStrokeWidth={1}
-              anchorSize={10}
+              anchorSize={7}
               keepRatio={false}
               flipEnabled={false}
               ignoreStroke={true}
@@ -194,7 +195,7 @@ const Canvas = () => {
           )}
         </Layer>
       </Stage>
-      <div className="m-4 flex gap-4 justify-end">
+      <div className="m-4 flex gap-4 justify-end pr-10 pb-10">
         <Button variant="secondary">Back</Button>
         <Button onClick={handleCreateMap}>Create map</Button>
       </div>
