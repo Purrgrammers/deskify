@@ -11,10 +11,17 @@ import { BookingContext } from "@/contexts/BookingContext";
 import { createClient } from "@supabase/supabase-js";
 import { Trash2 } from "lucide-react";
 import { useContext } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+//Toasters
+const deleteSuccess = () =>
+  toast.success("You succesfully deleted your booking.");
+const deleteFail = () =>
+  toast.error("We could not delete your booking.", { id: "fail1" });
 
 type BookingProps = {
   booking: {
@@ -36,12 +43,18 @@ const Booking: React.FC<BookingProps> = ({ booking }) => {
   const { removeBookingFromState } = context;
 
   const handleClick = async () => {
-    const { error } = await supabase
-      .from("Bookings")
-      .delete()
-      .eq("id", booking.id);
-    console.log("I have been clicked");
-    removeBookingFromState(booking.id);
+    try {
+      const { error } = await supabase
+        .from("Bookings")
+        .delete()
+        .eq("id", booking.id);
+      if (error) throw new Error();
+      console.log("I have been clicked");
+      deleteSuccess();
+      removeBookingFromState(booking.id);
+    } catch (error) {
+      deleteFail();
+    }
   };
 
   return (
