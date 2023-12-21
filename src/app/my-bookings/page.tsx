@@ -2,6 +2,7 @@
 import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 import {
   Table,
@@ -19,6 +20,11 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+const fetchFail = () =>
+  toast.error("Could not show your bookings.", {
+    id: "fail1",
+  });
+
 type Booking = {
   id: string;
   date: string;
@@ -35,6 +41,7 @@ const Bookings = () => {
       const { data, error } = await supabase.from("Bookings").select();
       if (error) {
         console.log("Fetching problem:", error);
+        fetchFail();
         return;
       }
       setBookings(data);
@@ -54,6 +61,26 @@ const Bookings = () => {
         initialBookings={bookings}
         removeBookingFromState={removeBookingFromState}
       >
+        <Toaster
+          containerStyle={{
+            top: 20,
+            left: 20,
+            bottom: 20,
+            right: 20,
+          }}
+          toastOptions={{
+            success: {
+              style: {
+                background: "#a3cfac",
+              },
+            },
+            error: {
+              style: {
+                background: "#f6b2b5",
+              },
+            },
+          }}
+        />
         <h1 className="text-2xl my-6 mx-4">Bookings</h1>
         <div className="flex flex-col justify-center mx-4">
           <h2>Your booked desks:</h2>
