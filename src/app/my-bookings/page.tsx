@@ -1,4 +1,5 @@
 "use client";
+import MyBooking from "@/components/MyBooking";
 import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -32,6 +33,10 @@ const Bookings = () => {
   return (
     <>
       <h1 className="text-2xl my-6 mx-4">Bookings</h1>
+      {bookings.map((booking) => (
+        // Pass each memory to the Memory component
+        <MyBooking key={booking.id} booking={booking} />
+      ))}
     </>
   );
 };
