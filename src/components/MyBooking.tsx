@@ -1,3 +1,13 @@
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 type BookingProps = {
   booking: {
     id: string;
@@ -10,9 +20,11 @@ type BookingProps = {
 const MyBooking = ({ booking }: BookingProps) => {
   return (
     <>
-      <h1>This is my single booking</h1>
-      <p>Id is {booking.id}</p>
-      <p>Date is {booking.date}</p>
+      <TableRow>
+        <TableCell className="font-medium">{booking.date}</TableCell>
+        <TableCell>{booking.deskId}</TableCell>
+        <TableCell className="text-right">Delete button</TableCell>
+      </TableRow>
     </>
   );
 };
