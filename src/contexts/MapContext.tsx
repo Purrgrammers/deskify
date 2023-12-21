@@ -35,7 +35,7 @@ export type Room = {
   scaleX: number;
   scaleY: number;
   name?: string;
-  mapId: number
+  mapId?: number
 };
 
 export type Desk = {
@@ -46,7 +46,7 @@ export type Desk = {
   width: number;
   scaleX: number;
   scaleY: number;
-  mapId: number;
+  mapId?: number;
 };
 
 export type Booking = {
@@ -74,10 +74,10 @@ export const MapContext = createContext<MapContextProps>({
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
   const [rooms, setRooms] = useState<Room[]>([
-    { id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1, mapId: 1 },
+    { id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
   ]);
   const [desks, setDesks] = useState<Desk[]>([
-    { id: 1, x: 120, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1, mapId: 1 },
+    { id: 1, x: 120, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
   ]);
   const [date, setDate] = useState<Date | undefined>();
   const [bookings, setBookings] = useState<Booking[]>([]);

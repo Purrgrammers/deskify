@@ -55,6 +55,7 @@ const Canvas = ({mapId}: {mapId: number}) => {
       ...rooms[draggedElementIndex],
       x: target.x(),
       y: target.y(),
+      mapId
     };
     updateRooms(rooms);
   };
@@ -77,6 +78,7 @@ const Canvas = ({mapId}: {mapId: number}) => {
       ...desks[draggedElementIndex],
       x: target.x(),
       y: target.y(),
+      mapId
     };
     updateDesks(desks);
   };

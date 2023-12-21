@@ -75,7 +75,7 @@ const BookingMap = ({mapId}: {mapId: number}) => {
     setBookedRooms(filteredRooms) 
   }, [bookings])
 
-  const container = document.querySelector("#bookingWrapper") as HTMLDivElement;
+  // const container = document.querySelector("#bookingWrapper") as HTMLDivElement;
 
   const handleClickRoom = (target: Shape<ShapeConfig>, id: number) => {
     const booked = bookedRooms.includes(id)
@@ -101,8 +101,8 @@ const BookingMap = ({mapId}: {mapId: number}) => {
     <DatePicker />
     </div>
       <Stage
-        width={container.offsetWidth}
-        height={container.offsetHeight}
+        width={window.innerWidth}
+        height={window.innerHeight}
         name="stage"
         onClick={(e) => handleFocus(e)}
         style={{
