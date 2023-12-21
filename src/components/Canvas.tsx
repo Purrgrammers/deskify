@@ -130,13 +130,13 @@ const Canvas = ({mapId}: {mapId: number}) => {
     }
   }
 
-  const container = document.querySelector("#canvasWrapper") as HTMLDivElement;
+  // const container = document.querySelector("#canvasWrapper") as HTMLDivElement;
 
   return (
     <>
       <Stage
-        width={container.offsetWidth}
-        height={container.offsetHeight}
+        width={window.innerWidth}
+        height={window.innerHeight}
         name="stage"
         onClick={(e) => handleFocus(e)}
         style={{

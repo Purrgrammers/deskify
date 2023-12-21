@@ -69,6 +69,9 @@ const DropZone = () => {
 
       setPreviewUrl("");
       uploadSuccess();
+      if(mapId){
+        router.push(`/create-map/${mapId[0].id}`, { scroll: false })
+      }
     } catch (error) {
       uploadFail(error as Error);
     }
