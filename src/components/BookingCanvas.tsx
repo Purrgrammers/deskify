@@ -6,6 +6,7 @@ import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { useEffect, useState } from "react";
 import { Layer, Path, Rect, Stage } from "react-konva";
 import BookingDetails from "./BookingDetails";
+import DatePicker from "./DatePicker";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -63,6 +64,9 @@ const BookingMap = () => {
 
   return (
     <>
+    <div className="self-end pr-10 mt-4">
+    <DatePicker />
+    </div>
       <Stage
         width={container.offsetWidth}
         height={container.offsetHeight}

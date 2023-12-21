@@ -195,7 +195,7 @@ const Canvas = () => {
           )}
         </Layer>
       </Stage>
-      <div className="m-4 flex gap-4 justify-end">
+      <div className="m-4 flex gap-4 justify-end pr-10 pb-10">
         <Button variant="secondary">Back</Button>
         <Button onClick={handleCreateMap}>Create map</Button>
       </div>
