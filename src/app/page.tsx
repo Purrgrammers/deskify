@@ -9,6 +9,7 @@ const Home = () => {
         title="For office managers"
         description="Create a new booking map here"
         btnText="Create map"
+        href="upload-map"
       ></ActionCard>
       <ActionCard
         img="/favicon.ico"
@@ -16,6 +17,7 @@ const Home = () => {
         description="Book a desk here"
         btnText="Book desk"
         reverse={true}
+        href="book-desk/1"
       ></ActionCard>
     </main>
   );
