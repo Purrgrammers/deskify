@@ -78,7 +78,11 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       .filter((booking) => booking.roomId)
       .map((booking) => booking.roomId);
     setBookedRooms(filteredRooms);
-  }, [bookings]);
+
+    if (focusElement && (filteredDesks.includes(focusElement?.id as number) || filteredRooms.includes(focusElement?.id as number))){
+      focusElement.booked = true
+    }
+  }, [bookings, focusElement]);
 
   useEffect(() => {
     if(!image) {

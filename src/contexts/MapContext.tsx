@@ -86,11 +86,14 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     const { data, error } = await supabase
         .from("Bookings")
         .insert({userId: 1, roomId: id, date: date?.toLocaleDateString("en-CA")})
+        .select()
       if(error) {
         toast.error("Error booking room");
         console.log(error)
-      } else {
+      } else if (data) {
         toast.success("Your room has been booked");
+        setBookings(prev => [...prev, data[0]])
+        console.log(data[0])
       }
   }
 
@@ -98,11 +101,14 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     const { data, error } = await supabase
         .from("Bookings")
         .insert({userId: 1, deskId: id, date: date})
+        .select()
       if(error) {
         toast.error("Error booking desk");
         console.log(error)
-      } else {
+      } else if (data) {
         toast.success("Your desk has been booked");
+        setBookings(prev => [...prev, data[0]])
+        console.log(data)
       }
   }
 
