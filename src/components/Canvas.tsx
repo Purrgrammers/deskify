@@ -168,13 +168,13 @@ const Canvas = ({ mapId }: { mapId: number }) => {
         <Stage
           name="stage"
           width={deviceDimensions.width > 768? image?.width as number * imageScale || 400 : 350}
-          height={deviceDimensions.width > 768? 500 + 140 : image?.width as number * imageScale || 400}
+          height={deviceDimensions.width > 768? 500 + 140 : (image?.height as number + 250) * imageScale || 400}
           onClick={(e) => handleFocus(e)}
           ref={stageRef}
         >
           <Layer>
           <Image 
-          offsetY={-140} 
+          offsetY={deviceDimensions.width > 768? -140 : -250} 
           image={image} 
           scaleX={imageScale}
           scaleY={imageScale}

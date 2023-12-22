@@ -137,7 +137,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       <div className="flex flex-col items-center relative" ref={containerRef}>
         <Stage
           width={deviceDimensions.width > 768? image?.width as number * imageScale || 400 : 350}
-          height={deviceDimensions.width > 768? 500 + 140 : image?.width as number * imageScale || 400}
+          height={deviceDimensions.width > 768? 500 : (image?.height as number) * imageScale|| 400}
           name="stage"
           ref={stageRef}
           onClick={(e) => handleFocus(e)}
@@ -158,7 +158,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 scaleX={room.scaleX}
                 scaleY={room.scaleY}
                 x={room.x}
-                y={room.y - 110}
+                y={room.y - 140 * imageScale}
                 stroke={bookedRooms.includes(room.id) ? "red" : "green"}
                 onClick={(e) =>
                   handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
@@ -175,7 +175,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 scaleX={desk.scaleX}
                 scaleY={desk.scaleY}
                 x={desk.x}
-                y={desk.y - 110}
+                y={desk.y - 140 * imageScale}
                 stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
                 fill="white"
                 onClick={(e) =>
