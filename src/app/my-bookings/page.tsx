@@ -56,7 +56,7 @@ const Bookings = () => {
     );
   };
   return (
-    <>
+    <div className="max-w-7xl mx-auto">
       <BookingProvider
         initialBookings={bookings}
         removeBookingFromState={removeBookingFromState}
@@ -102,7 +102,7 @@ const Bookings = () => {
               )}
             </TableBody>
           </Table>
-          <h2>Your booked rooms:</h2>
+          <h2 className="mt-8">Your booked rooms:</h2>
           <Table className="mx-auto">
             <TableCaption>A list of your booked rooms.</TableCaption>
             <TableHeader>
@@ -123,7 +123,7 @@ const Bookings = () => {
           </Table>
         </div>
       </BookingProvider>
-    </>
+    </div>
   );
 };
 

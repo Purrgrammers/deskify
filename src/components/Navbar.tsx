@@ -30,8 +30,12 @@ const Navbar = () => {
               <Link href="/upload-map">
                 <NavigationMenuLink>Create Map</NavigationMenuLink>
               </Link>
-              <NavigationMenuLink>Book Desk</NavigationMenuLink>
-              <NavigationMenuLink>Booknings</NavigationMenuLink>
+              <Link href="/book-desk/1">
+                <NavigationMenuLink>Book Desk</NavigationMenuLink>
+              </Link>
+              <Link href="/my-bookings">
+                <NavigationMenuLink>Booknings</NavigationMenuLink>
+              </Link>
             </NavigationMenuContent>
           </NavigationMenuItem>
         </NavigationMenuList>
