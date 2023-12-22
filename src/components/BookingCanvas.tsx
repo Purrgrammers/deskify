@@ -30,6 +30,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
+  const [deviceDimensions, setDeviceDimensions] = useState({width: 400, height: 400});
   const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
   const { bookings } = useContext(MapContext);
 
@@ -83,8 +84,23 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     if(!image) {
       return
     }
-    setImageScale(500 / image?.height)
-  }, [image])
+    if(deviceDimensions.width > 768){
+      setImageScale(500 / image?.height)
+    } else {
+      setImageScale(350 / image?.width)
+    }
+  }, [image, deviceDimensions])
+
+  useEffect(() => {
+    setDeviceDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(deviceDimensions)
+  }, [deviceDimensions]);
 
   const stageRef = useRef<StageType>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -112,19 +128,16 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       setFocusElement(undefined);
     }
   };
-  
+
   return (
     <>
       <div className="self-start my-6 pl-10">
         <DatePicker />
       </div>
-      <div
-        className="flex flex-col items-center relative"
-        ref={containerRef}
-      >
+      <div className="flex flex-col items-center relative" ref={containerRef}>
         <Stage
-          width={image?.width as number * imageScale || 400}
-          height={500}
+          width={deviceDimensions.width > 768? image?.width as number * imageScale || 400 : 350}
+          height={deviceDimensions.width > 768? 500 + 140 : image?.width as number * imageScale || 400}
           name="stage"
           ref={stageRef}
           onClick={(e) => handleFocus(e)}
@@ -145,7 +158,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 scaleX={room.scaleX}
                 scaleY={room.scaleY}
                 x={room.x}
-                y={room.y -110}
+                y={room.y - 110}
                 stroke={bookedRooms.includes(room.id) ? "red" : "green"}
                 onClick={(e) =>
                   handleClickRoom(e.target as Shape<ShapeConfig>, room.id)

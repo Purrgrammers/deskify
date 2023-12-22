@@ -28,6 +28,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
+  const [deviceDimensions, setDeviceDimensions] = useState({width: 400, height: 400});
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
@@ -64,9 +65,23 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     if(!image) {
       return
     }
-    setImageScale(500 / image?.height)
-    console.log(image.height)
-  }, [image])
+    if(deviceDimensions.width > 768){
+      setImageScale(500 / image?.height)
+    } else {
+      setImageScale(350 / image?.width)
+    }
+  }, [image, deviceDimensions])
+
+  useEffect(() => {
+    setDeviceDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(deviceDimensions)
+  }, [deviceDimensions]);
 
 
   const handleDraggedRoom = (target: Shape<ShapeConfig>, id: number) => {
@@ -152,8 +167,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       >
         <Stage
           name="stage"
-          width={image?.width as number * imageScale || 400}
-          height={500 + 140}
+          width={deviceDimensions.width > 768? image?.width as number * imageScale || 400 : 350}
+          height={deviceDimensions.width > 768? 500 + 140 : image?.width as number * imageScale || 400}
           onClick={(e) => handleFocus(e)}
           ref={stageRef}
         >
