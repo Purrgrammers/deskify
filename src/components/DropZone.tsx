@@ -31,7 +31,7 @@ const uploadImgToDb = async (userId: number, url: string) => {
 const DropZone = () => {
   const [file, setFile] = useState<File>();
   const [previewUrl, setPreviewUrl] = useState("");
-  const router = useRouter()
+  const router = useRouter();
 
   const handleUpload = async (file: File) => {
     // Create a local URL only for preview
@@ -69,8 +69,8 @@ const DropZone = () => {
 
       setPreviewUrl("");
       uploadSuccess();
-      if(mapId){
-        router.push(`/create-map/${mapId[0].id}`, { scroll: false })
+      if (mapId) {
+        router.push(`/create-map/${mapId[0].id}`, { scroll: false });
       }
     } catch (error) {
       uploadFail(error as Error);
@@ -98,11 +98,13 @@ const DropZone = () => {
           },
         }}
       />
-      <FileUploader
-        handleChange={(file: File) => handleUpload(file)}
-        name="picture"
-        types={fileTypes}
-      />
+      <div className="mb-12">
+        <FileUploader
+          handleChange={(file: File) => handleUpload(file)}
+          name="picture"
+          types={fileTypes}
+        />
+      </div>
 
       {previewUrl && (
         <div className="flex justify-center mt-4">
