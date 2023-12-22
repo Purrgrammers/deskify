@@ -1,20 +1,24 @@
 import ActionCard from "@/components/ActionCard";
+import manager from "../manager.png";
+import user from "../user.png";
+import floorplan from "../floorplan.jpg";
+import office from "../office.jpg";
+import newdesk from "../newdesk.jpg";
 
 const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 gap-4">
-      <h1 className="text-lg mb-4">Deskify</h1>
+    <main className="flex min-h-screen flex-col items-center mt-10 gap-4">
       <ActionCard
-        img="/favicon.ico"
+        img={floorplan}
         title="For office managers"
         description="Create a new booking map here"
         btnText="Create map"
         href="upload-map"
       ></ActionCard>
       <ActionCard
-        img="/favicon.ico"
+        img={newdesk}
         title="For employees"
-        description="Book a desk here"
+        description="Book a room or a desk here"
         btnText="Book desk"
         reverse={true}
         href="book-desk/1"
