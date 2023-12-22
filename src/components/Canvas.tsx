@@ -25,6 +25,8 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const Canvas = ({ mapId }: { mapId: number }) => {
   const [focus, setFocus] = useState<Shape<ShapeConfig> | null>(null);
   const [backgroundImage, setBackgroundImage] = useState("");
+  const [image] = useImage(backgroundImage);
+  const [imageScale, setImageScale] = useState(1);
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
@@ -57,7 +59,14 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     }
   }, [focus]);
 
-  const [image] = useImage(backgroundImage);
+  useEffect(() => {
+    if(!image) {
+      return
+    }
+    setImageScale(500 / image?.height)
+    console.log(image.height)
+  }, [image])
+
 
   const handleDraggedRoom = (target: Shape<ShapeConfig>, id: number) => {
     const draggedElementIndex = rooms.findIndex((room) => room.id === id);
@@ -107,13 +116,10 @@ const Canvas = ({ mapId }: { mapId: number }) => {
 
   const handleFocus = (e: KonvaEventObject<MouseEvent>) => {
     console.log(e.target);
-    if (e.target.attrs.name === "stage") {
+    if (e.target.attrs.name === "stage" || e.target.attrs.name === "image") {
       setFocus(null);
     } else {
       setFocus(e.target as Shape<ShapeConfig>);
-    }
-
-    if (e.target.attrs.name === "room") {
     }
   };
 
@@ -125,7 +131,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     const deskData = desks
       .filter((desk) => desk.y !== 50)
       .map(({ id, ...keepAttrs }) => keepAttrs);
-    console.log(roomData, deskData);
 
     const { error: roomError } = await supabase.from("Rooms").insert(roomData);
     if (roomError) {
@@ -136,32 +141,31 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       console.log("deskerror", deskError);
     }
   };
-  console.log(containerRef)
-  console.log(stageRef)
+
 
   return (
     <>
       <div
         style={{
           position: "relative",
-          width: "700",
-          height: "600"
         }}
         ref={containerRef}
       >
         <Stage
           name="stage"
           width={containerRef.current?.offsetWidth || 400}
-          height={500 + 110}
+          height={500 + 140}
           onClick={(e) => handleFocus(e)}
           ref={stageRef}
         >
           <Layer>
           <Image 
-          offsetY={-110} 
+          offsetY={-140} 
           image={image} 
+          scaleX={imageScale}
+          scaleY={imageScale}
           alt="floor plan"
-          height={stageRef.current?.attrs.height - 110 || 900}
+          name="image"
           >
           </Image>
             {rooms.map((room) => (

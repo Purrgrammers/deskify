@@ -28,8 +28,10 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
   const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
   const [bookedRooms, setBookedRooms] = useState<(number | undefined)[]>([]);
   const [backgroundImage, setBackgroundImage] = useState("");
+  const [image] = useImage(backgroundImage);
+  const [imageScale, setImageScale] = useState(1);
   const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
-  const { bookings, date } = useContext(MapContext);
+  const { bookings } = useContext(MapContext);
 
   useEffect(() => {
     const getMapData = async () => {
@@ -77,7 +79,13 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     setBookedRooms(filteredRooms);
   }, [bookings]);
 
-  const [image] = useImage(backgroundImage);
+  useEffect(() => {
+    if(!image) {
+      return
+    }
+    setImageScale(500 / image?.height)
+  }, [image])
+
   const stageRef = useRef<StageType>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -104,11 +112,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       setFocusElement(undefined);
     }
   };
-
-  console.log(containerRef)
-  console.log(stageRef)
   
-
   return (
     <>
       <div className="self-start my-6 pl-10">
@@ -133,7 +137,8 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
             <Image
               image={image}
               alt="booking map"
-              height={stageRef.current?.attrs.height || 900}
+              scaleX={imageScale}
+              scaleY={imageScale}
             ></Image>
             {rooms.map((room) => (
               <Rect
@@ -144,7 +149,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 scaleX={room.scaleX}
                 scaleY={room.scaleY}
                 x={room.x}
-                y={room.y - 110}
+                y={room.y -110}
                 stroke={bookedRooms.includes(room.id) ? "red" : "green"}
                 onClick={(e) =>
                   handleClickRoom(e.target as Shape<ShapeConfig>, room.id)

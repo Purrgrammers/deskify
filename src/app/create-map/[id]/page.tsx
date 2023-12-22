@@ -23,7 +23,7 @@ const CreateMap = () => {
     <h1 className='text-2xl'>Create your office map</h1>
     <p>Drag and drop bookable rooms and desks onto your map</p>
     </div>
-    <div id="bookingWrapper" className="h-screen flex flex-col"> 
+    <div id="bookingWrapper" className="flex flex-col"> 
     <Canvas mapId={Number(id)}></Canvas>
     </div>
     </MapContextProvider>
