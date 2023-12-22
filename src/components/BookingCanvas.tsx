@@ -4,10 +4,11 @@ import { Desk, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { useContext, useEffect, useState } from "react";
-import { Layer, Path, Rect, Stage } from "react-konva";
+import { Layer, Path, Rect, Stage, Image } from "react-konva";
 import BookingDetails from "./BookingDetails";
 import DatePicker from "./DatePicker";
 import { KonvaEventObject } from "konva/lib/Node";
+import useImage from "use-image";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -54,7 +55,7 @@ const BookingMap = ({mapId}: {mapId: number}) => {
       }
       setRooms(roomData as Room[]);
       setDesks(deskData as Desk[]);
-      //   updateDesks(deskData as Desk[]);
+      console.log(roomData, deskData)
       if (imgData) {
         setBackgroundImage(imgData[0].img);
       }
@@ -75,7 +76,7 @@ const BookingMap = ({mapId}: {mapId: number}) => {
     setBookedRooms(filteredRooms) 
   }, [bookings])
 
-  // const container = document.querySelector("#bookingWrapper") as HTMLDivElement;
+  const [image] = useImage(backgroundImage);
 
   const handleClickRoom = (target: Shape<ShapeConfig>, id: number) => {
     const booked = bookedRooms.includes(id)
@@ -100,19 +101,21 @@ const BookingMap = ({mapId}: {mapId: number}) => {
     <div className="self-end pr-10 mt-4">
     <DatePicker />
     </div>
+    <div
+        style={{
+          position: "relative",
+          width: "100vw",
+          height: "100vh",
+        }}
+      >
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
         name="stage"
         onClick={(e) => handleFocus(e)}
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "100%",
-          backgroundPositionY: 120,
-        }}
       >
         <Layer>
+        <Image image={image} alt="booking map"></Image>
           {rooms.map((room) => (
             <Rect
               key={`room-${room.id}`}
@@ -122,7 +125,7 @@ const BookingMap = ({mapId}: {mapId: number}) => {
               scaleX={room.scaleX}
               scaleY={room.scaleY}
               x={room.x}
-              y={room.y}
+              y={room.y - 110}
               stroke={bookedRooms.includes(room.id)? "red": "green"}
               onClick={(e) => handleClickRoom(e.target as Shape<ShapeConfig>, room.id)}
             />
@@ -137,18 +140,20 @@ const BookingMap = ({mapId}: {mapId: number}) => {
               scaleX={desk.scaleX}
               scaleY={desk.scaleY}
               x={desk.x}
-              y={desk.y}
+              y={desk.y - 110}
               stroke={bookedDesks.includes(desk.id)? "red": "green"}
               fill="white"
               onClick={(e) => handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)}
             />
           ))}
         </Layer>
+
       </Stage>
       {focusElement && 
         <BookingDetails element={focusElement}/>
       }
 
+</div>
     </>
   );
 };

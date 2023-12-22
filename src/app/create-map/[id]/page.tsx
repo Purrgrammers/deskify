@@ -10,7 +10,6 @@ const Canvas = dynamic(() => import('@/components/Canvas'), {
 
 
 const CreateMap = () => {
-  const router = useRouter()
   const path = usePathname()
   const id = path.replace('/create-map/', '')
 
@@ -21,9 +20,7 @@ const CreateMap = () => {
     <h1 className='text-2xl'>Create your office map</h1>
     <p>Drag and drop bookable rooms and desks onto your map</p>
     </div>
-    <div id='canvasWrapper' className='h-screen'>
     <Canvas mapId={Number(id)}></Canvas>
-    </div>
     </MapContextProvider>
     </>
   );
