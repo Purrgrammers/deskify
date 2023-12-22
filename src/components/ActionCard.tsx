@@ -33,18 +33,20 @@ const ActionCard = ({
   return (
     <Card className="w-[350px] p-4">
       <CardTitle className="text-xl mb-3">{title}</CardTitle>
-      <CardContent className={`flex gap-4 justify-between ${imgPlacement} `}>
+      <CardContent
+        className={`flex gap-4 justify-between rounded-xl border-solid bg-gray-50 border-gray border shadow-sm ${imgPlacement} `}
+      >
         <Image
           src={img}
           alt="image"
           width={150}
           height={250}
-          className="border-solid border-black border-1"
+          className="border-solid rounded-xl border-black border-1"
         />
 
         <div className={`flex `}>
           <div className="flex flex-col justify-between items-center">
-            <CardDescription className="my-2 text-center mt-4">
+            <CardDescription className="my-2 text-center mt-8 px-2">
               {description}
             </CardDescription>
             <Link href={`/${href}`} passHref>

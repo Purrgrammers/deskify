@@ -7,11 +7,11 @@ import newdesk from "../newdesk.jpg";
 
 const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center mt-10 gap-4">
+    <main className="flex min-h-screen flex-col items-center mt-7 pt-4 gap-4">
       <ActionCard
         img={floorplan}
         title="For office managers"
-        description="Create a new booking map here"
+        description="Create a new bookable map here."
         btnText="Create map"
         href="upload-map"
       ></ActionCard>
