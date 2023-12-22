@@ -119,15 +119,11 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
         <DatePicker />
       </div>
       <div
-        style={{
-          position: "relative",
-          width: "700",
-          height: "600",
-        }}
+        className="flex flex-col items-center relative"
         ref={containerRef}
       >
         <Stage
-          width={containerRef.current?.offsetWidth || 400}
+          width={image?.width as number * imageScale || 400}
           height={500}
           name="stage"
           ref={stageRef}

@@ -11,6 +11,7 @@ import {
   Transformer,
   Path,
   Image,
+  Text,
 } from "react-konva";
 import { useStrictMode } from "react-konva";
 import { Button } from "./ui/button";
@@ -146,14 +147,12 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   return (
     <>
       <div
-        style={{
-          position: "relative",
-        }}
+        className="flex flex-col items-center relative"
         ref={containerRef}
       >
         <Stage
           name="stage"
-          width={containerRef.current?.offsetWidth || 400}
+          width={image?.width as number * imageScale || 400}
           height={500 + 140}
           onClick={(e) => handleFocus(e)}
           ref={stageRef}
@@ -228,7 +227,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
             )}
           </Layer>
         </Stage>
-        <div className="m-4 flex gap-4 justify-end pr-10 pb-10">
+        <div className="m-4 flex gap-4 self-end px-10 pb-10">
           <Button variant="secondary">Back</Button>
           <Button onClick={handleCreateMap}>Create map</Button>
         </div>
