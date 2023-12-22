@@ -31,26 +31,31 @@ const ActionCard = ({
   // const btnPlacement = reverse ? "place-self-start" : "place-self-end";
 
   return (
-    <Card className="w-[350px] p-4">
+    <Card className="w-[350px] md:w-[500px] lg:w-[600px] p-4 lg:p-6 md:p-5 ">
       <CardTitle className="text-xl mb-3">{title}</CardTitle>
       <CardContent
-        className={`flex gap-4 justify-between rounded-xl border-solid bg-gray-50 border-gray border shadow-sm ${imgPlacement} `}
+        className={`flex gap-4 xl:max-h-80 justify-evenly rounded-xl border-solid bg-gray-50 border-gray border shadow-sm ${imgPlacement} `}
       >
         <Image
           src={img}
           alt="image"
-          width={150}
-          height={250}
-          className="border-solid rounded-xl border-black border-1"
+          width={500}
+          height={700}
+          className="border-solid rounded-xl border-black border-1 w-40 md:w-52 lg:w-56 xl:w-64"
         />
 
         <div className={`flex `}>
           <div className="flex flex-col justify-between items-center">
-            <CardDescription className="my-2 text-center mt-8 px-2">
+            <CardDescription className="my-2 text-center mt-7 px-2 text-xs md:text-base md:pt-10 ">
               {description}
             </CardDescription>
             <Link href={`/${href}`} passHref>
-              <Button className={`justify-self-center mb-5`}>{btnText}</Button>
+              <Button
+                size={"sm"}
+                className={`justify-self-center mb-5 xl:mb-8`}
+              >
+                {btnText}
+              </Button>
             </Link>
           </div>
         </div>

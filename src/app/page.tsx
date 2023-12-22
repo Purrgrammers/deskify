@@ -7,18 +7,18 @@ import newdesk from "../newdesk.jpg";
 
 const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center mt-7 pt-4 gap-4">
+    <main className="flex flex-col xl:flex-row justify-center xl:items-stretch items-center mt-7 pt-4 gap-4">
       <ActionCard
         img={floorplan}
         title="For office managers"
-        description="Create a new bookable map here."
+        description="Start building your office! With interactive map you can design your office layout with rooms and desks, creating a bookable space for your team."
         btnText="Create map"
         href="upload-map"
       ></ActionCard>
       <ActionCard
         img={newdesk}
         title="For employees"
-        description="Book a room or a desk here"
+        description="Choose your workspace! Select dates and pick from available rooms or desks through our interface. Book your ideal spot with just a few taps."
         btnText="Book desk"
         reverse={true}
         href="book-desk/1"
