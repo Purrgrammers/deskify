@@ -74,10 +74,10 @@ export const MapContext = createContext<MapContextProps>({
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
   const [rooms, setRooms] = useState<Room[]>([
-    { id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
+    { id: 1, x: 20, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
   ]);
   const [desks, setDesks] = useState<Desk[]>([
-    { id: 1, x: 120, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
+    { id: 1, x: 80, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
   ]);
   const [date, setDate] = useState<Date | undefined>();
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -86,11 +86,14 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     const { data, error } = await supabase
         .from("Bookings")
         .insert({userId: 1, roomId: id, date: date?.toLocaleDateString("en-CA")})
+        .select()
       if(error) {
         toast.error("Error booking room");
         console.log(error)
-      } else {
+      } else if (data) {
         toast.success("Your room has been booked");
+        setBookings(prev => [...prev, data[0]])
+        console.log(data[0])
       }
   }
 
@@ -98,11 +101,14 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     const { data, error } = await supabase
         .from("Bookings")
         .insert({userId: 1, deskId: id, date: date})
+        .select()
       if(error) {
         toast.error("Error booking desk");
         console.log(error)
-      } else {
+      } else if (data) {
         toast.success("Your desk has been booked");
+        setBookings(prev => [...prev, data[0]])
+        console.log(data)
       }
   }
 
@@ -127,7 +133,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
       ...prev,
       {
         id: rooms.length + 1,
-        x: 50,
+        x: 20,
         y: 50,
         width: 50,
         height: 50,
@@ -143,7 +149,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
       ...prev,
       {
         id: desks.length + 1,
-        x: 120,
+        x: 80,
         y: 50,
         width: 50,
         height: 50,

@@ -25,7 +25,7 @@ const BookingDetails = ({element}: BookingDetailsProps) => {
   }
 
   return (
-    <div className="flex gap-6 items-center pl-10 pb-10">
+    <div className="flex gap-6 items-center pl-10 pb-10 self-start">
         <p>{`${element.type} ${element.id}: `} <span className={element.booked? 'text-red-600': 'text-green-600'}>{element.booked? 'Booked': 'Available'}</span></p>
         <Button disabled={element.booked? true: false} size='xs' onClick={handleBooking}>Book</Button>
     </div>
