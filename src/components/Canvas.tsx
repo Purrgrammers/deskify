@@ -17,6 +17,8 @@ import { useStrictMode } from "react-konva";
 import { Button } from "./ui/button";
 import useImage from "use-image";
 import { Stage as StageType } from "konva/lib/Stage";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -33,6 +35,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     useContext(MapContext);
 
   useStrictMode(true);
+  const router = useRouter()
+
 
   const trRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -151,11 +155,15 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     const { error: roomError } = await supabase.from("Rooms").insert(roomData);
     if (roomError) {
       console.log("roomerror", roomError);
+      return
     }
     const { error: deskError } = await supabase.from("Desks").insert(deskData);
     if (deskError) {
       console.log("deskerror", deskError);
+      return
     }
+    toast.success('Your bookable map was created!')
+    router.push(`/book-desk/${mapId}`, { scroll: false })
   };
 
 

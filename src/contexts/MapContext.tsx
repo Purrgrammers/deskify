@@ -74,10 +74,10 @@ export const MapContext = createContext<MapContextProps>({
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
   const [rooms, setRooms] = useState<Room[]>([
-    { id: 1, x: 50, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
+    { id: 1, x: 20, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
   ]);
   const [desks, setDesks] = useState<Desk[]>([
-    { id: 1, x: 120, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
+    { id: 1, x: 80, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
   ]);
   const [date, setDate] = useState<Date | undefined>();
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -127,7 +127,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
       ...prev,
       {
         id: rooms.length + 1,
-        x: 50,
+        x: 20,
         y: 50,
         width: 50,
         height: 50,
@@ -143,7 +143,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
       ...prev,
       {
         id: desks.length + 1,
-        x: 120,
+        x: 80,
         y: 50,
         width: 50,
         height: 50,

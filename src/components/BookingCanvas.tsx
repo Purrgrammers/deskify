@@ -158,7 +158,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 scaleX={room.scaleX}
                 scaleY={room.scaleY}
                 x={room.x}
-                y={room.y - 140 * imageScale}
+                y={deviceDimensions.width > 768? room.y - 140 * imageScale: room.y - 250 * imageScale}
                 stroke={bookedRooms.includes(room.id) ? "red" : "green"}
                 onClick={(e) =>
                   handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
@@ -175,7 +175,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 scaleX={desk.scaleX}
                 scaleY={desk.scaleY}
                 x={desk.x}
-                y={desk.y - 140 * imageScale}
+                y={deviceDimensions.width > 768? desk.y - 140 * imageScale: desk.y - 250 * imageScale}
                 stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
                 fill="white"
                 onClick={(e) =>
