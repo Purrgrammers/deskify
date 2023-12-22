@@ -17,7 +17,26 @@ const BookingPage = () => {
   return (
     <div className="flex flex-col">
     <MapContextProvider>
-    <Toaster></Toaster>
+    <Toaster
+        containerStyle={{
+          top: 20,
+          left: 20,
+          bottom: 20,
+          right: 20,
+        }}
+        toastOptions={{
+          success: {
+            style: {
+              background: "#a3cfac",
+            },
+          },
+          error: {
+            style: {
+              background: "#f6b2b5",
+            },
+          },
+        }}
+      />
     <div className="pl-10 pt-10">
     <h1 className='text-2xl'>Book your workspace</h1>
     <p>Select an available desk or room to book</p>
