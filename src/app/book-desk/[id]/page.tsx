@@ -15,7 +15,7 @@ const BookingPage = () => {
   const id = path.replace('/book-desk/', '')
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col">
     <MapContextProvider>
     <Toaster></Toaster>
     <div className="pl-10 pt-10">

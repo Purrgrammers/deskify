@@ -10,12 +10,12 @@ import {
   Rect,
   Transformer,
   Path,
-  Group,
   Image,
 } from "react-konva";
 import { useStrictMode } from "react-konva";
 import { Button } from "./ui/button";
 import useImage from "use-image";
+import { Stage as StageType } from "konva/lib/Stage";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -27,20 +27,12 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
-  // const [size, setSize] = useState({
-  //     width: 1000,
-  //     height: 1000,
-  //     virtualWidth: 1000
-  //   });
-  // const [virtualWidth, setVirtualWidth] = useState(1000);
-  // const [scale, setScale] = useState(1);
-  // const [scaleToFit, setScaleToFit] = useState(1);
 
   useStrictMode(true);
 
   const trRef = useRef(null);
-  const containerRef = useRef(null);
-  const stageRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<StageType>(null);
 
   useEffect(() => {
     const getImage = async () => {
@@ -144,26 +136,34 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       console.log("deskerror", deskError);
     }
   };
+  console.log(containerRef)
+  console.log(stageRef)
 
   return (
     <>
       <div
         style={{
           position: "relative",
-          width: "100vw",
-          height: "100vh",
+          width: "700",
+          height: "600"
         }}
         ref={containerRef}
       >
         <Stage
           name="stage"
-          width={window.innerWidth}
-          height={800}
+          width={containerRef.current?.offsetWidth || 400}
+          height={500 + 110}
           onClick={(e) => handleFocus(e)}
           ref={stageRef}
         >
           <Layer>
-          <Image offsetY={-110} image={image} alt="floor plan"></Image>
+          <Image 
+          offsetY={-110} 
+          image={image} 
+          alt="floor plan"
+          height={stageRef.current?.attrs.height - 110 || 900}
+          >
+          </Image>
             {rooms.map((room) => (
               <Rect
                 key={`room-${room.id}`}
