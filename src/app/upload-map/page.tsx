@@ -7,7 +7,9 @@ const Upload = () => {
     <MapContextProvider>
       <div className="flex flex-col mt-12 items-center min-h-screen max-w-2xl mx-auto">
         <div className="text-center">
-          <h1 className="text-xl m-4 mb-8">Upload your Office floor plan</h1>
+          <h1 className="text-2xl font-semibold m-4 mb-8">
+            Upload your Office floor plan
+          </h1>
           <div className="mx-4 my-2">
             <p>
               Upload your floor plan image for an effortless mapping of your
