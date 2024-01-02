@@ -42,7 +42,7 @@ const DatePicker = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
-  
+
 
   return (
     <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
@@ -64,7 +64,7 @@ const DatePicker = () => {
           selected={date}
           onSelect={(e) => { setDate(e as Date); setIsCalendarOpen(false); }}
           initialFocus
-          disabled={(date) => date < new Date()}
+          disabled={(date) => date.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)}
         />
       </PopoverContent>
     </Popover>
