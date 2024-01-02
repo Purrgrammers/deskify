@@ -6,7 +6,7 @@ const Upload = () => {
   return (
     <MapContextProvider>
       <div className="flex flex-col mt-12 items-center min-h-screen max-w-2xl mx-auto">
-        <div className="text-center">
+        <div className="text-left">
           <h1 className="text-2xl font-semibold m-4 mb-8">
             Upload your Office floor plan
           </h1>
