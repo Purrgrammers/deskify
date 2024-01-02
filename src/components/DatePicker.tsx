@@ -10,10 +10,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { SetStateAction, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { supabase } from "./BookingCanvas";
 import { MapContext } from "@/contexts/MapContext";
-import { SelectSingleEventHandler } from "react-day-picker";
 
 const DatePicker = () => {
   const today = new Date()

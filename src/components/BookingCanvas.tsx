@@ -31,8 +31,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
   const [deviceDimensions, setDeviceDimensions] = useState({width: 400, height: 400});
-  const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
-  const { bookings } = useContext(MapContext);
+  const { bookings, focusElement, updateFocusElement } = useContext(MapContext);
 
   useEffect(() => {
     const getMapData = async () => {
@@ -59,7 +58,6 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       }
       setRooms(roomData as Room[]);
       setDesks(deskData as Desk[]);
-      console.log(roomData, deskData);
       if (imgData) {
         setBackgroundImage(imgData[0].img);
       }
@@ -115,7 +113,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       target.attrs.name[0],
       target.attrs.name[0].toUpperCase()
     );
-    setFocusElement({ type, id, booked });
+    updateFocusElement({ type, id, booked });
   };
 
   const handleClickDesk = (target: Shape<ShapeConfig>, id: number) => {
@@ -124,12 +122,12 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       target.attrs.name[0],
       target.attrs.name[0].toUpperCase()
     );
-    setFocusElement({ type, id, booked });
+    updateFocusElement({ type, id, booked });
   };
 
   const handleFocus = (e: KonvaEventObject<MouseEvent>) => {
     if (e.target.attrs.name === "stage") {
-      setFocusElement(undefined);
+      updateFocusElement(undefined);
     }
   };
 

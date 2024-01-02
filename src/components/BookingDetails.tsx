@@ -10,7 +10,6 @@ type BookingDetailsProps = {
     }
 }
 
-
 const BookingDetails = ({element}: BookingDetailsProps) => {
 
   const { bookRoom, bookDesk } = useContext(MapContext)
