@@ -100,7 +100,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const bookDesk = async(id: number) => {
     const { data, error } = await supabase
         .from("Bookings")
-        .insert({userId: 1, deskId: id, date: date})
+        .insert({userId: 1, deskId: id, date: date?.toLocaleDateString("en-CA")})
         .select()
       if(error) {
         toast.error("Error booking desk");
