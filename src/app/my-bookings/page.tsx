@@ -38,7 +38,7 @@ const Bookings = () => {
 
   useEffect(() => {
     const fetchAllBookings = async () => {
-      const { data, error } = await supabase.from("Bookings").select();
+      const { data, error } = await supabase.from("Bookings").select().order('date', { ascending: true });
       if (error) {
         console.log("Fetching problem:", error);
         fetchFail();
