@@ -18,6 +18,7 @@ import { SelectSingleEventHandler } from "react-day-picker";
 const DatePicker = () => {
   const today = new Date()
   const [date, setDate] = useState<Date>(today);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const { updateBookings, updateDate } = useContext(MapContext);
 
   useEffect(() => {
@@ -41,8 +42,10 @@ const DatePicker = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
+
+
   return (
-    <Popover>
+    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
@@ -59,8 +62,9 @@ const DatePicker = () => {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate as SelectSingleEventHandler}
+          onSelect={(e) => { setDate(e as Date); setIsCalendarOpen(false); }}
           initialFocus
+          disabled={(date) => date.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)}
         />
       </PopoverContent>
     </Popover>
