@@ -64,6 +64,7 @@ const DatePicker = () => {
           selected={date}
           onSelect={(e) => { setDate(e as Date); setIsCalendarOpen(false); }}
           initialFocus
+          disabled={(date) => date < new Date()}
         />
       </PopoverContent>
     </Popover>
