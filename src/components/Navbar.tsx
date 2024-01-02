@@ -1,4 +1,5 @@
 "use client";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import logo from "../logo.png";
 import Link from "next/link";
@@ -6,9 +7,12 @@ import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+
+  const pathname = usePathname();
+
   useEffect(() => {
     setIsNavOpen(false);
-  }, []);
+  }, [pathname]);
 
   return (
     <header className="flex justify-between px-4 mx-6 mt-4 pb-6 border-b border-gray">
@@ -45,17 +49,43 @@ const Navbar = () => {
               </svg>
             </div>
             <ul className="flex flex-col items-center justify-between min-h-[250px]">
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <Link href="/">Home</Link>
+              <li className="border-b hover:border-gray-400 my-8 uppercase">
+                <Link
+                  className={`link ${pathname === "/" ? "font-bold" : ""}`}
+                  href="/"
+                >
+                  Home
+                </Link>
               </li>
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <Link href="/upload-map">Create Map</Link>
+              <li className="border-b hover:border-gray-400 my-8 uppercase">
+                <Link
+                  className={`link ${
+                    pathname === "/upload-map" ? "font-bold" : ""
+                  }`}
+                  href="/upload-map"
+                >
+                  Create Map
+                </Link>
               </li>
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <Link href="/book-desk/1">Book space</Link>
+              <li className="border-b hover:border-gray-400 my-8 uppercase">
+                <Link
+                  className={`link ${
+                    pathname === "/book-desk/1" ? "font-bold" : ""
+                  }`}
+                  href="/book-desk/1"
+                >
+                  Book space
+                </Link>
               </li>
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <Link href="/my-bookings">Bookings</Link>
+              <li className="border-b hover:border-gray-400 my-8 uppercase">
+                <Link
+                  className={`link ${
+                    pathname === "/my-bookings" ? "font-bold" : ""
+                  }`}
+                  href="/my-bookings"
+                >
+                  Bookings
+                </Link>
               </li>
             </ul>
           </div>
@@ -63,16 +93,42 @@ const Navbar = () => {
 
         <ul className="DESKTOP-MEN hidden space-x-8 mt-4 lg:flex">
           <li>
-            <Link href="/">Home</Link>
+            <Link
+              className={`link ${pathname === "/" ? "font-semibold" : ""}`}
+              href="/"
+            >
+              Home
+            </Link>
           </li>
           <li>
-            <Link href="/upload-map">Create Map</Link>
+            <Link
+              className={`link ${
+                pathname === "/upload-map" ? "font-semibold" : ""
+              }`}
+              href="/upload-map"
+            >
+              Create Map
+            </Link>
           </li>
           <li>
-            <Link href="/book-desk/1">Book space</Link>
+            <Link
+              className={`link ${
+                pathname === "/book-desk/1" ? "font-semibold" : ""
+              }`}
+              href="/book-desk/1"
+            >
+              Book space
+            </Link>
           </li>
           <li>
-            <Link href="/my-bookings">Bookings</Link>
+            <Link
+              className={`link ${
+                pathname === "/my-bookings" ? "font-semibold" : ""
+              }`}
+              href="/my-bookings"
+            >
+              Bookings
+            </Link>
           </li>
         </ul>
       </nav>
