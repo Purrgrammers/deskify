@@ -18,7 +18,7 @@ const DatePicker = () => {
   const today = new Date()
   const [date, setDate] = useState<Date>(today);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const { updateBookings, updateDate } = useContext(MapContext);
+  const { updateBookings, updateDate, updateFocusElement } = useContext(MapContext);
 
   useEffect(() => {
     const getBookings = async () => {
@@ -61,7 +61,7 @@ const DatePicker = () => {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={(e) => { setDate(e as Date); setIsCalendarOpen(false); }}
+          onSelect={(e) => { setDate(e as Date); setIsCalendarOpen(false); updateFocusElement(undefined)}}
           initialFocus
           disabled={(date) => date.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)}
         />
