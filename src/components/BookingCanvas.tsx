@@ -134,8 +134,19 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     }
   };
 
+  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (!(e.target as HTMLDivElement).matches('canvas')) {
+      updateFocusElement(undefined);
+    }
+  }
+
   return (
     <>
+     <div
+          id="bookingWrapper"
+          className="h-screen flex flex-col"
+          onClick={(e) => handleClick(e)}
+        >
       <div className="self-start my-6 pl-10">
         <DatePicker />
       </div>
@@ -241,6 +252,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
           </Layer>
         </Stage>
         {focusElement && <BookingDetails/>}
+      </div>
       </div>
     </>
   );

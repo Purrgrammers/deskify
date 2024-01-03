@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import { MapContext } from "@/contexts/MapContext";
 
 const BookingDetails = () => {
-
   const { bookRoom, bookDesk, focusElement } = useContext(MapContext)
 
   const handleBooking = () => {
@@ -14,7 +13,7 @@ const BookingDetails = () => {
       bookDesk(focusElement?.id)
     }
   }
-
+  
   return (
     <div className="flex gap-6 items-center pl-10 pb-10">
         <p>{`${focusElement?.type} ${focusElement?.id}: `} <span className={focusElement?.booked? 'text-red-600': 'text-green-600'}>{focusElement?.booked? 'Booked': 'Available'}</span></p>

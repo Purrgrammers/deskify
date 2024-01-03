@@ -15,13 +15,6 @@ const BookingPage = () => {
   const path = usePathname();
   const id = path.replace("/book-desk/", "");
 
-  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (!(e.target as HTMLDivElement).matches('canvas')) {
-      console.log('hello')
-      updateFocusElement(undefined);
-    }
-  }
-
   return (
     <div className="flex flex-col">
       <MapContextProvider>
@@ -49,13 +42,7 @@ const BookingPage = () => {
           <h1 className="text-2xl font-semibold">Book your workspace</h1>
           <p>Select an available desk or room to book</p>
         </div>
-        <div
-          id="bookingWrapper"
-          className="h-screen flex flex-col"
-          onClick={(e) => handleClick(e)}
-        >
           <BookingCanvas mapId={Number(id)}></BookingCanvas>
-        </div>
       </MapContextProvider>
     </div>
   );
