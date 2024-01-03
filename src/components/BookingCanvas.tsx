@@ -3,7 +3,7 @@
 import { Desk, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
-import { SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
+import { MouseEvent, useContext, useEffect, useRef, useState } from "react";
 import { Layer, Path, Rect, Stage, Image } from "react-konva";
 import BookingDetails from "./BookingDetails";
 import DatePicker from "./DatePicker";
@@ -126,7 +126,9 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     updateFocusElement({ type, id, booked });
   };
 
-  const handleFocus = (e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>) => {
+  const handleFocus = (
+    e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
+  ) => {
     if (e.target.attrs.name !== "room" && e.target.attrs.name !== "desk") {
       updateFocusElement(undefined);
     }
@@ -137,7 +139,10 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       <div className="self-start my-6 pl-10">
         <DatePicker />
       </div>
-      <div className="flex flex-col items-center relative" ref={containerRef}>
+      <div
+        className="flex flex-col items-center relative"
+        ref={containerRef}
+      >
         <Stage
           width={
             deviceDimensions.width > 768
@@ -176,7 +181,6 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                     : room.y - 250 * imageScale
                 }
                 stroke={bookedRooms.includes(room.id) ? "red" : "green"}
-                
                 onClick={(e) =>
                   handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                 }
@@ -184,11 +188,15 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                   handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                 }
                 onMouseEnter={(e) => {
-                  const container = (e.target.getStage() as StageType).container();
+                  const container = (
+                    e.target.getStage() as StageType
+                  ).container();
                   container.style.cursor = "pointer";
                 }}
                 onMouseLeave={(e) => {
-                  const container = (e.target.getStage() as StageType).container();
+                  const container = (
+                    e.target.getStage() as StageType
+                  ).container();
                   container.style.cursor = "default";
                 }}
               />
@@ -217,18 +225,22 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                   handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
                 }
                 onMouseEnter={(e) => {
-                  const container = (e.target.getStage() as StageType).container();
+                  const container = (
+                    e.target.getStage() as StageType
+                  ).container();
                   container.style.cursor = "pointer";
                 }}
                 onMouseLeave={(e) => {
-                  const container = (e.target.getStage() as StageType).container();
+                  const container = (
+                    e.target.getStage() as StageType
+                  ).container();
                   container.style.cursor = "default";
                 }}
               />
             ))}
           </Layer>
         </Stage>
-        {focusElement && <BookingDetails element={focusElement} />}
+        {focusElement && <BookingDetails/>}
       </div>
     </>
   );
