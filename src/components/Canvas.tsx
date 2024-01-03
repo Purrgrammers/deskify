@@ -267,7 +267,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
           </Layer>
         </Stage>
         <div className="m-4 flex gap-4 self-end px-10 pb-10">
-          <Button variant="secondary">Back</Button>
+          <Button variant="secondary" onClick={() => router.back()}>Back</Button>
           <Button onClick={handleCreateMap}>Create map</Button>
         </div>
       </div>
