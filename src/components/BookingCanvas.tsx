@@ -126,8 +126,8 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     updateFocusElement({ type, id, booked });
   };
 
-  const handleFocus = (e: KonvaEventObject<MouseEvent>) => {
-    if (e.target.attrs.name === "stage") {
+  const handleFocus = (e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>) => {
+    if (e.target.attrs.name !== "room" && e.target.attrs.name !== "desk") {
       updateFocusElement(undefined);
     }
   };
@@ -152,6 +152,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
           name="stage"
           ref={stageRef}
           onClick={(e) => handleFocus(e)}
+          onTap={(e) => handleFocus(e)}
         >
           <Layer>
             <Image
@@ -177,6 +178,9 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 stroke={bookedRooms.includes(room.id) ? "red" : "green"}
                 
                 onClick={(e) =>
+                  handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
+                }
+                onTap={(e) =>
                   handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                 }
                 onMouseEnter={(e) => {
@@ -207,6 +211,9 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
                 fill="white"
                 onClick={(e) =>
+                  handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
+                }
+                onTap={(e) =>
                   handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
                 }
                 onMouseEnter={(e) => {
