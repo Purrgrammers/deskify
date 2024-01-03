@@ -134,7 +134,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     updateDesks(desks);
   };
 
-  const handleFocus = (e: KonvaEventObject<MouseEvent>) => {
+  const handleFocus = (e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>) => {
     console.log(e.target);
     if (e.target.attrs.name === "stage" || e.target.attrs.name === "image") {
       setFocus(null);
@@ -178,6 +178,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
           width={deviceDimensions.width > 768? image?.width as number * imageScale || 400 : 350}
           height={deviceDimensions.width > 768? 500 + 140 : (image?.height as number + 250) * imageScale || 400}
           onClick={(e) => handleFocus(e)}
+          onTap={(e) => handleFocus(e)}
           ref={stageRef}
         >
           <Layer>

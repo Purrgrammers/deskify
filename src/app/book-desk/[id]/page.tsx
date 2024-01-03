@@ -1,15 +1,17 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { MapContextProvider } from "@/contexts/MapContext";
+import { MapContext, MapContextProvider } from "@/contexts/MapContext";
 import { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
+import { MouseEvent, useContext } from "react";
 
 const BookingCanvas = dynamic(() => import("@/components/BookingCanvas"), {
   ssr: false,
 });
 
 const BookingPage = () => {
+  const { updateFocusElement } = useContext(MapContext);
   const path = usePathname();
   const id = path.replace("/book-desk/", "");
 
@@ -40,9 +42,7 @@ const BookingPage = () => {
           <h1 className="text-2xl font-semibold">Book your workspace</h1>
           <p>Select an available desk or room to book</p>
         </div>
-        <div id="bookingWrapper" className="h-screen flex flex-col">
           <BookingCanvas mapId={Number(id)}></BookingCanvas>
-        </div>
       </MapContextProvider>
     </div>
   );

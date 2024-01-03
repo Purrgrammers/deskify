@@ -128,6 +128,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
 
   const updateFocusElement = (element: FocusElement | undefined) => {
     setFocusElement(element);
+    console.log(focusElement)
   };
 
   const updateDate = (date: Date) => {
