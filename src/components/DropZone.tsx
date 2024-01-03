@@ -98,7 +98,7 @@ const DropZone = () => {
           },
         }}
       />
-      <div className="mb-12">
+      <div className="mb-12 mx-2">
         <FileUploader
           handleChange={(file: File) => handleUpload(file)}
           name="picture"
@@ -112,7 +112,7 @@ const DropZone = () => {
         </div>
       )}
       <div className="flex justify-end mt-5">
-        <div className="flex gap-2">
+        <div className="flex gap-2 mx-2">
           <Button variant="outline">Skip</Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </div>

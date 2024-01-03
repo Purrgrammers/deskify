@@ -7,7 +7,7 @@ import newdesk from "../newdesk.jpg";
 
 const Home = () => {
   return (
-    <main className="flex flex-col xl:flex-row justify-center xl:items-stretch items-center mt-7 pt-4 gap-4">
+    <main className="flex flex-col xl:flex-row justify-center xl:items-stretch items-center mt-16 pt-4 gap-4 mb-16">
       <ActionCard
         img={floorplan}
         title="For office managers"

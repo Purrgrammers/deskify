@@ -151,27 +151,6 @@ const Navbar = () => {
         align-items: center;
       }
     `}</style>
-      {/* <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Menu</NavigationMenuTrigger>
-            <NavigationMenuContent className="flex flex-col px-4 py-4 gap-2">
-              <Link href="/">
-                <NavigationMenuLink>Home</NavigationMenuLink>
-              </Link>
-              <Link href="/upload-map">
-                <NavigationMenuLink>Create Map</NavigationMenuLink>
-              </Link>
-              <Link href="/book-desk/1">
-                <NavigationMenuLink>Book Desk</NavigationMenuLink>
-              </Link>
-              <Link href="/my-bookings">
-                <NavigationMenuLink>Booknings</NavigationMenuLink>
-              </Link>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu> */}
     </header>
   );
 };
