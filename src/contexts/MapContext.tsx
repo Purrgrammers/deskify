@@ -24,6 +24,8 @@ type MapContextProps = {
   bookDesk: (id: number) => void
   date: Date | undefined
   updateDate: (date: Date) => void
+  focusElement: FocusElement | undefined
+  updateFocusElement: (element: FocusElement | undefined) => void
 };
 
 export type Room = {
@@ -57,6 +59,12 @@ export type Booking = {
   date: Date
 };
 
+type FocusElement = {
+  type: string;
+  booked: boolean;
+  id: number;
+};
+
 export const MapContext = createContext<MapContextProps>({
   rooms: [],
   updateRooms: () => {},
@@ -69,7 +77,9 @@ export const MapContext = createContext<MapContextProps>({
   bookRoom: () => {},
   bookDesk: () => {},
   date: undefined,
-  updateDate: () => {}
+  updateDate: () => {},
+  focusElement: undefined,
+  updateFocusElement: () => {}
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
@@ -81,6 +91,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   ]);
   const [date, setDate] = useState<Date | undefined>();
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
 
   const bookRoom = async(id: number) => {
     const { data, error } = await supabase
@@ -93,7 +104,6 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
       } else if (data) {
         toast.success("Your room has been booked");
         setBookings(prev => [...prev, data[0]])
-        console.log(data[0])
       }
   }
 
@@ -114,6 +124,10 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
 
   const updateBookings = (bookingData: Booking[]) => {
     setBookings(bookingData);
+  };
+
+  const updateFocusElement = (element: FocusElement | undefined) => {
+    setFocusElement(element);
   };
 
   const updateDate = (date: Date) => {
@@ -174,7 +188,9 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         bookRoom,
         bookDesk,
         date,
-        updateDate
+        updateDate,
+        focusElement,
+        updateFocusElement
       }}
     >
       {props.children}
