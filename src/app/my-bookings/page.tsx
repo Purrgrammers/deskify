@@ -35,10 +35,16 @@ type Booking = {
 
 const Bookings = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const date = new Date();
+  const today = date.toISOString().split("T")[0];
 
   useEffect(() => {
     const fetchAllBookings = async () => {
-      const { data, error } = await supabase.from("Bookings").select().order('date', { ascending: true });
+      const { data, error } = await supabase
+        .from("Bookings")
+        .select()
+        .order("date", { ascending: true })
+        .gte("date", today);
       if (error) {
         console.log("Fetching problem:", error);
         fetchFail();
