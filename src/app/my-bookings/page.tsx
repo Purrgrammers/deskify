@@ -81,7 +81,7 @@ const Bookings = () => {
             },
           }}
         />
-        <h1 className="text-2xl my-6 mx-4">Bookings</h1>
+        <h1 className="text-2xl font-semibold my-8 mx-4 mt-10">Bookings</h1>
         <div className="flex flex-col justify-center mx-4">
           <h2>Your booked desks:</h2>
           <Table className="mx-auto">
