@@ -1,4 +1,6 @@
+import { MapContext } from "@/contexts/MapContext";
 import { Trash2 } from "lucide-react";
+import { useContext } from "react";
 
 type PopupProps = {
     position: number
@@ -7,6 +9,18 @@ type PopupProps = {
 }
 
 const Popup = ({position, type, id}: PopupProps) => {
+
+    const { deleteRoom, deleteDesk } = useContext(MapContext)
+
+    const handleDelete = () => {
+        if(type === 'room'){
+            deleteRoom(id)
+        }
+        if(type === 'desk'){
+            deleteDesk(id)
+        }
+    }
+
   return (
     <div
     style={{
@@ -20,7 +34,7 @@ const Popup = ({position, type, id}: PopupProps) => {
         backgroundColor: "white"
       }}
     >
-      <Trash2 size={16} className="trash-hover" />
+      <Trash2 size={16} className="trash-hover" onClick={handleDelete}/>
     </div>
   );
 };

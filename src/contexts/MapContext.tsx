@@ -15,9 +15,11 @@ type MapContextProps = {
   rooms: Room[];
   updateRooms: (rooms: Room[]) => void;
   addRoom: () => void;
+  deleteRoom: (id: number) => void;
   desks: Desk[];
   updateDesks: (desks: Desk[]) => void;
   addDesk: () => void;
+  deleteDesk: (id: number) => void;
   bookings: Booking[]
   updateBookings: (bookingData: Booking[]) => void
   bookRoom: (id: number) => void
@@ -69,9 +71,11 @@ export const MapContext = createContext<MapContextProps>({
   rooms: [],
   updateRooms: () => {},
   addRoom: () => {},
+  deleteRoom: () => {},
   desks: [],
   updateDesks: () => {},
   addDesk: () => {},
+  deleteDesk: () => {},
   bookings: [],
   updateBookings: () => {},
   bookRoom: () => {},
@@ -175,15 +179,28 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     ]);
   };
 
+  const deleteRoom = (id: number) => {
+    const filteredRooms = rooms.filter((room) => room.id !== id)
+    setRooms(filteredRooms)
+  }
+
+  const deleteDesk = (id: number) => {
+    console.log('deleting deks')
+    const filteredDesks = desks.filter((desk) => desk.id !== id)
+    setDesks(filteredDesks)
+  }
+
   return (
     <MapContext.Provider
       value={{
         rooms,
         updateRooms,
         addRoom,
+        deleteRoom,
         desks,
         updateDesks,
         addDesk,
+        deleteDesk,
         bookings,
         updateBookings,
         bookRoom,

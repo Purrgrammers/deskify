@@ -271,7 +271,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
         {focus && 
         <Popup 
         position={22}
-        type=""
+        type="room"
         id={1}
         />
 }
