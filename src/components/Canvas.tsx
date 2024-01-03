@@ -19,6 +19,7 @@ import useImage from "use-image";
 import { Stage as StageType } from "konva/lib/Stage";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Popup from "./Popup";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -267,6 +268,13 @@ const Canvas = ({ mapId }: { mapId: number }) => {
             )}
           </Layer>
         </Stage>
+        {focus && 
+        <Popup 
+        position={22}
+        type=""
+        id={1}
+        />
+}
         <div className="m-4 flex gap-4 self-end px-10 pb-10">
           <Button variant="secondary" onClick={() => router.back()}>Back</Button>
           <Button onClick={handleCreateMap}>Create map</Button>
