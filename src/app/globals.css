@@ -88,3 +88,7 @@
 .trash-hover:hover {
   color: rgb(242, 114, 114); /* Changes the color to red on hover */
 }
+
+.rect:hover{
+ cursor: pointer;
+}

@@ -3,7 +3,7 @@
 import { Desk, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
-import { useContext, useEffect, useRef, useState } from "react";
+import { SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
 import { Layer, Path, Rect, Stage, Image } from "react-konva";
 import BookingDetails from "./BookingDetails";
 import DatePicker from "./DatePicker";
@@ -16,12 +16,6 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-type FocusElement = {
-  type: string;
-  booked: boolean;
-  id: number;
-};
-
 const BookingMap = ({ mapId }: { mapId: number }) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
@@ -30,7 +24,10 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const [deviceDimensions, setDeviceDimensions] = useState({width: 400, height: 400});
+  const [deviceDimensions, setDeviceDimensions] = useState({
+    width: 400,
+    height: 400,
+  });
   const { bookings, focusElement, updateFocusElement } = useContext(MapContext);
 
   useEffect(() => {
@@ -77,21 +74,25 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       .map((booking) => booking.roomId);
     setBookedRooms(filteredRooms);
 
-    if (focusElement && (filteredDesks.includes(focusElement?.id as number) || filteredRooms.includes(focusElement?.id as number))){
-      focusElement.booked = true
+    if (
+      focusElement &&
+      (filteredDesks.includes(focusElement?.id as number) ||
+        filteredRooms.includes(focusElement?.id as number))
+    ) {
+      focusElement.booked = true;
     }
   }, [bookings, focusElement]);
 
   useEffect(() => {
-    if(!image) {
-      return
+    if (!image) {
+      return;
     }
-    if(deviceDimensions.width > 768){
-      setImageScale(500 / image?.height)
+    if (deviceDimensions.width > 768) {
+      setImageScale(500 / image?.height);
     } else {
-      setImageScale(350 / image?.width)
+      setImageScale(350 / image?.width);
     }
-  }, [image, deviceDimensions])
+  }, [image, deviceDimensions]);
 
   useEffect(() => {
     setDeviceDimensions({
@@ -101,7 +102,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
   }, []);
 
   useEffect(() => {
-    console.log(deviceDimensions)
+    console.log(deviceDimensions);
   }, [deviceDimensions]);
 
   const stageRef = useRef<StageType>(null);
@@ -138,8 +139,16 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       </div>
       <div className="flex flex-col items-center relative" ref={containerRef}>
         <Stage
-          width={deviceDimensions.width > 768? image?.width as number * imageScale || 400 : 350}
-          height={deviceDimensions.width > 768? 500 : (image?.height as number) * imageScale|| 400}
+          width={
+            deviceDimensions.width > 768
+              ? (image?.width as number) * imageScale || 400
+              : 350
+          }
+          height={
+            deviceDimensions.width > 768
+              ? 500
+              : (image?.height as number) * imageScale || 400
+          }
           name="stage"
           ref={stageRef}
           onClick={(e) => handleFocus(e)}
@@ -160,11 +169,24 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 scaleX={room.scaleX}
                 scaleY={room.scaleY}
                 x={room.x}
-                y={deviceDimensions.width > 768? room.y - 140 * imageScale: room.y - 250 * imageScale}
+                y={
+                  deviceDimensions.width > 768
+                    ? room.y - 140 * imageScale
+                    : room.y - 250 * imageScale
+                }
                 stroke={bookedRooms.includes(room.id) ? "red" : "green"}
+                
                 onClick={(e) =>
                   handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                 }
+                onMouseEnter={(e) => {
+                  const container = (e.target.getStage() as StageType).container();
+                  container.style.cursor = "pointer";
+                }}
+                onMouseLeave={(e) => {
+                  const container = (e.target.getStage() as StageType).container();
+                  container.style.cursor = "default";
+                }}
               />
             ))}
             {desks.map((desk) => (
@@ -177,12 +199,24 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 scaleX={desk.scaleX}
                 scaleY={desk.scaleY}
                 x={desk.x}
-                y={deviceDimensions.width > 768? desk.y - 140 * imageScale: desk.y - 250 * imageScale}
+                y={
+                  deviceDimensions.width > 768
+                    ? desk.y - 140 * imageScale
+                    : desk.y - 250 * imageScale
+                }
                 stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
                 fill="white"
                 onClick={(e) =>
                   handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
                 }
+                onMouseEnter={(e) => {
+                  const container = (e.target.getStage() as StageType).container();
+                  container.style.cursor = "pointer";
+                }}
+                onMouseLeave={(e) => {
+                  const container = (e.target.getStage() as StageType).container();
+                  container.style.cursor = "default";
+                }}
               />
             ))}
           </Layer>

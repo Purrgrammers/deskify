@@ -104,7 +104,6 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
       } else if (data) {
         toast.success("Your room has been booked");
         setBookings(prev => [...prev, data[0]])
-        console.log(data[0])
       }
   }
 

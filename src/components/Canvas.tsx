@@ -209,6 +209,14 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                 onTransformEnd={(e) =>
                   handleTransformRoom(e.target as Shape<ShapeConfig>, room.id)
                 }
+                onMouseEnter={(e) => {
+                  const container = (e.target.getStage() as StageType).container();
+                  container.style.cursor = "pointer";
+                }}
+                onMouseLeave={(e) => {
+                  const container = (e.target.getStage() as StageType).container();
+                  container.style.cursor = "default";
+                }}
               />
             ))}
             {desks.map((desk) => (
@@ -232,6 +240,14 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                 onTransformEnd={(e) =>
                   handleTransformDesk(e.target as Shape<ShapeConfig>, desk.id)
                 }
+                onMouseEnter={(e) => {
+                  const container = (e.target.getStage() as StageType).container();
+                  container.style.cursor = "pointer";
+                }}
+                onMouseLeave={(e) => {
+                  const container = (e.target.getStage() as StageType).container();
+                  container.style.cursor = "default";
+                }}
               />
             ))}
             {focus && (
