@@ -41,6 +41,10 @@ const DropZone = () => {
     setFile(file); // Save file for later submission
   };
 
+  const handleSkip = async () => {
+    router.push(`/create-map/44`, { scroll: false });
+  };
+
   const handleSubmit = async () => {
     // Show toster when user try to submit without picture
     if (!file) {
@@ -113,7 +117,9 @@ const DropZone = () => {
       )}
       <div className="flex justify-end mt-5">
         <div className="flex gap-2 mx-2">
-          <Button variant="outline">Skip</Button>
+          <Button variant="outline" onClick={handleSkip}>
+            Skip
+          </Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </div>
       </div>
