@@ -62,7 +62,7 @@ const Bookings = () => {
     );
   };
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto mb-14">
       <BookingProvider
         initialBookings={bookings}
         removeBookingFromState={removeBookingFromState}
