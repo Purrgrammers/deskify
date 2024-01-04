@@ -102,7 +102,7 @@ const Bookings = () => {
             <TableBody>
               {bookings.map((booking) =>
                 // Pass each memory to the Memory component
-                booking.roomId ? (
+                booking.deskId ? (
                   <Booking key={booking.id} booking={booking} />
                 ) : null
               )}
@@ -121,7 +121,7 @@ const Bookings = () => {
             <TableBody>
               {bookings.map((booking) =>
                 // Pass each memory to the Memory component
-                booking.deskId ? (
+                booking.roomId ? (
                   <Booking key={booking.id} booking={booking} />
                 ) : null
               )}
