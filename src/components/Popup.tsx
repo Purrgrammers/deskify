@@ -2,26 +2,17 @@ import { MapContext } from "@/contexts/MapContext";
 import { Trash2 } from "lucide-react";
 import { useContext } from "react";
 
-type PopupProps = {
-    position: {
-        x: number
-        y: number
-    }
-    type: string
-    id: number
-    updateFocus: () => void
-}
 
-const Popup = ({position, type, id, updateFocus}: PopupProps) => {
-    const { deleteRoom, deleteDesk } = useContext(MapContext)
+const Popup = () => {
+    const { deleteRoom, deleteDesk, focus, updateFocus } = useContext(MapContext)
     const handleDelete = () => {
-        if(type === 'room'){
-            deleteRoom(id)
+        if(focus?.element.attrs.name === 'room'){
+            deleteRoom(Number(focus.element.attrs.id))
         }
-        if(type === 'desk'){
-            deleteDesk(id)
+        if(focus?.element.attrs.name === 'desk'){
+            deleteDesk(Number(focus.element.attrs.id))
         }
-        updateFocus()
+        updateFocus(null)
     }
 
     const canvas = document.querySelector('#createMapStage')
@@ -33,8 +24,8 @@ const Popup = ({position, type, id, updateFocus}: PopupProps) => {
     <div
     style={{
         position: "absolute",
-        top: position.y + offsetTop - 30,
-        left: position.x + offsetLeft,
+        top: (focus?.y || focus?.element.attrs.y) + offsetTop - 30,
+        left: (focus?.x || focus?.element.attrs.x) + offsetLeft,
         padding: "5px 10px",
         borderRadius: "3px",
         boxShadow: "0 0 3px grey",

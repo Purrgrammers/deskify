@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { createContext, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -28,6 +29,9 @@ type MapContextProps = {
   updateDate: (date: Date) => void
   focusElement: FocusElement | undefined
   updateFocusElement: (element: FocusElement | undefined) => void
+  focus: {element: Shape<ShapeConfig>, x?: number, y?: number } | null,
+  updateFocus: (element: Shape<ShapeConfig> | null) => void
+  updateFocusPosition: (x: number, y: number) => void
 };
 
 export type Room = {
@@ -83,7 +87,11 @@ export const MapContext = createContext<MapContextProps>({
   date: undefined,
   updateDate: () => {},
   focusElement: undefined,
-  updateFocusElement: () => {}
+  updateFocusElement: () => {},
+  focus: null,
+  updateFocus: () => {},
+  updateFocusPosition: () => {}
+
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
@@ -96,6 +104,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [date, setDate] = useState<Date | undefined>();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
+  const [focus, setFocus] = useState<{element: Shape<ShapeConfig>, x?: number, y?: number } | null>(null);
 
   const bookRoom = async(id: number) => {
     const { data, error } = await supabase
@@ -185,9 +194,25 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   }
 
   const deleteDesk = (id: number) => {
-    console.log('deleting deks')
     const filteredDesks = desks.filter((desk) => desk.id !== id)
     setDesks(filteredDesks)
+  }
+
+  const updateFocus = (element: Shape<ShapeConfig> | null) => {
+    if(element === null){
+      setFocus(null)
+
+    } else {
+      const newFocus = {...focus, element}
+      setFocus(newFocus)
+    }
+  }
+
+  const updateFocusPosition = (x: number, y: number) => {
+    if (focus){
+      const newFocus = {...focus, x, y}
+      setFocus(newFocus)
+    }
   }
 
   return (
@@ -208,7 +233,10 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         date,
         updateDate,
         focusElement,
-        updateFocusElement
+        updateFocusElement,
+        focus,
+        updateFocus,
+        updateFocusPosition
       }}
     >
       {props.children}
