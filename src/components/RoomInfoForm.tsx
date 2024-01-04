@@ -1,8 +1,8 @@
 import { Input } from "@/components/ui/input"
 import { Button } from "./ui/button"
-import { SyntheticEvent, useContext } from "react"
+import { SyntheticEvent, useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
-import { MapContext } from "@/contexts/MapContext"
+import { MapContext, Room } from "@/contexts/MapContext"
 
 type RoomInfoProps = {
     quitEditMode: () => void
@@ -10,8 +10,14 @@ type RoomInfoProps = {
 }
 
 const RoomInfoForm = ({quitEditMode, id}: RoomInfoProps) => {
+    const { rooms, updateRooms, focus } = useContext(MapContext)
+    const [ roomInfo, setRoomInfo ] = useState<Room>()
 
-    const { rooms, updateRooms } = useContext(MapContext)
+    useEffect(() => {
+      const room = rooms.find((room) => room.id === id)
+      setRoomInfo(room)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rooms, focus])
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault()
@@ -34,9 +40,9 @@ const RoomInfoForm = ({quitEditMode, id}: RoomInfoProps) => {
 
   return (
     <form className="flex flex-col gap-2 mb-4" onSubmit={(e) => handleSubmit(e)}>
-       <Input type="text" name='input-name' placeholder="Room name"/>
-       <Input type="number" name='input-seats' placeholder="Number of seats"/>
-       <Input type="text" name='input-additional-info' placeholder="Additional information"/>
+       <Input type="text" name='input-name' placeholder="Room name" defaultValue={roomInfo?.name || ''}/>
+       <Input type="number" name='input-seats' placeholder="Number of seats" defaultValue={roomInfo?.seats || ''}/>
+       <Input type="text" name='input-additional-info' placeholder="Additional information" defaultValue={roomInfo?.additionalInfo || ''}/>
        <div className="flex gap-2 place-content-end">
        <Button size='xs' className="w-10 text-xs" variant="secondary" onClick={() => quitEditMode()}>Cancel</Button>
        <Button size='xs' className="w-10 text-xs" type="submit">Save</Button>
