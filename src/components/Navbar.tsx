@@ -15,7 +15,7 @@ const Navbar = () => {
   }, [pathname]);
 
   return (
-    <header className="flex justify-between px-4 mx-6 mt-4 pb-6 border-b border-gray">
+    <header className="flex justify-between px-4 mx-16 mt-4 pb-6 border-b border-gray">
       <Link href="/">
         <Image src={logo} alt="logo" width={50} height={50} />
       </Link>
