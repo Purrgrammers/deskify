@@ -43,6 +43,8 @@ export type Room = {
   scaleX: number;
   scaleY: number;
   name?: string;
+  seats?: number;
+  additionalInfo?: string;
   mapId?: number
 };
 
