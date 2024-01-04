@@ -27,8 +27,8 @@ const Popup = () => {
     <div
     style={{
         position: "absolute",
-        top: (focus?.y || Number(focus?.element.attrs.y)) + offsetTop - 30,
-        left: (focus?.x || Number(focus?.element.attrs.x)) + offsetLeft,
+        top: (focus?.y || focus?.element.attrs.y) + offsetTop - 30,
+        left: (focus?.x || focus?.element.attrs.x) + offsetLeft,
         padding: "5px 5px",
         borderRadius: "3px",
         boxShadow: "0 0 3px grey",

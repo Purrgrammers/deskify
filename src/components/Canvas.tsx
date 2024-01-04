@@ -163,7 +163,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
   ) => {
     if (e.target.attrs.name === "stage" || e.target.attrs.name === "image" || e.target.attrs.y === 50) {
-      console.log(e.target)
       updateFocus(null);
       setShowPopup(false)
     } else {

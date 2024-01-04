@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Button } from "./ui/button"
 import { SyntheticEvent, useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
@@ -42,7 +43,7 @@ const RoomInfoForm = ({quitEditMode, id}: RoomInfoProps) => {
     <form className="flex flex-col gap-2 mb-4" onSubmit={(e) => handleSubmit(e)}>
        <Input type="text" name='input-name' placeholder="Room name" defaultValue={roomInfo?.name || ''}/>
        <Input type="number" name='input-seats' placeholder="Number of seats" defaultValue={roomInfo?.seats || ''}/>
-       <Input type="text" name='input-additional-info' placeholder="Additional information" defaultValue={roomInfo?.additionalInfo || ''}/>
+       <Textarea name='input-additional-info' placeholder="Additional information" defaultValue={roomInfo?.additionalInfo || ''}/>
        <div className="flex gap-2 place-content-end">
        <Button size='xs' className="w-10 text-xs" variant="secondary" onClick={() => quitEditMode()}>Cancel</Button>
        <Button size='xs' className="w-10 text-xs" type="submit">Save</Button>
