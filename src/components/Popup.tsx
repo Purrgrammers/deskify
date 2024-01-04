@@ -1,10 +1,13 @@
 import { MapContext } from "@/contexts/MapContext";
 import { Pencil, Trash2 } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import RoomInfoForm from "./RoomInfoForm";
 
 
 const Popup = () => {
     const { deleteRoom, deleteDesk, focus, updateFocus } = useContext(MapContext)
+    const [editMode, setEditMode] = useState(false)
+    
     const handleDelete = () => {
         if(focus?.element.attrs.name === 'room'){
             deleteRoom(Number(focus.element.attrs.id))
@@ -33,9 +36,10 @@ const Popup = () => {
         backgroundColor: "white"
       }}
     >
+      {editMode && <RoomInfoForm />}
       <div className="flex gap-2">
       <Trash2 size={16} className="trash-hover" onClick={handleDelete}/>
-      <Pencil size={16} className="cursor-pointer hover:text-blue-800 " />
+      <Pencil size={16} className="cursor-pointer hover:text-blue-800" onClick={() => setEditMode(!editMode)} />
       </div>
     </div>
   );
