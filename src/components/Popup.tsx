@@ -1,10 +1,13 @@
 import { MapContext } from "@/contexts/MapContext";
-import { Trash2 } from "lucide-react";
-import { useContext } from "react";
+import { Pencil, Trash2 } from "lucide-react";
+import { useContext, useState } from "react";
+import RoomInfoForm from "./RoomInfoForm";
 
 
 const Popup = () => {
     const { deleteRoom, deleteDesk, focus, updateFocus } = useContext(MapContext)
+    const [editMode, setEditMode] = useState(false)
+    
     const handleDelete = () => {
         if(focus?.element.attrs.name === 'room'){
             deleteRoom(Number(focus.element.attrs.id))
@@ -17,7 +20,7 @@ const Popup = () => {
 
     const canvas = document.querySelector('#createMapStage')
     const offsetLeft = (canvas as HTMLDivElement)?.offsetLeft
-    const offsetTop = (canvas as HTMLDivElement)?.offsetTop
+    const offsetTop = editMode? (canvas as HTMLDivElement)?.offsetTop - 172 : (canvas as HTMLDivElement)?.offsetTop
 
 
   return (
@@ -26,14 +29,18 @@ const Popup = () => {
         position: "absolute",
         top: (focus?.y || focus?.element.attrs.y) + offsetTop - 30,
         left: (focus?.x || focus?.element.attrs.x) + offsetLeft,
-        padding: "5px 10px",
+        padding: "5px 5px",
         borderRadius: "3px",
         boxShadow: "0 0 3px grey",
         zIndex: 10,
         backgroundColor: "white"
       }}
     >
+      {editMode && <RoomInfoForm quitEditMode={() => setEditMode(false)} id={Number(focus?.element.attrs.id)}/>}
+      <div className="flex gap-2">
       <Trash2 size={16} className="trash-hover" onClick={handleDelete}/>
+      {focus?.element.attrs.name === 'room' && <Pencil size={16} className="cursor-pointer hover:text-blue-800" onClick={() => setEditMode(!editMode)} />}
+      </div>
     </div>
   );
 };

@@ -163,7 +163,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
   ) => {
     if (e.target.attrs.name === "stage" || e.target.attrs.name === "image" || e.target.attrs.y === 50) {
-      console.log(e.target)
       updateFocus(null);
       setShowPopup(false)
     } else {
@@ -176,7 +175,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     const roomData = rooms
       .filter((room) => room.y !== 50)
       .map(({ id, ...keepAttrs }) => keepAttrs);
-
     const deskData = desks
       .filter((desk) => desk.y !== 50)
       .map(({ id, ...keepAttrs }) => keepAttrs);
