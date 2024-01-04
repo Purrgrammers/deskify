@@ -20,7 +20,7 @@ const Popup = () => {
 
     const canvas = document.querySelector('#createMapStage')
     const offsetLeft = (canvas as HTMLDivElement)?.offsetLeft
-    const offsetTop = (canvas as HTMLDivElement)?.offsetTop
+    const offsetTop = editMode? (canvas as HTMLDivElement)?.offsetTop - 172 : (canvas as HTMLDivElement)?.offsetTop
 
 
   return (

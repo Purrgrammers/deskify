@@ -175,7 +175,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     const roomData = rooms
       .filter((room) => room.y !== 50)
       .map(({ id, ...keepAttrs }) => keepAttrs);
-     console.log(roomData)
     const deskData = desks
       .filter((desk) => desk.y !== 50)
       .map(({ id, ...keepAttrs }) => keepAttrs);
