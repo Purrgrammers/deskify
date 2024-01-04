@@ -1,5 +1,5 @@
 import { MapContext } from "@/contexts/MapContext";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useContext } from "react";
 
 
@@ -26,14 +26,17 @@ const Popup = () => {
         position: "absolute",
         top: (focus?.y || focus?.element.attrs.y) + offsetTop - 30,
         left: (focus?.x || focus?.element.attrs.x) + offsetLeft,
-        padding: "5px 10px",
+        padding: "5px 5px",
         borderRadius: "3px",
         boxShadow: "0 0 3px grey",
         zIndex: 10,
         backgroundColor: "white"
       }}
     >
+      <div className="flex gap-2">
       <Trash2 size={16} className="trash-hover" onClick={handleDelete}/>
+      <Pencil size={16} className="cursor-pointer hover:text-blue-800 " />
+      </div>
     </div>
   );
 };
