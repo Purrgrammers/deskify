@@ -180,7 +180,6 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   };
 
   const deleteRoom = (id: number) => {
-    console.log(id, 'context')
     const filteredRooms = rooms.filter((room) => room.id !== id)
     setRooms(filteredRooms)
   }
