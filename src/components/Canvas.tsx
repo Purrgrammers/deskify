@@ -139,6 +139,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
   ) => {
     if (e.target.attrs.name === "stage" || e.target.attrs.name === "image" || e.target.attrs.y === 50) {
+      console.log(e.target)
       setFocus(null);
     } else {
       setFocus(e.target as Shape<ShapeConfig>);
@@ -173,6 +174,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       <div className="flex flex-col items-center relative" ref={containerRef}>
         <Stage
           name="stage"
+          id="createMapStage"
           width={
             deviceDimensions.width > 768
               ? (image?.width as number) * imageScale || 400

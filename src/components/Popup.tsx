@@ -13,9 +13,7 @@ type PopupProps = {
 }
 
 const Popup = ({position, type, id, updateFocus}: PopupProps) => {
-
     const { deleteRoom, deleteDesk } = useContext(MapContext)
-
     const handleDelete = () => {
         if(type === 'room'){
             deleteRoom(id)
@@ -26,12 +24,17 @@ const Popup = ({position, type, id, updateFocus}: PopupProps) => {
         updateFocus()
     }
 
+    const canvas = document.querySelector('#createMapStage')
+    const offsetLeft = (canvas as HTMLDivElement)?.offsetLeft
+    const offsetTop = (canvas as HTMLDivElement)?.offsetTop
+
+
   return (
     <div
     style={{
         position: "absolute",
-        top:  position.y + "px",
-        left: position.x + "px",
+        top: position.y + offsetTop - 30,
+        left: position.x + offsetLeft,
         padding: "5px 10px",
         borderRadius: "3px",
         boxShadow: "0 0 3px grey",
