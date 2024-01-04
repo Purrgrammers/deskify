@@ -151,7 +151,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     setRooms((prev) => [
       ...prev,
       {
-        id: rooms.length + 1,
+        id: rooms[rooms.length-1].id + 1,
         x: 20,
         y: 50,
         width: 50,
@@ -167,7 +167,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     setDesks((prev) => [
       ...prev,
       {
-        id: desks.length + 1,
+        id: desks[desks.length-1].id + 1,
         x: 80,
         y: 50,
         width: 50,

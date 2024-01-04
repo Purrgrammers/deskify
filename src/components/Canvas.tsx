@@ -138,7 +138,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   const handleFocus = (
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
   ) => {
-    console.log(e.target);
     if (e.target.attrs.name === "stage" || e.target.attrs.name === "image") {
       setFocus(null);
     } else {
