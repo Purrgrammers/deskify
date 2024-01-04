@@ -3,12 +3,16 @@ import { Trash2 } from "lucide-react";
 import { useContext } from "react";
 
 type PopupProps = {
-    position: number
+    position: {
+        x: number
+        y: number
+    }
     type: string
     id: number
+    updateFocus: () => void
 }
 
-const Popup = ({position, type, id}: PopupProps) => {
+const Popup = ({position, type, id, updateFocus}: PopupProps) => {
 
     const { deleteRoom, deleteDesk } = useContext(MapContext)
 
@@ -19,14 +23,15 @@ const Popup = ({position, type, id}: PopupProps) => {
         if(type === 'desk'){
             deleteDesk(id)
         }
+        updateFocus()
     }
 
   return (
     <div
     style={{
         position: "absolute",
-        top:  position + 20 + "px",
-        left: position + 20 + "px",
+        top:  position.y + "px",
+        left: position.x + "px",
         padding: "5px 10px",
         borderRadius: "3px",
         boxShadow: "0 0 3px grey",

@@ -11,7 +11,6 @@ import {
   Transformer,
   Path,
   Image,
-  Text,
 } from "react-konva";
 import { useStrictMode } from "react-konva";
 import { Button } from "./ui/button";
@@ -31,13 +30,15 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const [deviceDimensions, setDeviceDimensions] = useState({width: 400, height: 400});
+  const [deviceDimensions, setDeviceDimensions] = useState({
+    width: 400,
+    height: 400,
+  });
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
   useStrictMode(true);
-  const router = useRouter()
-
+  const router = useRouter();
 
   const trRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,15 +68,15 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   }, [focus]);
 
   useEffect(() => {
-    if(!image) {
-      return
+    if (!image) {
+      return;
     }
-    if(deviceDimensions.width > 768){
-      setImageScale(500 / image?.height)
+    if (deviceDimensions.width > 768) {
+      setImageScale(500 / image?.height);
     } else {
-      setImageScale(350 / image?.width)
+      setImageScale(350 / image?.width);
     }
-  }, [image, deviceDimensions])
+  }, [image, deviceDimensions]);
 
   useEffect(() => {
     setDeviceDimensions({
@@ -85,9 +86,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   }, []);
 
   useEffect(() => {
-    console.log(deviceDimensions)
+    console.log(deviceDimensions);
   }, [deviceDimensions]);
-
 
   const handleDraggedRoom = (target: Shape<ShapeConfig>, id: number) => {
     const draggedElementIndex = rooms.findIndex((room) => room.id === id);
@@ -135,7 +135,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     updateDesks(desks);
   };
 
-  const handleFocus = (e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>) => {
+  const handleFocus = (
+    e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
+  ) => {
     console.log(e.target);
     if (e.target.attrs.name === "stage" || e.target.attrs.name === "image") {
       setFocus(null);
@@ -156,45 +158,49 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     const { error: roomError } = await supabase.from("Rooms").insert(roomData);
     if (roomError) {
       console.log("roomerror", roomError);
-      return
+      return;
     }
     const { error: deskError } = await supabase.from("Desks").insert(deskData);
     if (deskError) {
       console.log("deskerror", deskError);
-      return
+      return;
     }
-    toast.success('Your bookable map was created!')
-    router.push(`/book-desk/${mapId}`, { scroll: false })
+    toast.success("Your bookable map was created!");
+    router.push(`/book-desk/${mapId}`, { scroll: false });
   };
-
 
   return (
     <>
-      <div
-        className="flex flex-col items-center relative"
-        ref={containerRef}
-      >
+      <div className="flex flex-col items-center relative" ref={containerRef}>
         <Stage
           name="stage"
-          width={deviceDimensions.width > 768? image?.width as number * imageScale || 400 : 350}
-          height={deviceDimensions.width > 768? 500 + 140 : (image?.height as number + 250) * imageScale || 400}
+          width={
+            deviceDimensions.width > 768
+              ? (image?.width as number) * imageScale || 400
+              : 350
+          }
+          height={
+            deviceDimensions.width > 768
+              ? 500 + 140
+              : ((image?.height as number) + 250) * imageScale || 400
+          }
           onClick={(e) => handleFocus(e)}
           onTap={(e) => handleFocus(e)}
           ref={stageRef}
         >
           <Layer>
-          <Image 
-          offsetY={deviceDimensions.width > 768? -140 : -250} 
-          image={image} 
-          scaleX={imageScale}
-          scaleY={imageScale}
-          alt="floor plan"
-          name="image"
-          >
-          </Image>
+            <Image
+              offsetY={deviceDimensions.width > 768 ? -140 : -250}
+              image={image}
+              scaleX={imageScale}
+              scaleY={imageScale}
+              alt="floor plan"
+              name="image"
+            ></Image>
             {rooms.map((room) => (
               <Rect
                 key={`room-${room.id}`}
+                id={`${room.id}`}
                 name="room"
                 width={room.width}
                 height={room.height}
@@ -212,11 +218,15 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                   handleTransformRoom(e.target as Shape<ShapeConfig>, room.id)
                 }
                 onMouseEnter={(e) => {
-                  const container = (e.target.getStage() as StageType).container();
+                  const container = (
+                    e.target.getStage() as StageType
+                  ).container();
                   container.style.cursor = "pointer";
                 }}
                 onMouseLeave={(e) => {
-                  const container = (e.target.getStage() as StageType).container();
+                  const container = (
+                    e.target.getStage() as StageType
+                  ).container();
                   container.style.cursor = "default";
                 }}
               />
@@ -225,6 +235,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
               <Path
                 key={`desk-${desk.id}`}
                 name="desk"
+                id={`${desk.id}`}
                 data="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
                 width={desk.width}
                 height={desk.height}
@@ -243,11 +254,15 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                   handleTransformDesk(e.target as Shape<ShapeConfig>, desk.id)
                 }
                 onMouseEnter={(e) => {
-                  const container = (e.target.getStage() as StageType).container();
+                  const container = (
+                    e.target.getStage() as StageType
+                  ).container();
                   container.style.cursor = "pointer";
                 }}
                 onMouseLeave={(e) => {
-                  const container = (e.target.getStage() as StageType).container();
+                  const container = (
+                    e.target.getStage() as StageType
+                  ).container();
                   container.style.cursor = "default";
                 }}
               />
@@ -268,15 +283,11 @@ const Canvas = ({ mapId }: { mapId: number }) => {
             )}
           </Layer>
         </Stage>
-        {focus && 
-        <Popup 
-        position={22}
-        type="room"
-        id={1}
-        />
-}
+        {focus && <Popup position={{x: focus.attrs.x, y: focus.attrs.y}} type={focus.attrs.name} id={Number(focus.attrs.id)} updateFocus={() => setFocus(null)}/>}
         <div className="m-4 flex gap-4 self-end px-10 pb-10">
-          <Button variant="secondary" onClick={() => router.back()}>Back</Button>
+          <Button variant="secondary" onClick={() => router.back()}>
+            Back
+          </Button>
           <Button onClick={handleCreateMap}>Create map</Button>
         </div>
       </div>
