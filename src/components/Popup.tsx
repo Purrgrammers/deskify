@@ -39,7 +39,7 @@ const Popup = () => {
       {editMode && <RoomInfoForm quitEditMode={() => setEditMode(false)} id={Number(focus?.element.attrs.id)}/>}
       <div className="flex gap-2">
       <Trash2 size={16} className="trash-hover" onClick={handleDelete}/>
-      <Pencil size={16} className="cursor-pointer hover:text-blue-800" onClick={() => setEditMode(!editMode)} />
+      {focus?.element.attrs.name === 'room' && <Pencil size={16} className="cursor-pointer hover:text-blue-800" onClick={() => setEditMode(!editMode)} />}
       </div>
     </div>
   );
