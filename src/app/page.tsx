@@ -19,7 +19,7 @@ const Home = () => {
         img={newdesk}
         title="For employees"
         description="Choose your workspace! Select dates and pick from available rooms or desks through our interface. Book your ideal spot with just a few taps."
-        btnText="Book desk"
+        btnText="Book space"
         reverse={true}
         href="book-desk/1"
       ></ActionCard>
