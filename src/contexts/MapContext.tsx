@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { createContext, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -15,9 +16,11 @@ type MapContextProps = {
   rooms: Room[];
   updateRooms: (rooms: Room[]) => void;
   addRoom: () => void;
+  deleteRoom: (id: number) => void;
   desks: Desk[];
   updateDesks: (desks: Desk[]) => void;
   addDesk: () => void;
+  deleteDesk: (id: number) => void;
   bookings: Booking[]
   updateBookings: (bookingData: Booking[]) => void
   bookRoom: (id: number) => void
@@ -26,6 +29,9 @@ type MapContextProps = {
   updateDate: (date: Date) => void
   focusElement: FocusElement | undefined
   updateFocusElement: (element: FocusElement | undefined) => void
+  focus: {element: Shape<ShapeConfig>, x?: number, y?: number } | null,
+  updateFocus: (element: Shape<ShapeConfig> | null) => void
+  updateFocusPosition: (x: number, y: number) => void
 };
 
 export type Room = {
@@ -69,9 +75,11 @@ export const MapContext = createContext<MapContextProps>({
   rooms: [],
   updateRooms: () => {},
   addRoom: () => {},
+  deleteRoom: () => {},
   desks: [],
   updateDesks: () => {},
   addDesk: () => {},
+  deleteDesk: () => {},
   bookings: [],
   updateBookings: () => {},
   bookRoom: () => {},
@@ -79,7 +87,11 @@ export const MapContext = createContext<MapContextProps>({
   date: undefined,
   updateDate: () => {},
   focusElement: undefined,
-  updateFocusElement: () => {}
+  updateFocusElement: () => {},
+  focus: null,
+  updateFocus: () => {},
+  updateFocusPosition: () => {}
+
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
@@ -92,6 +104,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [date, setDate] = useState<Date | undefined>();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
+  const [focus, setFocus] = useState<{element: Shape<ShapeConfig>, x?: number, y?: number } | null>(null);
 
   const bookRoom = async(id: number) => {
     const { data, error } = await supabase
@@ -147,7 +160,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     setRooms((prev) => [
       ...prev,
       {
-        id: rooms.length + 1,
+        id: rooms[rooms.length-1].id + 1,
         x: 20,
         y: 50,
         width: 50,
@@ -163,7 +176,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     setDesks((prev) => [
       ...prev,
       {
-        id: desks.length + 1,
+        id: desks[desks.length-1].id + 1,
         x: 80,
         y: 50,
         width: 50,
@@ -175,15 +188,44 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     ]);
   };
 
+  const deleteRoom = (id: number) => {
+    const filteredRooms = rooms.filter((room) => room.id !== id)
+    setRooms(filteredRooms)
+  }
+
+  const deleteDesk = (id: number) => {
+    const filteredDesks = desks.filter((desk) => desk.id !== id)
+    setDesks(filteredDesks)
+  }
+
+  const updateFocus = (element: Shape<ShapeConfig> | null) => {
+    if(element === null){
+      setFocus(null)
+
+    } else {
+      const newFocus = {...focus, element}
+      setFocus(newFocus)
+    }
+  }
+
+  const updateFocusPosition = (x: number, y: number) => {
+    if (focus){
+      const newFocus = {...focus, x, y}
+      setFocus(newFocus)
+    }
+  }
+
   return (
     <MapContext.Provider
       value={{
         rooms,
         updateRooms,
         addRoom,
+        deleteRoom,
         desks,
         updateDesks,
         addDesk,
+        deleteDesk,
         bookings,
         updateBookings,
         bookRoom,
@@ -191,7 +233,10 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         date,
         updateDate,
         focusElement,
-        updateFocusElement
+        updateFocusElement,
+        focus,
+        updateFocus,
+        updateFocusPosition
       }}
     >
       {props.children}
