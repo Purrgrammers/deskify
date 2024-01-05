@@ -1,19 +1,23 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { MapContext, MapContextProvider } from "@/contexts/MapContext";
+import {
+  FacilityInfo,
+  MapContext,
+  MapContextProvider,
+} from "@/contexts/MapContext";
 import { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
-import { MouseEvent, useContext } from "react";
+import { useState } from "react";
 
 const BookingCanvas = dynamic(() => import("@/components/BookingCanvas"), {
   ssr: false,
 });
 
 const BookingPage = () => {
-  const { updateFocusElement } = useContext(MapContext);
   const path = usePathname();
   const id = path.replace("/book-desk/", "");
+  const [facilityInfo, setFacilityInfo] = useState<FacilityInfo | null>();
 
   return (
     <div className="flex flex-col max-w-7xl mx-auto">
@@ -43,6 +47,19 @@ const BookingPage = () => {
           <p>Select an available desk or room to book</p>
         </div>
         <BookingCanvas mapId={Number(id)}></BookingCanvas>
+        <div className="pl-10 pt-4">
+          <p>
+            <span className="font-semibold">Address:</span>{" "}
+            {facilityInfo?.address}
+          </p>
+          <p>
+            <span className="font-semibold">Floor:</span> {facilityInfo?.floor}
+          </p>
+        </div>
+        <BookingCanvas
+          mapId={Number(id)}
+          getFacilityInfo={(data: FacilityInfo) => setFacilityInfo(data)}
+        ></BookingCanvas>
       </MapContextProvider>
     </div>
   );

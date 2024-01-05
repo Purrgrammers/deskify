@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 
-const BookDeskPopup = () => {
+const BookDeskPopup = ({mapId}: {mapId: number}) => {
     const { focusElement, updateFocusElement, bookDesk, bookRoom } = useContext(MapContext)
     const [ popupHeight, setPopupHeight] = useState(0)
-    const canvas = document.querySelector('#BookDeskStage')
+    const canvas = document.querySelector('#bookDeskStage')
     const offsetLeft = (canvas as HTMLDivElement)?.offsetLeft
     const offsetTop =  (canvas as HTMLDivElement)?.offsetTop
     const popupElement = document.querySelector('#bookDeskPopup') as HTMLDivElement
@@ -19,10 +19,10 @@ const BookDeskPopup = () => {
 
     const handleBooking = () => {
       if(focusElement?.type === 'Room') {
-        bookRoom(focusElement?.id)
+        bookRoom(focusElement?.id, mapId)
       }
       if(focusElement?.type === 'Desk') {
-        bookDesk(focusElement?.id)
+        bookDesk(focusElement?.id, mapId)
       }
     }
   return (
@@ -46,7 +46,7 @@ const BookDeskPopup = () => {
       {focusElement?.seats && <p className="text-xs"><span className="font-semibold">Number of seats:</span> {focusElement.seats}</p>}
       {focusElement?.additionalInfo && <p className="text-xs"><span className="font-semibold">Additional information:</span> {focusElement.additionalInfo}</p>}
       <div className="flex gap-2 justify-end">
-      <Button className="mt-2" size='xs' variant='secondary' onClick={() => updateFocusElement(undefined)}>Close</Button>
+      <Button className="mt-2" size='xs' variant='outline' onClick={() => updateFocusElement(undefined)}>Close</Button>
       <Button disabled={focusElement?.booked? true : false} className="mt-2" size='xs' onClick={handleBooking}>Book</Button>
       </div>
       </div>
