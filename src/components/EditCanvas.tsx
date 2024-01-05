@@ -13,11 +13,9 @@ import {
   useStrictMode,
   Transformer,
 } from "react-konva";
-import DatePicker from "./DatePicker";
 import { KonvaEventObject } from "konva/lib/Node";
 import useImage from "use-image";
 import { Stage as StageType } from "konva/lib/Stage";
-import Popup from "./CreateMapPopup";
 import { Button } from "./ui/button";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -31,8 +29,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const EditCanvas = ({ mapId }: { mapId: number }) => {
   const [showPopup, setShowPopup] = useState(false);
   const { focus, updateFocus, updateFocusPosition } = useContext(MapContext);
-  const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
-  const [bookedRooms, setBookedRooms] = useState<(number | undefined)[]>([]);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
@@ -288,7 +284,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             }
             height={
               deviceDimensions.width > 768
-                ? 500
+                ? 640
                 : (image?.height as number) * imageScale || 400
             }
             name="stage"
@@ -299,10 +295,12 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
           >
             <Layer>
               <Image
+                y={120}
                 image={image}
                 alt="booking map"
                 scaleX={imageScale}
                 scaleY={imageScale}
+                name="image"
               ></Image>
               {rooms.map((room) => (
                 <Rect
