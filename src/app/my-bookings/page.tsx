@@ -31,6 +31,10 @@ type Booking = {
   userId: number;
   deskId: number;
   roomId: number;
+  Maps: {
+    address?:string;
+    floor?:number;
+  }
 };
 
 const Bookings = () => {
@@ -42,7 +46,7 @@ const Bookings = () => {
     const fetchAllBookings = async () => {
       const { data, error } = await supabase
         .from("Bookings")
-        .select()
+        .select('*, Maps!inner(id, address, floor)')
         .order("date", { ascending: true })
         .gte("date", today);
       if (error) {
@@ -50,10 +54,12 @@ const Bookings = () => {
         fetchFail();
         return;
       }
+      console.log(data, 'bookingdata')
       setBookings(data);
       console.log("Those are my bookings", data);
     };
     fetchAllBookings();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const removeBookingFromState = (bookingId: string) => {
@@ -96,6 +102,8 @@ const Bookings = () => {
               <TableRow>
                 <TableHead className="w-[150px]">Date</TableHead>
                 <TableHead>Desk</TableHead>
+                <TableHead>Address</TableHead>
+                <TableHead>Floor</TableHead>
                 <TableHead className="pl-0">Remove</TableHead>
               </TableRow>
             </TableHeader>
@@ -115,6 +123,8 @@ const Bookings = () => {
               <TableRow>
                 <TableHead className="w-[150px]">Date</TableHead>
                 <TableHead>Room</TableHead>
+                <TableHead>Address</TableHead>
+                <TableHead>Floor</TableHead>
                 <TableHead className="pl-0">Remove</TableHead>
               </TableRow>
             </TableHeader>

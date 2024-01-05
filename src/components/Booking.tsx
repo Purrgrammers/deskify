@@ -30,6 +30,8 @@ type BookingProps = {
     userId: number;
     deskId: number;
     roomId: number;
+    Maps: {address?:string;
+    floor?: number;}
   };
 };
 
@@ -39,6 +41,8 @@ const Booking: React.FC<BookingProps> = ({ booking }) => {
   if (!context) {
     throw new Error("BookingContext must be used within a BookingProvider");
   }
+
+  console.log(booking)
 
   const { removeBookingFromState } = context;
 
@@ -63,6 +67,12 @@ const Booking: React.FC<BookingProps> = ({ booking }) => {
         <TableCell className="font-medium">{booking.date}</TableCell>
         <TableCell>
           {booking.deskId ? booking.deskId : booking.roomId}
+        </TableCell>
+        <TableCell>
+          {booking.Maps.address}
+        </TableCell>
+        <TableCell>
+        {booking.Maps.floor}
         </TableCell>
         <TableCell className="text-right w-[25px]" align="right">
           <Trash2 onClick={handleClick} className="trash-hover" />
