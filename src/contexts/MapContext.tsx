@@ -67,6 +67,11 @@ export type Booking = {
   date: Date
 };
 
+export type FacilityInfo = {
+  address: string;
+  floor: number;
+};
+
 type FocusElement = {
   type: string;
   booked: boolean;
@@ -97,8 +102,7 @@ export const MapContext = createContext<MapContextProps>({
   updateFocusElement: () => {},
   focus: null,
   updateFocus: () => {},
-  updateFocusPosition: () => {}
-
+  updateFocusPosition: () => {},
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {

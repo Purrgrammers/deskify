@@ -1,11 +1,12 @@
 "use client";
 import { createClient } from "@supabase/supabase-js";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { MapContext } from "@/contexts/MapContext";
 
 const fileTypes = ["JPG", "JPEG", "PNG"];
 
@@ -19,10 +20,10 @@ const missingFile = () => toast.error("You need to upload a file.");
 const uploadFail = (error: Error) =>
   toast.error(`${error.message}. Try another picture.`);
 
-const uploadImgToDb = async (userId: number, url: string) => {
+const uploadImgToDb = async (userId: number, url: string, address: string, floor: number) => {
   const { data, error } = await supabase
     .from("Maps")
-    .insert({ userId, img: url })
+    .insert({ userId, img: url, address, floor})
     .select("id");
   //returns created mapId.
   return data;
@@ -51,6 +52,9 @@ const DropZone = () => {
       missingFile();
       return;
     }
+    const address = (document.querySelector('#address') as HTMLInputElement).value
+    const floor = (document.querySelector('#floor') as HTMLInputElement).value
+    console.log(address, floor)
     const filePath = `uploads/${file.name}`;
     try {
       // Uploads picture to bucket
@@ -67,7 +71,7 @@ const DropZone = () => {
       console.log("Public URL:", publicUrl);
 
       // Uploads userId and public URL to database and saves created mapId
-      const mapId = await uploadImgToDb(1, publicUrl);
+      const mapId = await uploadImgToDb(1, publicUrl, address, Number(floor));
       console.log("File uploaded to Supabase:", data);
       console.log("This is id of created map:", mapId);
 

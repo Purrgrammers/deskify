@@ -26,7 +26,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const Canvas = ({ mapId }: { mapId: number }) => {
-  const {focus, updateFocus, updateFocusPosition} = useContext(MapContext);
+  const {focus, updateFocus, updateFocusPosition } = useContext(MapContext);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);

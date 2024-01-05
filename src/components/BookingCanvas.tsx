@@ -1,11 +1,10 @@
 "use client";
 
-import { Desk, MapContext, Room } from "@/contexts/MapContext";
+import { Desk, FacilityInfo, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { MouseEvent, useContext, useEffect, useRef, useState } from "react";
 import { Layer, Path, Rect, Stage, Image } from "react-konva";
-import BookingDetails from "./BookingDetails";
 import DatePicker from "./DatePicker";
 import { KonvaEventObject } from "konva/lib/Node";
 import useImage from "use-image";
@@ -17,7 +16,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const BookingMap = ({ mapId }: { mapId: number }) => {
+const BookingMap = ({ mapId, getFacilityInfo }: { mapId: number , getFacilityInfo: (data: FacilityInfo) => void}) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
   const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
@@ -47,17 +46,18 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       if (deskError) {
         console.log(deskError);
       }
-      const { data: imgData, error: imgError } = await supabase
+      const { data: mapData, error: imgError } = await supabase
         .from("Maps")
-        .select("img")
+        .select()
         .eq("id", mapId);
       if (imgError) {
         console.log(imgError);
       }
       setRooms(roomData as Room[]);
       setDesks(deskData as Desk[]);
-      if (imgData) {
-        setBackgroundImage(imgData[0].img);
+      if (mapData) {
+        setBackgroundImage(mapData[0].img);
+        getFacilityInfo({address: mapData[0].address, floor: mapData[0].floor})
       }
     };
     getMapData();
