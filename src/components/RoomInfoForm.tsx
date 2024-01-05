@@ -4,6 +4,7 @@ import { Button } from "./ui/button"
 import { SyntheticEvent, useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { MapContext, Room } from "@/contexts/MapContext"
+import { Label } from "./ui/label"
 
 type RoomInfoProps = {
     quitEditMode: () => void
@@ -41,9 +42,12 @@ const RoomInfoForm = ({quitEditMode, id}: RoomInfoProps) => {
 
   return (
     <form className="flex flex-col gap-2 mb-4" onSubmit={(e) => handleSubmit(e)}>
-       <Input type="text" name='input-name' placeholder="Room name" defaultValue={roomInfo?.name || ''}/>
-       <Input type="number" name='input-seats' placeholder="Number of seats" defaultValue={roomInfo?.seats || ''}/>
-       <Textarea name='input-additional-info' placeholder="Additional information" defaultValue={roomInfo?.additionalInfo || ''}/>
+        <Label htmlFor="input-name" className="ml-px mt-px">Room name</Label>
+       <Input type="text" name='input-name' id='input-name' defaultValue={roomInfo?.name || ''}/>
+       <Label htmlFor="input-seats" className="ml-px mt-px">Number of seats</Label>
+       <Input type="number" name='input-seats' defaultValue={roomInfo?.seats || ''}/>
+       <Label htmlFor="input-additional-info" className="ml-px mt-px">Additional information</Label>
+       <Textarea name='input-additional-info' defaultValue={roomInfo?.additionalInfo || ''}/>
        <div className="flex gap-2 place-content-end">
        <Button size='xs' className="w-10 text-xs" variant="secondary" onClick={() => quitEditMode()}>Cancel</Button>
        <Button size='xs' className="w-10 text-xs" type="submit">Save</Button>
