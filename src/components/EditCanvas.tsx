@@ -4,12 +4,24 @@ import { Desk, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { MouseEvent, useContext, useEffect, useRef, useState } from "react";
-import { Layer, Path, Rect, Stage, Image } from "react-konva";
+import {
+  Layer,
+  Path,
+  Rect,
+  Stage,
+  Image,
+  useStrictMode,
+  Transformer,
+} from "react-konva";
 import BookingDetails from "./BookingDetails";
 import DatePicker from "./DatePicker";
 import { KonvaEventObject } from "konva/lib/Node";
 import useImage from "use-image";
 import { Stage as StageType } from "konva/lib/Stage";
+import Popup from "./Popup";
+import { Button } from "./ui/button";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -19,12 +31,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const EditCanvas = ({ mapId }: { mapId: number }) => {
   const [showPopup, setShowPopup] = useState(false);
   const { focus, updateFocus, updateFocusPosition } = useContext(MapContext);
-  //   const [roomsState, setRooms] = useState<Room[]>([
-  //     { id: 1, x: 20, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
-  //   ]);
-  //   const [desksState, setDesks] = useState<Desk[]>([
-  //     { id: 1, x: 80, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
-  //   ]);
   const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
   const [bookedRooms, setBookedRooms] = useState<(number | undefined)[]>([]);
   const [backgroundImage, setBackgroundImage] = useState("");
@@ -37,6 +43,12 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   const { bookings, focusElement, updateFocusElement } = useContext(MapContext);
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
+
+  const router = useRouter();
+
+  const trRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<StageType>(null);
 
   useEffect(() => {
     const getMapData = async () => {
@@ -118,11 +130,27 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   }, []);
 
   useEffect(() => {
+    if (focus) {
+      // @ts-expect-error just let me do it
+      trRef.current?.nodes([focus.element]);
+      // @ts-expect-error just let me do it
+      trRef.current?.getLayer().batchDraw();
+    }
+    if (!focus) {
+      setShowPopup(false);
+    }
+  }, [focus]);
+
+  useEffect(() => {
+    setDeviceDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, []);
+
+  useEffect(() => {
     console.log(deviceDimensions);
   }, [deviceDimensions]);
-
-  const stageRef = useRef<StageType>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleClickRoom = (target: Shape<ShapeConfig>, id: number) => {
     const booked = bookedRooms.includes(id);
@@ -225,6 +253,52 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     updateDesks(desks);
     if (focus) {
       updateFocusPosition(target.x(), target.y());
+    }
+  };
+
+  const handleUpdateMap = async () => {
+    await supabase.from("Rooms").delete().eq("mapId", mapId);
+    await supabase.from("Desks").delete().eq("mapId", mapId);
+    const roomData = rooms
+      .filter((room) => room.y !== 50)
+      .map(({ id, ...keepAttrs }) => keepAttrs);
+
+    const deskData = desks
+      .filter((desk) => desk.y !== 50)
+      .map(({ id, ...keepAttrs }) => keepAttrs);
+    try {
+      // Insert all rooms with the new map ID
+      for (const room of roomData) {
+        await supabase.from("Rooms").insert({
+          x: room.x,
+          y: room.y,
+          height: room.height,
+          width: room.width,
+          scaleX: room.scaleX,
+          scaleY: room.scaleY,
+          mapId: mapId,
+        });
+      }
+
+      // Insert all desks with the new map ID
+      for (const desk of deskData) {
+        await supabase.from("Desks").insert({
+          x: desk.x,
+          y: desk.y,
+          height: desk.height,
+          width: desk.width,
+          scaleX: desk.scaleX,
+          scaleY: desk.scaleY,
+          mapId: mapId,
+        });
+      }
+
+      toast.success("Your map has been updated.");
+      router.push(`/book-desk/${mapId}`, { scroll: false });
+      // Navigate to the new map or update state as necessary
+    } catch (error) {
+      console.error("Error updating map:", error);
+      toast.error("Failed to create new map version.");
     }
   };
 
@@ -333,9 +407,29 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                   }}
                 />
               ))}
+              {focus && (
+                <Transformer
+                  ref={trRef}
+                  rotateEnabled={false}
+                  borderEnabled={false}
+                  anchorStroke={"#869ee3"}
+                  anchorCornerRadius={15}
+                  anchorStrokeWidth={1}
+                  anchorSize={7}
+                  keepRatio={false}
+                  flipEnabled={false}
+                  ignoreStroke={true}
+                />
+              )}
             </Layer>
           </Stage>
-          {focusElement && <BookingDetails />}
+          {showPopup && <Popup />}
+          <div className="m-4 flex gap-4 self-end px-10 pb-10">
+            <Button variant="secondary" onClick={() => router.back()}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateMap}>Update map</Button>
+          </div>
         </div>
       </div>
     </>

@@ -1,11 +1,11 @@
 "use client";
-import EditCanvas from "@/components/EditCanvas";
+
 import { MapContextProvider } from "@/contexts/MapContext";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 
-const Canvas = dynamic(() => import("@/components/Canvas"), {
+const EditCanvas = dynamic(() => import("@/components/EditCanvas"), {
   ssr: false,
 });
 
