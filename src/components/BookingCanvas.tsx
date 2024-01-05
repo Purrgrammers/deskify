@@ -170,7 +170,7 @@ const BookingMap = ({
     <>
       <div className="flex flex-col">
         {!backgroundImage ? (
-          <BeatLoader className="justify-center pt-20" color="#ccc" />
+          <BeatLoader className="justify-center pt-56" color="#ccc" />
         ) : (
           <div
             id="bookingWrapper"

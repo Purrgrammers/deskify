@@ -195,7 +195,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     <>
       <div className="flex flex-col">
         {!backgroundImage ? (
-          <BeatLoader className="justify-center pt-20" color="#ccc" />
+          <BeatLoader className="justify-center pt-56" color="#ccc" />
         ) : (
           <div
             className="flex flex-col items-center relative"
