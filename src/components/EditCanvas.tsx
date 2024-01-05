@@ -13,7 +13,6 @@ import {
   useStrictMode,
   Transformer,
 } from "react-konva";
-import BookingDetails from "./BookingDetails";
 import DatePicker from "./DatePicker";
 import { KonvaEventObject } from "konva/lib/Node";
 import useImage from "use-image";
