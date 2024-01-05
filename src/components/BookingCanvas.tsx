@@ -219,8 +219,8 @@ const BookingMap = ({
                       x={room.x}
                       y={
                         deviceDimensions.width > 768
-                          ? room.y - 140 * imageScale
-                          : room.y - 250 * imageScale
+                          ? room.y - 120
+                          : room.y - 250
                       }
                       stroke={bookedRooms.includes(room.id) ? "red" : "green"}
                       onClick={(e) =>
@@ -255,8 +255,8 @@ const BookingMap = ({
                       x={desk.x}
                       y={
                         deviceDimensions.width > 768
-                          ? desk.y - 140 * imageScale
-                          : desk.y - 250 * imageScale
+                          ? desk.y - 120
+                          : desk.y - 250
                       }
                       stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
                       fill="white"

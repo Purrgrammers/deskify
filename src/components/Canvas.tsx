@@ -220,7 +220,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
             >
               <Layer>
                 <Image
-                  offsetY={deviceDimensions.width > 768 ? -140 : -250}
+                  y={120}
                   image={image}
                   scaleX={imageScale}
                   scaleY={imageScale}
