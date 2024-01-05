@@ -243,6 +243,9 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
           scaleX: room.scaleX,
           scaleY: room.scaleY,
           mapId: mapId,
+          name: room.name,
+          seats: room.seats,
+          additionalInfo: room.additionalInfo
         });
       }
 
