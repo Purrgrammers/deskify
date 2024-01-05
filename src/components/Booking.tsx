@@ -30,8 +30,8 @@ type BookingProps = {
     userId: number;
     deskId: number;
     roomId: number;
-    address?:string;
-    floor?: number;
+    Maps: {address?:string;
+    floor?: number;}
   };
 };
 
@@ -69,10 +69,10 @@ const Booking: React.FC<BookingProps> = ({ booking }) => {
           {booking.deskId ? booking.deskId : booking.roomId}
         </TableCell>
         <TableCell>
-          {booking.address}
+          {booking.Maps.address}
         </TableCell>
         <TableCell>
-        {booking.floor}
+        {booking.Maps.floor}
         </TableCell>
         <TableCell className="text-right w-[25px]" align="right">
           <Trash2 onClick={handleClick} className="trash-hover" />
