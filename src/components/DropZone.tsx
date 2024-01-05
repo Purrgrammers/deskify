@@ -52,9 +52,17 @@ const DropZone = () => {
       missingFile();
       return;
     }
+    
     const address = (document.querySelector('#address') as HTMLInputElement).value
     const floor = (document.querySelector('#floor') as HTMLInputElement).value
-    console.log(address, floor)
+    if(!address) {
+      toast.error('Please add a facility address')
+      return
+    }
+    if(!floor) {
+      toast.error('Please add a floor number')
+      return
+    }
     const filePath = `uploads/${file.name}`;
     try {
       // Uploads picture to bucket

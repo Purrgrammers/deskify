@@ -19,9 +19,9 @@ const Upload = () => {
           </div>
           <div className="mx-4 flex flex-col gap-2">
           <Label htmlFor="address" className="ml-px mt-px">Address</Label>
-          <Input type="text" id="address" name="input-address" className="mb-2"></Input>
-          <Label htmlFor="floor" className="ml-px mt-px">Floor number</Label>
-          <Input type="number" id="floor" name="input-floor"></Input>
+          <Input type="text" id="address" name="input-address" required={true} className="mb-2"></Input>
+          <Label htmlFor="floor" className="ml-px mt-px" >Floor number</Label>
+          <Input type="number" id="floor" name="input-floor" required={true}></Input>
           </div>
         </div>
         <div className="text-left w-full">

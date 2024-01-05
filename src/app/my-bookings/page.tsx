@@ -31,8 +31,10 @@ type Booking = {
   userId: number;
   deskId: number;
   roomId: number;
-  address?:string;
-  floor?:number;
+  Maps: {
+    address?:string;
+    floor?:number;
+  }
 };
 
 const Bookings = () => {
