@@ -92,3 +92,11 @@
 .rect:hover{
  cursor: pointer;
 }
+
+.popup-visible {
+  visibility: visible;
+}
+
+.popup-hidden {
+  visibility: hidden;
+}

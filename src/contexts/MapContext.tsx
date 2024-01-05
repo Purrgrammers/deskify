@@ -71,6 +71,11 @@ type FocusElement = {
   type: string;
   booked: boolean;
   id: number;
+  x: number;
+  y: number;
+  name?: string;
+  seats?: number;
+  additionalInfo?: string
 };
 
 export const MapContext = createContext<MapContextProps>({
@@ -143,7 +148,6 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
 
   const updateFocusElement = (element: FocusElement | undefined) => {
     setFocusElement(element);
-    console.log(focusElement)
   };
 
   const updateDate = (date: Date) => {

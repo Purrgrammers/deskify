@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import RoomInfoForm from "./RoomInfoForm";
 
 
-const Popup = () => {
+const CreateMapPopup = () => {
     const { deleteRoom, deleteDesk, focus, updateFocus } = useContext(MapContext)
     const [editMode, setEditMode] = useState(false)
     
@@ -20,7 +20,7 @@ const Popup = () => {
 
     const canvas = document.querySelector('#createMapStage')
     const offsetLeft = (canvas as HTMLDivElement)?.offsetLeft
-    const offsetTop = editMode? (canvas as HTMLDivElement)?.offsetTop - 172 : (canvas as HTMLDivElement)?.offsetTop
+    const offsetTop = editMode? (canvas as HTMLDivElement)?.offsetTop - 235 : (canvas as HTMLDivElement)?.offsetTop
 
 
   return (
@@ -45,4 +45,4 @@ const Popup = () => {
   );
 };
 
-export default Popup;
+export default CreateMapPopup;
