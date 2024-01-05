@@ -13,6 +13,9 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+const gridImg =
+  "https://lbsitoldipybgclfuxbn.supabase.co/storage/v1/object/public/MapImages/uploads/plus_and_lines_grid.png";
+
 //Toasters
 const uploadSuccess = () => toast.success("Your picture has been uploaded.");
 const missingFile = () => toast.error("You need to upload a file.");
@@ -42,7 +45,10 @@ const DropZone = () => {
   };
 
   const handleSkip = async () => {
-    router.push(`/create-map/44`, { scroll: false });
+    const mapId = await uploadImgToDb(1, gridImg);
+    if (mapId) {
+      router.push(`/create-map/${mapId[0].id}`, { scroll: false });
+    }
   };
 
   const handleSubmit = async () => {
