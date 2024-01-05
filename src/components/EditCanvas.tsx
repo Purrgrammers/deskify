@@ -296,7 +296,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             ref={stageRef}
             onClick={(e) => handleFocus(e)}
             onTap={(e) => handleFocus(e)}
-            id="editMapStage"
+            id="createMapStage"
           >
             <Layer>
               <Image

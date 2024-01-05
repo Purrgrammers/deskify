@@ -17,7 +17,7 @@ const CreateMapPopup = () => {
     updateFocus(null);
   };
 
-  const canvas = document.querySelector("#editMapStage");
+  const canvas = document.querySelector("#createMapStage");
   const offsetLeft = (canvas as HTMLDivElement)?.offsetLeft;
   const offsetTop = editMode
     ? (canvas as HTMLDivElement)?.offsetTop - 235
