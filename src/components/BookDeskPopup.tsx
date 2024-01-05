@@ -32,7 +32,7 @@ const BookDeskPopup = () => {
     style={{
         position: "absolute",
         maxWidth: 180,
-        top: (focusElement?.y || 10) + offsetTop - (popupHeight + 3),
+        top: (focusElement?.y || 10) + offsetTop - (popupHeight + 4),
         left: (focusElement?.x || 10) + offsetLeft,
         padding: "5px 5px",
         borderRadius: "3px",
@@ -44,7 +44,7 @@ const BookDeskPopup = () => {
       id="bookDeskPopup"
     >
       <div className="flex flex-col gap-1">
-      <p className="text-sm">{`${focusElement?.type} ${focusElement?.id}: `} <span className={focusElement?.booked? 'text-red-600': 'text-green-600'}>{focusElement?.booked? 'Booked': 'Available'}</span></p>
+      <p className="text-sm">{focusElement?.name? `${focusElement?.name}:`: `${focusElement?.type} ${focusElement?.id}: `} <span className={focusElement?.booked? 'text-red-600': 'text-green-600'}>{focusElement?.booked? 'Booked': 'Available'}</span></p>
       {focusElement?.seats && <p className="text-xs"><span className="font-semibold">Number of seats:</span> {focusElement.seats}</p>}
       {focusElement?.additionalInfo && <p className="text-xs"><span className="font-semibold">Additional information:</span> {focusElement.additionalInfo}</p>}
       <div className="flex gap-2 justify-end">
