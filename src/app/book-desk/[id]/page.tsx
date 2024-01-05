@@ -46,7 +46,10 @@ const BookingPage = () => {
           <h1 className="text-2xl font-semibold">Book your workspace</h1>
           <p>Select an available desk or room to book</p>
         </div>
-        <BookingCanvas mapId={Number(id)}></BookingCanvas>
+        <BookingCanvas
+          mapId={Number(id)}
+          getFacilityInfo={(data: FacilityInfo) => setFacilityInfo(data)}
+        ></BookingCanvas>
         <div className="pl-10 pt-4">
           <p>
             <span className="font-semibold">Address:</span>{" "}
