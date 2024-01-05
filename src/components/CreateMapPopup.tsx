@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import RoomInfoForm from "./RoomInfoForm";
 
 
-const Popup = () => {
+const CreateMapPopup = () => {
     const { deleteRoom, deleteDesk, focus, updateFocus } = useContext(MapContext)
     const [editMode, setEditMode] = useState(false)
     
@@ -45,4 +45,4 @@ const Popup = () => {
   );
 };
 
-export default Popup;
+export default CreateMapPopup;

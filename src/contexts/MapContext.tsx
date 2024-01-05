@@ -71,6 +71,11 @@ type FocusElement = {
   type: string;
   booked: boolean;
   id: number;
+  x: number;
+  y: number;
+  name?: string;
+  seats?: number;
+  additionalInfo?: string
 };
 
 export const MapContext = createContext<MapContextProps>({

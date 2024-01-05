@@ -45,9 +45,9 @@ const RoomInfoForm = ({quitEditMode, id}: RoomInfoProps) => {
         <Label htmlFor="input-name" className="ml-px mt-px">Room name</Label>
        <Input type="text" name='input-name' id='input-name' defaultValue={roomInfo?.name || ''}/>
        <Label htmlFor="input-seats" className="ml-px mt-px">Number of seats</Label>
-       <Input type="number" name='input-seats' defaultValue={roomInfo?.seats || ''}/>
+       <Input type="number" name='input-seats' id='input-seats' defaultValue={roomInfo?.seats || ''}/>
        <Label htmlFor="input-additional-info" className="ml-px mt-px">Additional information</Label>
-       <Textarea name='input-additional-info' defaultValue={roomInfo?.additionalInfo || ''}/>
+       <Textarea name='input-additional-info' id='input-additional-info' defaultValue={roomInfo?.additionalInfo || ''}/>
        <div className="flex gap-2 place-content-end">
        <Button size='xs' className="w-10 text-xs" variant="secondary" onClick={() => quitEditMode()}>Cancel</Button>
        <Button size='xs' className="w-10 text-xs" type="submit">Save</Button>
