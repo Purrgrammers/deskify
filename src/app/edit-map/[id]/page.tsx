@@ -37,7 +37,7 @@ const EditMap = () => {
               },
             }}
           />
-          <div className="pl-10 pt-10">
+          <div className="pl-4 lg:pl-10 pt-10">
             <h1 className="text-2xl font-semibold">Edit your office map</h1>
             <p>
               Drag and drop bookable rooms and desks onto your map or remove

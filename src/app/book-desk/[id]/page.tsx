@@ -38,7 +38,7 @@ const BookingPage = () => {
             },
           }}
         />
-        <div className="pl-10 pt-10">
+        <div className="pl-4 lg:pl-10 pt-10">
           <h1 className="text-2xl font-semibold">Book your workspace</h1>
           <p>Select an available desk or room to book</p>
         </div>

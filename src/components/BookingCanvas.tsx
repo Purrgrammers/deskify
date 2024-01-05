@@ -163,7 +163,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
         className="flex flex-col"
         onClick={(e) => handleClick(e)}
       >
-        <div className="self-start my-6 pl-10">
+        <div className="self-start my-6 pl-4 lg:pl-10">
           <DatePicker />
         </div>
         <div className="flex flex-col items-center relative" ref={containerRef}>

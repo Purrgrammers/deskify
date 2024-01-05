@@ -4,14 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { useContext, useEffect, useRef, useState } from "react";
-import {
-  Stage,
-  Layer,
-  Rect,
-  Transformer,
-  Path,
-  Image,
-} from "react-konva";
+import { Stage, Layer, Rect, Transformer, Path, Image } from "react-konva";
 import { useStrictMode } from "react-konva";
 import { Button } from "./ui/button";
 import useImage from "use-image";
@@ -26,7 +19,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const Canvas = ({ mapId }: { mapId: number }) => {
-  const {focus, updateFocus, updateFocusPosition} = useContext(MapContext);
+  const { focus, updateFocus, updateFocusPosition } = useContext(MapContext);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
@@ -66,8 +59,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       // @ts-expect-error just let me do it
       trRef.current?.getLayer().batchDraw();
     }
-    if(!focus) {
-      setShowPopup(false)
+    if (!focus) {
+      setShowPopup(false);
     }
   }, [focus]);
 
@@ -98,9 +91,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       mapId,
     };
     updateRooms(rooms);
-    if(focus) {
-      setShowPopup(true)
-      updateFocusPosition(target.x(), target.y())
+    if (focus) {
+      setShowPopup(true);
+      updateFocusPosition(target.x(), target.y());
     }
   };
 
@@ -114,8 +107,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       y: target.attrs.y,
     };
     updateRooms(rooms);
-    if(focus) {
-      updateFocusPosition(target.x(), target.y())
+    if (focus) {
+      updateFocusPosition(target.x(), target.y());
     }
   };
 
@@ -128,9 +121,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       mapId,
     };
     updateDesks(desks);
-    if(focus) {
-      setShowPopup(true)
-      updateFocusPosition(target.x(), target.y())
+    if (focus) {
+      setShowPopup(true);
+      updateFocusPosition(target.x(), target.y());
     }
   };
 
@@ -144,30 +137,34 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       y: target.attrs.y,
     };
     updateDesks(desks);
-    if(focus) {
-      updateFocusPosition(target.x(), target.y())
+    if (focus) {
+      updateFocusPosition(target.x(), target.y());
     }
   };
 
   const handleDragStart = (target: Shape<ShapeConfig>) => {
-    setShowPopup(false)
-    if(target.attrs.name === 'room'){
-      addRoom()
+    setShowPopup(false);
+    if (target.attrs.name === "room") {
+      addRoom();
     }
-    if(target.attrs.name === 'desk'){
-      addDesk()
+    if (target.attrs.name === "desk") {
+      addDesk();
     }
-  }
+  };
 
   const handleFocus = (
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
   ) => {
-    if (e.target.attrs.name === "stage" || e.target.attrs.name === "image" || e.target.attrs.y === 50) {
+    if (
+      e.target.attrs.name === "stage" ||
+      e.target.attrs.name === "image" ||
+      e.target.attrs.y === 50
+    ) {
       updateFocus(null);
-      setShowPopup(false)
+      setShowPopup(false);
     } else {
       updateFocus(e.target as Shape<ShapeConfig>);
-      setShowPopup(true)
+      setShowPopup(true);
     }
   };
 
@@ -235,7 +232,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                 y={room.y}
                 stroke="black"
                 draggable
-                onDragStart={(e) => handleDragStart(e.target as Shape<ShapeConfig>)}
+                onDragStart={(e) =>
+                  handleDragStart(e.target as Shape<ShapeConfig>)
+                }
                 onDragEnd={(e) => {
                   handleDraggedRoom(e.target as Shape<ShapeConfig>, room.id);
                 }}
@@ -271,7 +270,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                 stroke="black"
                 fill="white"
                 draggable
-                onDragStart={(e) => handleDragStart(e.target as Shape<ShapeConfig>)}
+                onDragStart={(e) =>
+                  handleDragStart(e.target as Shape<ShapeConfig>)
+                }
                 onDragEnd={(e) => {
                   handleDraggedDesk(e.target as Shape<ShapeConfig>, desk.id);
                 }}
@@ -308,7 +309,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
             )}
           </Layer>
         </Stage>
-        {showPopup && <CreateMapPopup/>}
+        {showPopup && <CreateMapPopup />}
         <div className="m-4 flex gap-4 self-end px-10 pb-10">
           <Button variant="secondary" onClick={() => router.back()}>
             Back

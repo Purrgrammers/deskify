@@ -277,7 +277,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     <>
       <div
         id="bookingWrapper"
-        className=" flex flex-col"
+        className=" flex flex-col py-6"
         onClick={(e) => handleClick(e)}
       >
         <div className="flex flex-col items-center relative" ref={containerRef}>
@@ -396,7 +396,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             </Layer>
           </Stage>
           {showPopup && <CreateMapPopup />}
-          <div className="m-4 flex gap-4 self-end px-10 pb-10">
+          <div className="m-4 flex gap-4 self-end px-4 lg:px-10">
             <Button variant="secondary" onClick={() => router.back()}>
               Cancel
             </Button>

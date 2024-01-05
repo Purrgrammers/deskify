@@ -4,7 +4,7 @@ import { Github } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="flex justify-around px-2 mx-2 mt-8 py-4 pt-2 border-t border-gray text-xs font-light text-slate-400 md:mx-6">
+    <footer className="flex justify-around px-2 mx-2 mt-6 py-4 pt-2 border-t border-gray text-xs font-light text-slate-400 md:mx-6">
       <p className="w-4/12 lg:w-4/12 text-center md:text-left">
         Project created at SALT Bootcamp 2024.
       </p>
