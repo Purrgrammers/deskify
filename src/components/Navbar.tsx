@@ -59,12 +59,10 @@ const Navbar = () => {
               </li>
               <li className="border-b hover:border-gray-400 my-8 uppercase">
                 <Link
-                  className={`link ${
-                    pathname === "/upload-map" ? "font-bold" : ""
-                  }`}
-                  href="/upload-map"
+                  className={`link ${pathname === "/maps" ? "font-bold" : ""}`}
+                  href="/maps"
                 >
-                  Create Map
+                  Maps
                 </Link>
               </li>
               <li className="border-b hover:border-gray-400 my-8 uppercase">
@@ -102,12 +100,10 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              className={`link ${
-                pathname === "/upload-map" ? "font-semibold" : ""
-              }`}
-              href="/upload-map"
+              className={`link ${pathname === "/maps" ? "font-semibold" : ""}`}
+              href="/maps"
             >
-              Create Map
+              Maps
             </Link>
           </li>
           <li>

@@ -15,7 +15,7 @@ const EditMap = () => {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col max-w-7xl mx-auto">
         <MapContextProvider>
           <Toaster
             containerStyle={{
@@ -38,7 +38,7 @@ const EditMap = () => {
             }}
           />
           <div className="pl-10 pt-10">
-            <h1 className="text-2xl">Edit your office map</h1>
+            <h1 className="text-2xl font-semibold">Edit your office map</h1>
             <p>
               Drag and drop bookable rooms and desks onto your map or remove
               existing ones.

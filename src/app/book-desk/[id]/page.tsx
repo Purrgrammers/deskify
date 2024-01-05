@@ -16,7 +16,7 @@ const BookingPage = () => {
   const id = path.replace("/book-desk/", "");
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-7xl mx-auto">
       <MapContextProvider>
         <Toaster
           containerStyle={{
@@ -42,7 +42,7 @@ const BookingPage = () => {
           <h1 className="text-2xl font-semibold">Book your workspace</h1>
           <p>Select an available desk or room to book</p>
         </div>
-          <BookingCanvas mapId={Number(id)}></BookingCanvas>
+        <BookingCanvas mapId={Number(id)}></BookingCanvas>
       </MapContextProvider>
     </div>
   );

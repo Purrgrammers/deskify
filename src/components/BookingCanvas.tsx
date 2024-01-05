@@ -160,7 +160,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     <>
       <div
         id="bookingWrapper"
-        className="h-screen flex flex-col"
+        className="flex flex-col"
         onClick={(e) => handleClick(e)}
       >
         <div className="self-start my-6 pl-10">
