@@ -265,7 +265,7 @@ const BookingMap = ({ mapId, getFacilityInfo }: { mapId: number , getFacilityInf
               ))}
             </Layer>
           </Stage>
-          {focusElement && <BookDeskPopup />}
+          {focusElement && <BookDeskPopup mapId={mapId}/>}
         </div>
       </div>
     </>

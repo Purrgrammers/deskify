@@ -23,8 +23,8 @@ type MapContextProps = {
   deleteDesk: (id: number) => void;
   bookings: Booking[]
   updateBookings: (bookingData: Booking[]) => void
-  bookRoom: (id: number) => void
-  bookDesk: (id: number) => void
+  bookRoom: (id: number, mapId: number) => void
+  bookDesk: (id: number, mapId: number) => void
   date: Date | undefined
   updateDate: (date: Date) => void
   focusElement: FocusElement | undefined
@@ -117,10 +117,10 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
   const [focus, setFocus] = useState<{element: Shape<ShapeConfig>, x?: number, y?: number } | null>(null);
 
-  const bookRoom = async(id: number) => {
+  const bookRoom = async(id: number, mapId: number) => {
     const { data, error } = await supabase
         .from("Bookings")
-        .insert({userId: 1, roomId: id, date: date?.toLocaleDateString("en-CA")})
+        .insert({userId: 1, roomId: id, date: date?.toLocaleDateString("en-CA"), mapId})
         .select()
       if(error) {
         toast.error("Error booking room");
@@ -131,10 +131,10 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
       }
   }
 
-  const bookDesk = async(id: number) => {
+  const bookDesk = async(id: number, mapId: number) => {
     const { data, error } = await supabase
         .from("Bookings")
-        .insert({userId: 1, deskId: id, date: date?.toLocaleDateString("en-CA")})
+        .insert({userId: 1, deskId: id, date: date?.toLocaleDateString("en-CA"), mapId})
         .select()
       if(error) {
         toast.error("Error booking desk");

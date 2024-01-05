@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 
-const BookDeskPopup = () => {
+const BookDeskPopup = ({mapId}: {mapId: number}) => {
     const { focusElement, updateFocusElement, bookDesk, bookRoom } = useContext(MapContext)
     const [ popupHeight, setPopupHeight] = useState(0)
     const canvas = document.querySelector('#bookDeskStage')
@@ -19,10 +19,10 @@ const BookDeskPopup = () => {
 
     const handleBooking = () => {
       if(focusElement?.type === 'Room') {
-        bookRoom(focusElement?.id)
+        bookRoom(focusElement?.id, mapId)
       }
       if(focusElement?.type === 'Desk') {
-        bookDesk(focusElement?.id)
+        bookDesk(focusElement?.id, mapId)
       }
     }
   return (
