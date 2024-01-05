@@ -118,6 +118,7 @@ const DropZone = () => {
         <FileUploader
           handleChange={(file: File) => handleUpload(file)}
           name="picture"
+          id="picture"
           types={fileTypes}
         />
       </div>
