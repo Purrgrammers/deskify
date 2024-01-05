@@ -277,7 +277,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     <>
       <div
         id="bookingWrapper"
-        className="h-screen flex flex-col"
+        className=" flex flex-col"
         onClick={(e) => handleClick(e)}
       >
         <div className="flex flex-col items-center relative" ref={containerRef}>
