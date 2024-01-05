@@ -102,7 +102,7 @@ const DropZone = () => {
           },
         }}
       />
-      <div className="mb-12 mx-2">
+      <div className="mb-12 mx-2 flex justify-center">
         <FileUploader
           handleChange={(file: File) => handleUpload(file)}
           name="picture"

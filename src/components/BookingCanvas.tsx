@@ -179,7 +179,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 : (image?.height as number) * imageScale || 400
             }
             name="stage"
-            id="BookDeskStage"
+            id="bookDeskStage"
             ref={stageRef}
             onClick={(e) => handleFocus(e)}
             onTap={(e) => handleFocus(e)}
