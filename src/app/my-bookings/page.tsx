@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 import {
   Table,
@@ -32,9 +33,9 @@ type Booking = {
   deskId: number;
   roomId: number;
   Maps: {
-    address?:string;
-    floor?:number;
-  }
+    address?: string;
+    floor?: number;
+  };
 };
 
 const Bookings = () => {
@@ -46,7 +47,7 @@ const Bookings = () => {
     const fetchAllBookings = async () => {
       const { data, error } = await supabase
         .from("Bookings")
-        .select('*, Maps!inner(id, address, floor)')
+        .select("*, Maps!inner(id, address, floor)")
         .order("date", { ascending: true })
         .gte("date", today);
       if (error) {
@@ -54,12 +55,12 @@ const Bookings = () => {
         fetchFail();
         return;
       }
-      console.log(data, 'bookingdata')
+      console.log(data, "bookingdata");
       setBookings(data);
       console.log("Those are my bookings", data);
     };
     fetchAllBookings();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const removeBookingFromState = (bookingId: string) => {
@@ -67,6 +68,7 @@ const Bookings = () => {
       currentBookings.filter((b) => b.id !== bookingId)
     );
   };
+
   return (
     <div className="max-w-7xl mx-auto mb-14">
       <BookingProvider
@@ -96,47 +98,55 @@ const Bookings = () => {
         <h1 className="text-2xl font-semibold my-8 mx-4 mt-10">Bookings</h1>
         <div className="flex flex-col justify-center mx-4">
           <h2>Your booked desks:</h2>
-          <Table className="mx-auto">
-            <TableCaption>A list of your booked desks.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[150px]">Date</TableHead>
-                <TableHead>Desk</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Floor</TableHead>
-                <TableHead className="pl-0">Remove</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {bookings.map((booking) =>
-                // Pass each memory to the Memory component
-                booking.deskId ? (
-                  <Booking key={booking.id} booking={booking} />
-                ) : null
-              )}
-            </TableBody>
-          </Table>
+          {!bookings.length ? (
+            <BeatLoader className="justify-center pt-20" color="#ccc" />
+          ) : (
+            <Table className="mx-auto">
+              <TableCaption>A list of your booked desks.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[150px]">Date</TableHead>
+                  <TableHead>Desk</TableHead>
+                  <TableHead>Address</TableHead>
+                  <TableHead>Floor</TableHead>
+                  <TableHead className="pl-0">Remove</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {bookings.map((booking) =>
+                  // Pass each memory to the Memory component
+                  booking.deskId ? (
+                    <Booking key={booking.id} booking={booking} />
+                  ) : null
+                )}
+              </TableBody>
+            </Table>
+          )}
           <h2 className="mt-8">Your booked rooms:</h2>
-          <Table className="mx-auto">
-            <TableCaption>A list of your booked rooms.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[150px]">Date</TableHead>
-                <TableHead>Room</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Floor</TableHead>
-                <TableHead className="pl-0">Remove</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {bookings.map((booking) =>
-                // Pass each memory to the Memory component
-                booking.roomId ? (
-                  <Booking key={booking.id} booking={booking} />
-                ) : null
-              )}
-            </TableBody>
-          </Table>
+          {!bookings.length ? (
+            <BeatLoader className="justify-center pt-20" color="#ccc" />
+          ) : (
+            <Table className="mx-auto">
+              <TableCaption>A list of your booked rooms.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[150px]">Date</TableHead>
+                  <TableHead>Room</TableHead>
+                  <TableHead>Address</TableHead>
+                  <TableHead>Floor</TableHead>
+                  <TableHead className="pl-0">Remove</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {bookings.map((booking) =>
+                  // Pass each memory to the Memory component
+                  booking.roomId ? (
+                    <Booking key={booking.id} booking={booking} />
+                  ) : null
+                )}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </BookingProvider>
     </div>

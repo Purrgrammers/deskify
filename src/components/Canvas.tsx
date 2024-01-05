@@ -12,6 +12,7 @@ import { Stage as StageType } from "konva/lib/Stage";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import CreateMapPopup from "./CreateMapPopup";
+import { BeatLoader } from "react-spinners";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -192,130 +193,151 @@ const Canvas = ({ mapId }: { mapId: number }) => {
 
   return (
     <>
-      <div className="flex flex-col items-center relative" ref={containerRef}>
-        <Stage
-          name="stage"
-          id="createMapStage"
-          width={
-            deviceDimensions.width > 768
-              ? (image?.width as number) * imageScale || 400
-              : 350
-          }
-          height={
-            deviceDimensions.width > 768
-              ? 500 + 140
-              : ((image?.height as number) + 250) * imageScale || 400
-          }
-          onClick={(e) => handleFocus(e)}
-          onTap={(e) => handleFocus(e)}
-          ref={stageRef}
-        >
-          <Layer>
-            <Image
-              offsetY={deviceDimensions.width > 768 ? -140 : -250}
-              image={image}
-              scaleX={imageScale}
-              scaleY={imageScale}
-              alt="floor plan"
-              name="image"
-            ></Image>
-            {rooms.map((room) => (
-              <Rect
-                key={`room-${room.id}`}
-                id={`${room.id}`}
-                name="room"
-                width={room.width}
-                height={room.height}
-                scaleX={room.scaleX}
-                scaleY={room.scaleY}
-                x={room.x}
-                y={room.y}
-                stroke="black"
-                draggable
-                onDragStart={(e) =>
-                  handleDragStart(e.target as Shape<ShapeConfig>)
-                }
-                onDragEnd={(e) => {
-                  handleDraggedRoom(e.target as Shape<ShapeConfig>, room.id);
-                }}
-                onTransformEnd={(e) =>
-                  handleTransformRoom(e.target as Shape<ShapeConfig>, room.id)
-                }
-                onMouseEnter={(e) => {
-                  const container = (
-                    e.target.getStage() as StageType
-                  ).container();
-                  container.style.cursor = "pointer";
-                }}
-                onMouseLeave={(e) => {
-                  const container = (
-                    e.target.getStage() as StageType
-                  ).container();
-                  container.style.cursor = "default";
-                }}
-              />
-            ))}
-            {desks.map((desk) => (
-              <Path
-                key={`desk-${desk.id}`}
-                name="desk"
-                id={`${desk.id}`}
-                data="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
-                width={desk.width}
-                height={desk.height}
-                scaleX={desk.scaleX}
-                scaleY={desk.scaleY}
-                x={desk.x}
-                y={desk.y}
-                stroke="black"
-                fill="white"
-                draggable
-                onDragStart={(e) =>
-                  handleDragStart(e.target as Shape<ShapeConfig>)
-                }
-                onDragEnd={(e) => {
-                  handleDraggedDesk(e.target as Shape<ShapeConfig>, desk.id);
-                }}
-                onTransformEnd={(e) =>
-                  handleTransformDesk(e.target as Shape<ShapeConfig>, desk.id)
-                }
-                onMouseEnter={(e) => {
-                  const container = (
-                    e.target.getStage() as StageType
-                  ).container();
-                  container.style.cursor = "pointer";
-                }}
-                onMouseLeave={(e) => {
-                  const container = (
-                    e.target.getStage() as StageType
-                  ).container();
-                  container.style.cursor = "default";
-                }}
-              />
-            ))}
-            {focus && (
-              <Transformer
-                ref={trRef}
-                rotateEnabled={false}
-                borderEnabled={false}
-                anchorStroke={"#869ee3"}
-                anchorCornerRadius={15}
-                anchorStrokeWidth={1}
-                anchorSize={7}
-                keepRatio={false}
-                flipEnabled={false}
-                ignoreStroke={true}
-              />
-            )}
-          </Layer>
-        </Stage>
-        {showPopup && <CreateMapPopup />}
-        <div className="m-4 flex gap-4 self-end px-10 pb-10">
-          <Button variant="secondary" onClick={() => router.back()}>
-            Back
-          </Button>
-          <Button onClick={handleCreateMap}>Create map</Button>
-        </div>
+      <div className="flex flex-col">
+        {!backgroundImage ? (
+          <BeatLoader className="justify-center pt-20" color="#ccc" />
+        ) : (
+          <div
+            className="flex flex-col items-center relative"
+            ref={containerRef}
+          >
+            <Stage
+              name="stage"
+              id="createMapStage"
+              width={
+                deviceDimensions.width > 768
+                  ? (image?.width as number) * imageScale || 400
+                  : 350
+              }
+              height={
+                deviceDimensions.width > 768
+                  ? 500 + 140
+                  : ((image?.height as number) + 250) * imageScale || 400
+              }
+              onClick={(e) => handleFocus(e)}
+              onTap={(e) => handleFocus(e)}
+              ref={stageRef}
+            >
+              <Layer>
+                <Image
+                  offsetY={deviceDimensions.width > 768 ? -140 : -250}
+                  image={image}
+                  scaleX={imageScale}
+                  scaleY={imageScale}
+                  alt="floor plan"
+                  name="image"
+                ></Image>
+                {rooms.map((room) => (
+                  <Rect
+                    key={`room-${room.id}`}
+                    id={`${room.id}`}
+                    name="room"
+                    width={room.width}
+                    height={room.height}
+                    scaleX={room.scaleX}
+                    scaleY={room.scaleY}
+                    x={room.x}
+                    y={room.y}
+                    stroke="black"
+                    draggable
+                    onDragStart={(e) =>
+                      handleDragStart(e.target as Shape<ShapeConfig>)
+                    }
+                    onDragEnd={(e) => {
+                      handleDraggedRoom(
+                        e.target as Shape<ShapeConfig>,
+                        room.id
+                      );
+                    }}
+                    onTransformEnd={(e) =>
+                      handleTransformRoom(
+                        e.target as Shape<ShapeConfig>,
+                        room.id
+                      )
+                    }
+                    onMouseEnter={(e) => {
+                      const container = (
+                        e.target.getStage() as StageType
+                      ).container();
+                      container.style.cursor = "pointer";
+                    }}
+                    onMouseLeave={(e) => {
+                      const container = (
+                        e.target.getStage() as StageType
+                      ).container();
+                      container.style.cursor = "default";
+                    }}
+                  />
+                ))}
+                {desks.map((desk) => (
+                  <Path
+                    key={`desk-${desk.id}`}
+                    name="desk"
+                    id={`${desk.id}`}
+                    data="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
+                    width={desk.width}
+                    height={desk.height}
+                    scaleX={desk.scaleX}
+                    scaleY={desk.scaleY}
+                    x={desk.x}
+                    y={desk.y}
+                    stroke="black"
+                    fill="white"
+                    draggable
+                    onDragStart={(e) =>
+                      handleDragStart(e.target as Shape<ShapeConfig>)
+                    }
+                    onDragEnd={(e) => {
+                      handleDraggedDesk(
+                        e.target as Shape<ShapeConfig>,
+                        desk.id
+                      );
+                    }}
+                    onTransformEnd={(e) =>
+                      handleTransformDesk(
+                        e.target as Shape<ShapeConfig>,
+                        desk.id
+                      )
+                    }
+                    onMouseEnter={(e) => {
+                      const container = (
+                        e.target.getStage() as StageType
+                      ).container();
+                      container.style.cursor = "pointer";
+                    }}
+                    onMouseLeave={(e) => {
+                      const container = (
+                        e.target.getStage() as StageType
+                      ).container();
+                      container.style.cursor = "default";
+                    }}
+                  />
+                ))}
+                {focus && (
+                  <Transformer
+                    ref={trRef}
+                    rotateEnabled={false}
+                    borderEnabled={false}
+                    anchorStroke={"#869ee3"}
+                    anchorCornerRadius={15}
+                    anchorStrokeWidth={1}
+                    anchorSize={7}
+                    keepRatio={false}
+                    flipEnabled={false}
+                    ignoreStroke={true}
+                  />
+                )}
+              </Layer>
+            </Stage>
+            {showPopup && <CreateMapPopup />}
+            <div className="m-4 flex gap-4 self-end px-10 pb-10">
+              <Button variant="secondary" onClick={() => router.back()}>
+                Back
+              </Button>
+              <Button onClick={handleCreateMap}>Create map</Button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
