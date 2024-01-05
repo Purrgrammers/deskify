@@ -20,7 +20,7 @@ const Home = () => {
         title="For employees"
         description="Choose your workspace! Select dates and pick from available rooms or desks through our interface. Book your ideal spot with just a few taps."
         btnText="Book space"
-        reverse={true}
+        reverse={false}
         href="book-desk/1"
       ></ActionCard>
     </main>
