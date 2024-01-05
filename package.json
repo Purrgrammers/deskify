@@ -28,6 +28,7 @@
     "react-hot-toast": "^2.4.1",
     "react-konva": "^18.2.10",
     "react-konva-utils": "^1.0.5",
+    "react-spinners": "^0.13.8",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
     "use-image": "^1.1.1"

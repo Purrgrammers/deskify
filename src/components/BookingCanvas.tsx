@@ -10,13 +10,20 @@ import { KonvaEventObject } from "konva/lib/Node";
 import useImage from "use-image";
 import { Stage as StageType } from "konva/lib/Stage";
 import BookDeskPopup from "./BookDeskPopup";
+import { BeatLoader } from "react-spinners";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const BookingMap = ({ mapId, getFacilityInfo }: { mapId: number , getFacilityInfo: (data: FacilityInfo) => void}) => {
+const BookingMap = ({
+  mapId,
+  getFacilityInfo,
+}: {
+  mapId: number;
+  getFacilityInfo: (data: FacilityInfo) => void;
+}) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
   const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
@@ -57,7 +64,10 @@ const BookingMap = ({ mapId, getFacilityInfo }: { mapId: number , getFacilityInf
       setDesks(deskData as Desk[]);
       if (mapData) {
         setBackgroundImage(mapData[0].img);
-        getFacilityInfo({address: mapData[0].address, floor: mapData[0].floor})
+        getFacilityInfo({
+          address: mapData[0].address,
+          floor: mapData[0].floor,
+        });
       }
     };
     getMapData();
@@ -158,115 +168,124 @@ const BookingMap = ({ mapId, getFacilityInfo }: { mapId: number , getFacilityInf
 
   return (
     <>
-      <div
-        id="bookingWrapper"
-        className="flex flex-col"
-        onClick={(e) => handleClick(e)}
-      >
-        <div className="self-start my-6 pl-4 lg:pl-10">
-          <DatePicker />
-        </div>
-        <div className="flex flex-col items-center relative" ref={containerRef}>
-          <Stage
-            width={
-              deviceDimensions.width > 768
-                ? (image?.width as number) * imageScale || 400
-                : 350
-            }
-            height={
-              deviceDimensions.width > 768
-                ? 500
-                : (image?.height as number) * imageScale || 400
-            }
-            name="stage"
-            id="bookDeskStage"
-            ref={stageRef}
-            onClick={(e) => handleFocus(e)}
-            onTap={(e) => handleFocus(e)}
+      <div className="flex flex-col">
+        {!backgroundImage ? (
+          <BeatLoader className="justify-center pt-56" color="#ccc" />
+        ) : (
+          <div
+            id="bookingWrapper"
+            className="flex flex-col"
+            onClick={(e) => handleClick(e)}
           >
-            <Layer>
-              <Image
-                image={image}
-                alt="booking map"
-                scaleX={imageScale}
-                scaleY={imageScale}
-              ></Image>
-              {rooms.map((room) => (
-                <Rect
-                  key={`room-${room.id}`}
-                  name="room"
-                  width={room.width}
-                  height={room.height}
-                  scaleX={room.scaleX}
-                  scaleY={room.scaleY}
-                  x={room.x}
-                  y={
-                    deviceDimensions.width > 768
-                      ? room.y - 120
-                      : room.y - 250
-                  }
-                  stroke={bookedRooms.includes(room.id) ? "red" : "green"}
-                  onClick={(e) =>
-                    handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
-                  }
-                  onTap={(e) =>
-                    handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
-                  }
-                  onMouseEnter={(e) => {
-                    const container = (
-                      e.target.getStage() as StageType
-                    ).container();
-                    container.style.cursor = "pointer";
-                  }}
-                  onMouseLeave={(e) => {
-                    const container = (
-                      e.target.getStage() as StageType
-                    ).container();
-                    container.style.cursor = "default";
-                  }}
-                />
-              ))}
-              {desks.map((desk) => (
-                <Path
-                  key={`desk-${desk.id}`}
-                  name="desk"
-                  data="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
-                  width={desk.width}
-                  height={desk.height}
-                  scaleX={desk.scaleX}
-                  scaleY={desk.scaleY}
-                  x={desk.x}
-                  y={
-                    deviceDimensions.width > 768
-                      ? desk.y - 120
-                      : desk.y - 250
-                  }
-                  stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
-                  fill="white"
-                  onClick={(e) =>
-                    handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
-                  }
-                  onTap={(e) =>
-                    handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
-                  }
-                  onMouseEnter={(e) => {
-                    const container = (
-                      e.target.getStage() as StageType
-                    ).container();
-                    container.style.cursor = "pointer";
-                  }}
-                  onMouseLeave={(e) => {
-                    const container = (
-                      e.target.getStage() as StageType
-                    ).container();
-                    container.style.cursor = "default";
-                  }}
-                />
-              ))}
-            </Layer>
-          </Stage>
-          {focusElement && <BookDeskPopup mapId={mapId}/>}
-        </div>
+            <div className="self-start my-6 pl-4 lg:pl-10">
+              <DatePicker />
+            </div>
+            <div
+              className="flex flex-col items-center relative"
+              ref={containerRef}
+            >
+              <Stage
+                width={
+                  deviceDimensions.width > 768
+                    ? (image?.width as number) * imageScale || 400
+                    : 350
+                }
+                height={
+                  deviceDimensions.width > 768
+                    ? 500
+                    : (image?.height as number) * imageScale || 400
+                }
+                name="stage"
+                id="bookDeskStage"
+                ref={stageRef}
+                onClick={(e) => handleFocus(e)}
+                onTap={(e) => handleFocus(e)}
+              >
+                <Layer>
+                  <Image
+                    image={image}
+                    alt="booking map"
+                    scaleX={imageScale}
+                    scaleY={imageScale}
+                  ></Image>
+                  {rooms.map((room) => (
+                    <Rect
+                      key={`room-${room.id}`}
+                      name="room"
+                      width={room.width}
+                      height={room.height}
+                      scaleX={room.scaleX}
+                      scaleY={room.scaleY}
+                      x={room.x}
+                      y={
+                        deviceDimensions.width > 768
+                          ? room.y - 120
+                          : room.y - 250
+                      }
+                      stroke={bookedRooms.includes(room.id) ? "red" : "green"}
+                      onClick={(e) =>
+                        handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
+                      }
+                      onTap={(e) =>
+                        handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
+                      }
+                      onMouseEnter={(e) => {
+                        const container = (
+                          e.target.getStage() as StageType
+                        ).container();
+                        container.style.cursor = "pointer";
+                      }}
+                      onMouseLeave={(e) => {
+                        const container = (
+                          e.target.getStage() as StageType
+                        ).container();
+                        container.style.cursor = "default";
+                      }}
+                    />
+                  ))}
+                  {desks.map((desk) => (
+                    <Path
+                      key={`desk-${desk.id}`}
+                      name="desk"
+                      data="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
+                      width={desk.width}
+                      height={desk.height}
+                      scaleX={desk.scaleX}
+                      scaleY={desk.scaleY}
+                      x={desk.x}
+                      y={
+                        deviceDimensions.width > 768
+                          ? desk.y - 120
+                          : desk.y - 250
+                      }
+                      stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
+                      fill="white"
+                      onClick={(e) =>
+                        handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
+                      }
+                      onTap={(e) =>
+                        handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
+                      }
+                      onMouseEnter={(e) => {
+                        const container = (
+                          e.target.getStage() as StageType
+                        ).container();
+                        container.style.cursor = "pointer";
+                      }}
+                      onMouseLeave={(e) => {
+                        const container = (
+                          e.target.getStage() as StageType
+                        ).container();
+                        container.style.cursor = "default";
+                      }}
+                    />
+                  ))}
+                </Layer>
+              </Stage>
+              {focusElement && <BookDeskPopup mapId={mapId} />}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
