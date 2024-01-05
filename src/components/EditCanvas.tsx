@@ -13,15 +13,15 @@ import {
   useStrictMode,
   Transformer,
 } from "react-konva";
-import BookingDetails from "./BookingDetails";
 import DatePicker from "./DatePicker";
 import { KonvaEventObject } from "konva/lib/Node";
 import useImage from "use-image";
 import { Stage as StageType } from "konva/lib/Stage";
-import Popup from "./Popup";
+import Popup from "./CreateMapPopup";
 import { Button } from "./ui/button";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import CreateMapPopup from "./CreateMapPopup";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -92,26 +92,6 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   }, []);
 
   useEffect(() => {
-    const filteredDesks = bookings
-      .filter((booking) => booking.deskId)
-      .map((booking) => booking.deskId);
-    setBookedDesks(filteredDesks);
-
-    const filteredRooms = bookings
-      .filter((booking) => booking.roomId)
-      .map((booking) => booking.roomId);
-    setBookedRooms(filteredRooms);
-
-    if (
-      focusElement &&
-      (filteredDesks.includes(focusElement?.id as number) ||
-        filteredRooms.includes(focusElement?.id as number))
-    ) {
-      focusElement.booked = true;
-    }
-  }, [bookings, focusElement]);
-
-  useEffect(() => {
     if (!image) {
       return;
     }
@@ -152,29 +132,19 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     console.log(deviceDimensions);
   }, [deviceDimensions]);
 
-  const handleClickRoom = (target: Shape<ShapeConfig>, id: number) => {
-    const booked = bookedRooms.includes(id);
-    const type = target.attrs.name.replace(
-      target.attrs.name[0],
-      target.attrs.name[0].toUpperCase()
-    );
-    updateFocusElement({ type, id, booked });
-  };
-
-  const handleClickDesk = (target: Shape<ShapeConfig>, id: number) => {
-    const booked = bookedDesks.includes(id);
-    const type = target.attrs.name.replace(
-      target.attrs.name[0],
-      target.attrs.name[0].toUpperCase()
-    );
-    updateFocusElement({ type, id, booked });
-  };
-
   const handleFocus = (
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
   ) => {
-    if (e.target.attrs.name !== "room" && e.target.attrs.name !== "desk") {
-      updateFocusElement(undefined);
+    if (
+      e.target.attrs.name === "stage" ||
+      e.target.attrs.name === "image" ||
+      e.target.attrs.y === 50
+    ) {
+      updateFocus(null);
+      setShowPopup(false);
+    } else {
+      updateFocus(e.target as Shape<ShapeConfig>);
+      setShowPopup(true);
     }
   };
 
@@ -306,7 +276,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     <>
       <div
         id="bookingWrapper"
-        className="h-screen flex flex-col"
+        className=" flex flex-col py-6"
         onClick={(e) => handleClick(e)}
       >
         <div className="flex flex-col items-center relative" ref={containerRef}>
@@ -325,6 +295,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             ref={stageRef}
             onClick={(e) => handleFocus(e)}
             onTap={(e) => handleFocus(e)}
+            id="createMapStage"
           >
             <Layer>
               <Image
@@ -423,8 +394,8 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
               )}
             </Layer>
           </Stage>
-          {showPopup && <Popup />}
-          <div className="m-4 flex gap-4 self-end px-10 pb-10">
+          {showPopup && <CreateMapPopup />}
+          <div className="m-4 flex gap-4 self-end px-4 lg:px-10">
             <Button variant="secondary" onClick={() => router.back()}>
               Cancel
             </Button>

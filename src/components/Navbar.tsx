@@ -15,7 +15,7 @@ const Navbar = () => {
   }, [pathname]);
 
   return (
-    <header className="flex justify-between px-4 mx-16 mt-4 pb-6 border-b border-gray">
+    <header className="flex justify-between px-4 mx-2 md:mx-6 lg:mx-12 mt-4 pb-6 border-b border-gray">
       <Link href="/">
         <Image src={logo} alt="logo" width={50} height={50} />
       </Link>
@@ -59,12 +59,10 @@ const Navbar = () => {
               </li>
               <li className="border-b hover:border-gray-400 my-8 uppercase">
                 <Link
-                  className={`link ${
-                    pathname === "/upload-map" ? "font-bold" : ""
-                  }`}
-                  href="/upload-map"
+                  className={`link ${pathname === "/maps" ? "font-bold" : ""}`}
+                  href="/maps"
                 >
-                  Create Map
+                  Maps
                 </Link>
               </li>
               <li className="border-b hover:border-gray-400 my-8 uppercase">
@@ -102,12 +100,10 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              className={`link ${
-                pathname === "/upload-map" ? "font-semibold" : ""
-              }`}
-              href="/upload-map"
+              className={`link ${pathname === "/maps" ? "font-semibold" : ""}`}
+              href="/maps"
             >
-              Create Map
+              Maps
             </Link>
           </li>
           <li>

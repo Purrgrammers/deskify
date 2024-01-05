@@ -23,10 +23,15 @@ const missingFile = () => toast.error("You need to upload a file.");
 const uploadFail = (error: Error) =>
   toast.error(`${error.message}. Try another picture.`);
 
-const uploadImgToDb = async (userId: number, url: string, address: string, floor: number) => {
+const uploadImgToDb = async (
+  userId: number,
+  url: string,
+  address?: string,
+  floor?: number
+) => {
   const { data, error } = await supabase
     .from("Maps")
-    .insert({ userId, img: url, address, floor})
+    .insert({ userId, img: url, address, floor })
     .select("id");
   //returns created mapId.
   return data;
@@ -58,16 +63,17 @@ const DropZone = () => {
       missingFile();
       return;
     }
-    
-    const address = (document.querySelector('#address') as HTMLInputElement).value
-    const floor = (document.querySelector('#floor') as HTMLInputElement).value
-    if(!address) {
-      toast.error('Please add a facility address')
-      return
+
+    const address = (document.querySelector("#address") as HTMLInputElement)
+      .value;
+    const floor = (document.querySelector("#floor") as HTMLInputElement).value;
+    if (!address) {
+      toast.error("Please add a facility address");
+      return;
     }
-    if(!floor) {
-      toast.error('Please add a floor number')
-      return
+    if (!floor) {
+      toast.error("Please add a floor number");
+      return;
     }
     const filePath = `uploads/${file.name}`;
     try {
