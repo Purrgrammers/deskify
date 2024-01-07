@@ -33,7 +33,8 @@ type Booking = {
   deskId: number;
   roomId: number;
   Maps: {
-    address?: string;
+    id: number;
+    location?: string;
     floor?: number;
   };
 };
@@ -47,7 +48,7 @@ const Bookings = () => {
     const fetchAllBookings = async () => {
       const { data, error } = await supabase
         .from("Bookings")
-        .select("*, Maps!inner(id, address, floor)")
+        .select("*, Maps!inner(id, location, floor)")
         .order("date", { ascending: true })
         .gte("date", today);
       if (error) {
@@ -107,7 +108,7 @@ const Bookings = () => {
                 <TableRow>
                   <TableHead className="w-[150px]">Date</TableHead>
                   <TableHead>Desk</TableHead>
-                  <TableHead>Address</TableHead>
+                  <TableHead>Location</TableHead>
                   <TableHead>Floor</TableHead>
                   <TableHead className="pl-0">Remove</TableHead>
                 </TableRow>
@@ -132,7 +133,7 @@ const Bookings = () => {
                 <TableRow>
                   <TableHead className="w-[150px]">Date</TableHead>
                   <TableHead>Room</TableHead>
-                  <TableHead>Address</TableHead>
+                  <TableHead>Location</TableHead>
                   <TableHead>Floor</TableHead>
                   <TableHead className="pl-0">Remove</TableHead>
                 </TableRow>

@@ -30,7 +30,7 @@ const MapSelect = ({ mapId, path }: { mapId: string, path: string }) => {
           <SelectGroup>
             {maps.map((map) => (
               <SelectItem key={map.id} value={map.id.toString()}>
-                {map.location || 'hello'}
+                {map.location || `Map ${map.id}`}
               </SelectItem>
             ))}
           </SelectGroup>
