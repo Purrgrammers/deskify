@@ -21,7 +21,7 @@ const Upload = () => {
           <Label htmlFor="location" className="ml-px mt-px">Location</Label>
           <Input type="text" id="location" name="input-location" className="mb-2"></Input>
           <Label htmlFor="floor" className="ml-px mt-px" >Floor number</Label>
-          <Input type="number" id="floor" name="input-floor"></Input>
+          <Input type="text" id="floor" name="input-floor"></Input>
           </div>
         </div>
         <div className="text-left w-full">
