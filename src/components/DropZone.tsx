@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { MapContext } from "@/contexts/MapContext";
 
 const fileTypes = ["JPG", "JPEG", "PNG"];
 
@@ -19,7 +18,6 @@ const gridImg =
 
 //Toasters
 const uploadSuccess = () => toast.success("Your picture has been uploaded.");
-const missingFile = () => toast.error("You need to upload a file.");
 const uploadFail = (error: Error) =>
   toast.error(`${error.message}. Try another picture.`);
 
@@ -49,13 +47,6 @@ const DropZone = () => {
     // Saves file to state
     setFile(file); // Save file for later submission
   };
-
-  // const handleSkip = async () => {
-  //   const mapId = await uploadImgToDb(1, gridImg);
-  //   if (mapId) {
-  //     router.push(`/create-map/${mapId[0].id}`, { scroll: false });
-  //   }
-  // };
 
   const handleSubmit = async () => {
 
@@ -146,8 +137,8 @@ const DropZone = () => {
       )}
       <div className="flex justify-end mt-5">
         <div className="flex gap-2 mx-2">
-          <Button variant="outline">
-            Skip
+          <Button variant='outline' onClick={() => router.back()}>
+            Back
           </Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </div>

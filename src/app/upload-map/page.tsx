@@ -10,7 +10,7 @@ const Upload = () => {
       <div className="flex flex-col mt-12 mb-8 items-center max-w-2xl mx-auto">
         <div className="text-left w-full mb-8">
           <h1 className="text-2xl font-semibold m-4 mb-6">
-            Add some info about your facility
+            Add some info about your map
           </h1>
           <div className="mx-4 my-2">
             <p className="mb-4">
