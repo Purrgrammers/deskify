@@ -23,6 +23,7 @@ import CreateMapPopup from "./CreateMapPopup";
 import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
 import FloorSelect from "./FloorSelect";
+import HelpTextPopup from "./HelpTextPopup";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -31,6 +32,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const EditCanvas = ({ mapId }: { mapId: number }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const [showHelpText, setShowHelpText] = useState<{type: string, x: number} | null>(null);
   const { focus, updateFocus, updateFocusPosition } = useContext(MapContext);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
@@ -155,6 +157,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
 
   const handleDragStart = (target: Shape<ShapeConfig>) => {
     setShowPopup(false);
+    setShowHelpText(null)
     console.log("triggad first");
     if (target.attrs.name === "room") {
       addRoom();
@@ -352,12 +355,17 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                           e.target.getStage() as StageType
                         ).container();
                         container.style.cursor = "pointer";
+                        if(e.target.attrs.y === 50){
+                          setShowHelpText({type: e.target.attrs.name, x: e.target.attrs.x})
+                        }
                       }}
                       onMouseLeave={(e) => {
                         const container = (
                           e.target.getStage() as StageType
                         ).container();
                         container.style.cursor = "default";
+                        setShowHelpText(null)
+
                       }}
                     />
                   ))}
@@ -396,12 +404,16 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                           e.target.getStage() as StageType
                         ).container();
                         container.style.cursor = "pointer";
+                        if(e.target.attrs.y === 50){
+                          setShowHelpText({type: e.target.attrs.name, x: e.target.attrs.x})
+                        }
                       }}
                       onMouseLeave={(e) => {
                         const container = (
                           e.target.getStage() as StageType
                         ).container();
                         container.style.cursor = "default";
+                        setShowHelpText(null)
                       }}
                     />
                   ))}
@@ -422,6 +434,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                 </Layer>
               </Stage>
               {showPopup && <CreateMapPopup />}
+              {showHelpText && <HelpTextPopup type={showHelpText.type} x={showHelpText.x}/>}
               <div className="m-4 flex gap-4 self-end px-4 lg:px-10">
                 <Button variant="secondary" onClick={() => router.back()}>
                   Cancel
