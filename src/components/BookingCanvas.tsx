@@ -102,11 +102,7 @@ const BookingMap = ({
     if (!image) {
       return;
     }
-    if (deviceDimensions.width > 768) {
       setImageScale(500 / image?.height);
-    } else {
-      setImageScale(350 / image?.width);
-    }
   }, [image, deviceDimensions]);
 
   useEffect(() => {
@@ -178,31 +174,23 @@ const BookingMap = ({
         ) : (
           <div
             id="bookingWrapper"
-            className="flex flex-col"
+            className="flex flex-col overflow-auto"
             onClick={(e) => handleClick(e)}
           >
-            <div className="mb-6 mt-4 pl-4 lg:pl-10 flex justify-between items-end">
-              <div className="flex gap-2">
+            <div className="mb-6 mt-4 pl-4 lg:pl-10 flex flex-col md:flex-row gap-2 justify-between md:items-end">
+              <div className="flex flex-col md:flex-row gap-2">
               <MapSelect mapId={mapId.toString()} path="book-desk"/>
               <FloorSelect mapId={mapId.toString()}/>
               </div>
               <DatePicker />
             </div>
             <div
-              className="flex flex-col items-center relative"
+              className="flex flex-col lg:items-center relative"
               ref={containerRef}
             >
               <Stage
-                width={
-                  deviceDimensions.width > 768
-                    ? (image?.width as number) * imageScale || 400
-                    : 350
-                }
-                height={
-                  deviceDimensions.width > 768
-                    ? 500
-                    : (image?.height as number) * imageScale || 400
-                }
+                width={(image?.width as number) * imageScale || 400}
+                height={500}
                 name="stage"
                 id="bookDeskStage"
                 ref={stageRef}
@@ -228,7 +216,7 @@ const BookingMap = ({
                       y={
                         deviceDimensions.width > 768
                           ? room.y - 120
-                          : room.y - 250
+                          : room.y - 120
                       }
                       stroke={bookedRooms.includes(room.id) ? "red" : "green"}
                       onClick={(e) =>
@@ -264,7 +252,7 @@ const BookingMap = ({
                       y={
                         deviceDimensions.width > 768
                           ? desk.y - 120
-                          : desk.y - 250
+                          : desk.y - 120
                       }
                       stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
                       fill="white"
