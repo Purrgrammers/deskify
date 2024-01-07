@@ -26,12 +26,12 @@ const uploadFail = (error: Error) =>
 const uploadImgToDb = async (
   userId: number,
   url: string,
-  address?: string,
+  location?: string,
   floor?: number
 ) => {
   const { data, error } = await supabase
     .from("Maps")
-    .insert({ userId, img: url, address, floor })
+    .insert({ userId, img: url, location, floor })
     .select("id");
   //returns created mapId.
   return data;
@@ -50,22 +50,18 @@ const DropZone = () => {
     setFile(file); // Save file for later submission
   };
 
-  const handleSkip = async () => {
-    const mapId = await uploadImgToDb(1, gridImg);
-    if (mapId) {
-      router.push(`/create-map/${mapId[0].id}`, { scroll: false });
-    }
-  };
+  // const handleSkip = async () => {
+  //   const mapId = await uploadImgToDb(1, gridImg);
+  //   if (mapId) {
+  //     router.push(`/create-map/${mapId[0].id}`, { scroll: false });
+  //   }
+  // };
 
   const handleSubmit = async () => {
-    // Show toster when user try to submit without picture
-    if (!file) {
-      missingFile();
-      return;
-    }
 
     const location = (document.querySelector("#location") as HTMLInputElement)
       .value;
+      console.log(location)
     const floor = (document.querySelector("#floor") as HTMLInputElement).value;
     if (!location) {
       toast.error("Please add a location");
@@ -75,6 +71,12 @@ const DropZone = () => {
       toast.error("Please add a floor number");
       return;
     }
+    if (!file) {
+      const mapId = await uploadImgToDb(1, gridImg, location, Number(floor));
+      if (mapId) {
+        router.push(`/create-map/${mapId[0].id}`, { scroll: false });
+      }
+    } else {
     const filePath = `uploads/${file.name}`;
     try {
       // Uploads picture to bucket
@@ -97,12 +99,14 @@ const DropZone = () => {
 
       setPreviewUrl("");
       uploadSuccess();
+      
       if (mapId) {
         router.push(`/create-map/${mapId[0].id}`, { scroll: false });
       }
     } catch (error) {
       uploadFail(error as Error);
     }
+  }
   };
   return (
     <>
@@ -142,7 +146,7 @@ const DropZone = () => {
       )}
       <div className="flex justify-end mt-5">
         <div className="flex gap-2 mx-2">
-          <Button variant="outline" onClick={handleSkip}>
+          <Button variant="outline">
             Skip
           </Button>
           <Button onClick={handleSubmit}>Submit</Button>
