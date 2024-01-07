@@ -185,7 +185,7 @@ const BookingMap = ({
               <DatePicker />
             </div>
             <div
-              className="flex flex-col lg:items-center relative"
+              className="flex flex-col lg:items-center md:items-center relative"
               ref={containerRef}
             >
               <Stage

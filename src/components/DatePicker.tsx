@@ -13,6 +13,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { supabase } from "./BookingCanvas";
 import { MapContext } from "@/contexts/MapContext";
+import { Label } from "./ui/label";
 
 const DatePicker = () => {
   const today = new Date()
@@ -44,10 +45,13 @@ const DatePicker = () => {
 
 
   return (
+    <div className="flex flex-col gap-px pr-4 lg:pr-10">
+    <Label htmlFor="datePicker">Date</Label>
     <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
+          id="datePicker"
           className={cn(
             "w-[280px] justify-start text-left font-normal",
             !date && "text-muted-foreground"
@@ -67,6 +71,7 @@ const DatePicker = () => {
         />
       </PopoverContent>
     </Popover>
+    </div>
   );
 };
 

@@ -197,7 +197,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
           <BeatLoader className="justify-center pt-56" color="#ccc" />
         ) : (
           <div
-            className="flex flex-col relative overflow-scroll lg:items-center"
+            className="flex flex-col relative overflow-scroll lg:items-center md:items-center"
             ref={containerRef}
           >
             <Stage
