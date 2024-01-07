@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Select,
   SelectContent,
@@ -8,24 +8,27 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Label } from "./ui/label";
+import { MapContext } from "@/contexts/MapContext";
 
 type MapSelectProps = {
   options: number[];
 };
 
-const MapSelect = ({ options }: MapSelectProps) => {
+const MapSelect = () => {
+    const { maps } = useContext(MapContext)
+
   return (
     <div>
       <Select>
-        <Label htmlFor="mapSelect">Map</Label>
+        <Label htmlFor="mapSelect">Choose map</Label>
         <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={options[0]} />
+        <SelectValue placeholder={maps[0].id} />
         </SelectTrigger>
         <SelectContent id="mapSelect">
           <SelectGroup>
-            {options.map((option: number) => (
-              <SelectItem key={option} value={option.toString()}>
-                {option}
+            {maps.map((map) => (
+              <SelectItem key={map.id} value={map.id.toString()}>
+                {map.id}
               </SelectItem>
             ))}
           </SelectGroup>

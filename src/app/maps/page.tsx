@@ -1,11 +1,13 @@
+'use client'
+
 import ActionCard from "@/components/ActionCard";
-import floorplan from "../../floorplan.jpg";
 import editfloormap from "../../edit-floor-map.jpg";
-import newdesk from "../../newdesk.jpg";
 import pen from "../../pen.jpg";
-import planing from "../../planing.jpg";
+import { useEffect, useState } from "react";
+import { supabase } from "@/components/EditCanvas";
 
 const Home = () => {
+
   return (
     <main className="flex flex-col xl:flex-row justify-center xl:items-stretch items-center mt-8 lg:mt-16 pt-4 gap-4 mb-16">
       <ActionCard
