@@ -11,6 +11,7 @@ import useImage from "use-image";
 import { Stage as StageType } from "konva/lib/Stage";
 import BookDeskPopup from "./BookDeskPopup";
 import { BeatLoader } from "react-spinners";
+import MapSelect from "./MapSelect";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -177,7 +178,8 @@ const BookingMap = ({
             className="flex flex-col"
             onClick={(e) => handleClick(e)}
           >
-            <div className="self-start my-6 pl-4 lg:pl-10">
+            <div className="my-6 pl-4 lg:pl-10 flex justify-between items-end">
+            <MapSelect mapId={mapId.toString()} path="book-desk"/>
               <DatePicker />
             </div>
             <div

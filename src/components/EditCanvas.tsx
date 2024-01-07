@@ -285,7 +285,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             onClick={(e) => handleClick(e)}
           >
             <div>
-            <MapSelect/>
+            <MapSelect mapId={mapId.toString()} path="edit-map"/>
             </div>
             <div
               className="flex flex-col items-center relative"

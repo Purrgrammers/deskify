@@ -9,27 +9,22 @@ import {
 } from "./ui/select";
 import { Label } from "./ui/label";
 import { MapContext } from "@/contexts/MapContext";
-import router from "next/router";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-const MapSelect = () => {
-    const path = usePathname();
-    const id = path.replace("/edit-map/", "");
-    const { maps } = useContext(MapContext)
-    const [ selectedMap, setSelectedMap ] = useState(id)
-    const router = useRouter();
-    
-    const handleValueChange = (value: string) => {
+const MapSelect = ({ mapId, path}: { mapId: string, path: string }) => {
+  const { maps } = useContext(MapContext);
+  const router = useRouter();
 
-        // const selectedValue = (document.querySelector('#mapSelect') as HTMLSelectElement).value
-        router.push(`/edit-map/${value}`, { scroll: false });
-    }
+  const handleValueChange = (value: string) => {
+    router.push(`/${path}/${value}`, { scroll: false });
+  };
+
   return (
     <div>
-      <Select value={selectedMap} onValueChange={(value) => handleValueChange(value)}>
-        <Label htmlFor="mapSelect">Choose map</Label>
+      <Select value={mapId} onValueChange={(value) => handleValueChange(value)}>
+        <Label htmlFor="mapSelect">Choose location</Label>
         <SelectTrigger className="w-[180px]">
-        <SelectValue defaultValue={selectedMap} />
+          <SelectValue defaultValue={mapId} />
         </SelectTrigger>
         <SelectContent id="mapSelect">
           <SelectGroup>
