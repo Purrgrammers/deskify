@@ -177,15 +177,15 @@ const BookingMap = ({
             className="flex flex-col overflow-auto"
             onClick={(e) => handleClick(e)}
           >
-            <div className="mb-6 mt-4 pl-4 lg:pl-10 flex justify-between items-end">
-              <div className="flex gap-2">
+            <div className="mb-6 mt-4 pl-4 lg:pl-10 flex flex-col md:flex-row gap-2 justify-between md:items-end">
+              <div className="flex flex-col md:flex-row gap-2">
               <MapSelect mapId={mapId.toString()} path="book-desk"/>
               <FloorSelect mapId={mapId.toString()}/>
               </div>
               <DatePicker />
             </div>
             <div
-              className="flex flex-col lg:items-center md:items-center relative"
+              className="flex flex-col lg:items-center relative"
               ref={containerRef}
             >
               <Stage
