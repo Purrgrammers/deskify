@@ -71,11 +71,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     if (!image) {
       return;
     }
-    if (deviceDimensions.width > 768) {
-      setImageScale(500 / image?.height);
-    } else {
-      setImageScale(350 / image?.width);
-    }
+  setImageScale(500 / image?.height);
   }, [image, deviceDimensions]);
 
   useEffect(() => {
@@ -201,22 +197,14 @@ const Canvas = ({ mapId }: { mapId: number }) => {
           <BeatLoader className="justify-center pt-56" color="#ccc" />
         ) : (
           <div
-            className="flex flex-col items-center relative"
+            className="flex flex-col relative overflow-scroll lg:items-center"
             ref={containerRef}
           >
             <Stage
               name="stage"
               id="createMapStage"
-              width={
-                deviceDimensions.width > 768
-                  ? (image?.width as number) * imageScale || 400
-                  : 350
-              }
-              height={
-                deviceDimensions.width > 768
-                  ? 500 + 140
-                  : ((image?.height as number) + 250) * imageScale || 400
-              }
+              width={(image?.width as number) * imageScale || 400}
+              height={640}
               onClick={(e) => handleFocus(e)}
               onTap={(e) => handleFocus(e)}
               ref={stageRef}

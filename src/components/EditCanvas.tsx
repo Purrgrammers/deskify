@@ -96,11 +96,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     if (!image) {
       return;
     }
-    if (deviceDimensions.width > 768) {
       setImageScale(500 / image?.height);
-    } else {
-      setImageScale(350 / image?.width);
-    }
   }, [image, deviceDimensions]);
 
   useEffect(() => {
@@ -293,20 +289,12 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             <FloorSelect mapId={mapId.toString()}/>
             </div>
             <div
-              className="flex flex-col items-center relative"
+              className="flex flex-col lg:items-center relative"
               ref={containerRef}
             >
               <Stage
-                width={
-                  deviceDimensions.width > 768
-                    ? (image?.width as number) * imageScale || 400
-                    : 350
-                }
-                height={
-                  deviceDimensions.width > 768
-                    ? 640
-                    : (image?.height as number) * imageScale || 400
-                }
+                width={(image?.width as number) * imageScale || 400}
+                height={640}
                 name="stage"
                 ref={stageRef}
                 onClick={(e) => handleFocus(e)}
