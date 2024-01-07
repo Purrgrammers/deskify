@@ -22,7 +22,7 @@ const MapSelect = ({ mapId, path }: { mapId: string, path: string }) => {
   return (
     <div>
       <Select value={mapId} onValueChange={(value) => handleValueChange(value)}>
-        <Label htmlFor="mapSelect">Choose location</Label>
+        <Label htmlFor="mapSelect">Location</Label>
         <SelectTrigger className="w-[180px]">
           <SelectValue defaultValue={mapId} />
         </SelectTrigger>

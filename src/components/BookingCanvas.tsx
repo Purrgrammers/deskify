@@ -12,6 +12,9 @@ import { Stage as StageType } from "konva/lib/Stage";
 import BookDeskPopup from "./BookDeskPopup";
 import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Label } from "./ui/label";
+import FloorSelect from "./FloorSelect";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -36,7 +39,7 @@ const BookingMap = ({
     width: 400,
     height: 400,
   });
-  const { bookings, focusElement, updateFocusElement } = useContext(MapContext);
+  const { bookings, focusElement, updateFocusElement, maps } = useContext(MapContext);
 
   useEffect(() => {
     const getMapData = async () => {
@@ -178,8 +181,11 @@ const BookingMap = ({
             className="flex flex-col"
             onClick={(e) => handleClick(e)}
           >
-            <div className="my-6 pl-4 lg:pl-10 flex justify-between items-end">
-            <MapSelect mapId={mapId.toString()} path="book-desk"/>
+            <div className="mb-6 mt-4 pl-4 lg:pl-10 flex justify-between items-end">
+              <div className="flex gap-2">
+              <MapSelect mapId={mapId.toString()} path="book-desk"/>
+              <FloorSelect mapId={mapId.toString()}/>
+              </div>
               <DatePicker />
             </div>
             <div

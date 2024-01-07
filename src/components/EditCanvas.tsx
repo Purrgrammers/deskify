@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import CreateMapPopup from "./CreateMapPopup";
 import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
+import FloorSelect from "./FloorSelect";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -284,8 +285,9 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             className=" flex flex-col py-6"
             onClick={(e) => handleClick(e)}
           >
-            <div>
+            <div className="pl-4 lg:pl-10 flex gap-2">
             <MapSelect mapId={mapId.toString()} path="edit-map"/>
+            <FloorSelect mapId={mapId.toString()}/>
             </div>
             <div
               className="flex flex-col items-center relative"
