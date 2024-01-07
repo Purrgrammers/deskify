@@ -64,11 +64,11 @@ const DropZone = () => {
       return;
     }
 
-    const address = (document.querySelector("#address") as HTMLInputElement)
+    const location = (document.querySelector("#location") as HTMLInputElement)
       .value;
     const floor = (document.querySelector("#floor") as HTMLInputElement).value;
-    if (!address) {
-      toast.error("Please add a facility address");
+    if (!location) {
+      toast.error("Please add a location");
       return;
     }
     if (!floor) {
@@ -91,7 +91,7 @@ const DropZone = () => {
       console.log("Public URL:", publicUrl);
 
       // Uploads userId and public URL to database and saves created mapId
-      const mapId = await uploadImgToDb(1, publicUrl, address, Number(floor));
+      const mapId = await uploadImgToDb(1, publicUrl, location, Number(floor));
       console.log("File uploaded to Supabase:", data);
       console.log("This is id of created map:", mapId);
 

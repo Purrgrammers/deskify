@@ -11,7 +11,7 @@ import { Label } from "./ui/label";
 import { MapContext } from "@/contexts/MapContext";
 import { useRouter } from "next/navigation";
 
-const MapSelect = ({ mapId, path}: { mapId: string, path: string }) => {
+const MapSelect = ({ mapId, path }: { mapId: string, path: string }) => {
   const { maps } = useContext(MapContext);
   const router = useRouter();
 
@@ -30,7 +30,7 @@ const MapSelect = ({ mapId, path}: { mapId: string, path: string }) => {
           <SelectGroup>
             {maps.map((map) => (
               <SelectItem key={map.id} value={map.id.toString()}>
-                {map.id}
+                {map.location || 'hello'}
               </SelectItem>
             ))}
           </SelectGroup>

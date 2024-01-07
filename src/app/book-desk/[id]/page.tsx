@@ -48,8 +48,8 @@ const BookingPage = () => {
         </div>
         <div className="pl-10 pt-4">
           <p>
-            <span className="font-semibold">Address:</span>{" "}
-            {facilityInfo?.address}
+            <span className="font-semibold">Location:</span>{" "}
+            {facilityInfo?.location}
           </p>
           <p>
             <span className="font-semibold">Floor:</span> {facilityInfo?.floor}

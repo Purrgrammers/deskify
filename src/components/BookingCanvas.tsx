@@ -66,7 +66,7 @@ const BookingMap = ({
       if (mapData) {
         setBackgroundImage(mapData[0].img);
         getFacilityInfo({
-          address: mapData[0].address,
+          location: mapData[0].location,
           floor: mapData[0].floor,
         });
       }

@@ -69,12 +69,13 @@ export type Booking = {
 };
 
 export type FacilityInfo = {
-  address: string;
+  location: string;
   floor: number;
 };
 
 export type Map = {
-  id: number
+  id: number;
+  location: string
 };
 
 type FocusElement = {
@@ -108,7 +109,7 @@ export const MapContext = createContext<MapContextProps>({
   focus: null,
   updateFocus: () => {},
   updateFocusPosition: () => {},
-  maps: [{id: 1}]
+  maps: [{id: 1, location: ''}]
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
@@ -122,13 +123,13 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
   const [focus, setFocus] = useState<{element: Shape<ShapeConfig>, x?: number, y?: number } | null>(null);
-  const [maps, setMaps] = useState<Map[]>([{id: 1}]);
+  const [maps, setMaps] = useState<Map[]>([{id: 1, location: 'Deskify HQ'}]);
 
   useEffect(() => {
     const getMaps = async() => {
       const { data, error } = await supabase
       .from("Maps")
-      .select('id')
+      .select('id, location')
     if (error) {
       console.log(error);
     }
