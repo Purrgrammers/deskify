@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import CreateMapPopup from "./CreateMapPopup";
 import { BeatLoader } from "react-spinners";
+import MapSelect from "./MapSelect";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -283,6 +284,9 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             className=" flex flex-col py-6"
             onClick={(e) => handleClick(e)}
           >
+            <div>
+            <MapSelect options={[1,2]}/>
+            </div>
             <div
               className="flex flex-col items-center relative"
               ref={containerRef}
