@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { MapContext } from "@/contexts/MapContext";
 
 const fileTypes = ["JPG", "JPEG", "PNG"];
 
@@ -19,19 +18,18 @@ const gridImg =
 
 //Toasters
 const uploadSuccess = () => toast.success("Your picture has been uploaded.");
-const missingFile = () => toast.error("You need to upload a file.");
 const uploadFail = (error: Error) =>
   toast.error(`${error.message}. Try another picture.`);
 
 const uploadImgToDb = async (
   userId: number,
   url: string,
-  address?: string,
+  location?: string,
   floor?: number
 ) => {
   const { data, error } = await supabase
     .from("Maps")
-    .insert({ userId, img: url, address, floor })
+    .insert({ userId, img: url, location, floor })
     .select("id");
   //returns created mapId.
   return data;
@@ -50,31 +48,26 @@ const DropZone = () => {
     setFile(file); // Save file for later submission
   };
 
-  const handleSkip = async () => {
-    const mapId = await uploadImgToDb(1, gridImg);
-    if (mapId) {
-      router.push(`/create-map/${mapId[0].id}`, { scroll: false });
-    }
-  };
-
   const handleSubmit = async () => {
-    // Show toster when user try to submit without picture
-    if (!file) {
-      missingFile();
-      return;
-    }
 
-    const address = (document.querySelector("#address") as HTMLInputElement)
+    const location = (document.querySelector("#location") as HTMLInputElement)
       .value;
+      console.log(location)
     const floor = (document.querySelector("#floor") as HTMLInputElement).value;
-    if (!address) {
-      toast.error("Please add a facility address");
+    if (!location) {
+      toast.error("Please add a location");
       return;
     }
     if (!floor) {
       toast.error("Please add a floor number");
       return;
     }
+    if (!file) {
+      const mapId = await uploadImgToDb(1, gridImg, location, Number(floor));
+      if (mapId) {
+        router.push(`/create-map/${mapId[0].id}`, { scroll: false });
+      }
+    } else {
     const filePath = `uploads/${file.name}`;
     try {
       // Uploads picture to bucket
@@ -91,18 +84,20 @@ const DropZone = () => {
       console.log("Public URL:", publicUrl);
 
       // Uploads userId and public URL to database and saves created mapId
-      const mapId = await uploadImgToDb(1, publicUrl, address, Number(floor));
+      const mapId = await uploadImgToDb(1, publicUrl, location, Number(floor));
       console.log("File uploaded to Supabase:", data);
       console.log("This is id of created map:", mapId);
 
       setPreviewUrl("");
       uploadSuccess();
+      
       if (mapId) {
         router.push(`/create-map/${mapId[0].id}`, { scroll: false });
       }
     } catch (error) {
       uploadFail(error as Error);
     }
+  }
   };
   return (
     <>
@@ -142,8 +137,8 @@ const DropZone = () => {
       )}
       <div className="flex justify-end mt-5">
         <div className="flex gap-2 mx-2">
-          <Button variant="outline" onClick={handleSkip}>
-            Skip
+          <Button variant='outline' onClick={() => router.back()}>
+            Back
           </Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </div>

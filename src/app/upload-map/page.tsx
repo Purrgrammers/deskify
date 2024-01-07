@@ -10,7 +10,7 @@ const Upload = () => {
       <div className="flex flex-col mt-12 mb-8 items-center max-w-2xl mx-auto">
         <div className="text-left w-full mb-8">
           <h1 className="text-2xl font-semibold m-4 mb-6">
-            Add some info about your facility
+            Add some info about your map
           </h1>
           <div className="mx-4 my-2">
             <p className="mb-4">
@@ -18,10 +18,10 @@ const Upload = () => {
             </p>
           </div>
           <div className="mx-4 flex flex-col gap-2">
-          <Label htmlFor="address" className="ml-px mt-px">Address</Label>
-          <Input type="text" id="address" name="input-address" required={true} className="mb-2"></Input>
+          <Label htmlFor="location" className="ml-px mt-px">Location</Label>
+          <Input type="text" id="location" name="input-location" className="mb-2"></Input>
           <Label htmlFor="floor" className="ml-px mt-px" >Floor number</Label>
-          <Input type="number" id="floor" name="input-floor" required={true}></Input>
+          <Input type="number" id="floor" name="input-floor"></Input>
           </div>
         </div>
         <div className="text-left w-full">

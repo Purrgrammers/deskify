@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
@@ -32,6 +32,7 @@ type MapContextProps = {
   focus: {element: Shape<ShapeConfig>, x?: number, y?: number } | null,
   updateFocus: (element: Shape<ShapeConfig> | null) => void
   updateFocusPosition: (x: number, y: number) => void
+  maps: Map[]
 };
 
 export type Room = {
@@ -68,8 +69,14 @@ export type Booking = {
 };
 
 export type FacilityInfo = {
-  address: string;
+  location: string;
   floor: number;
+};
+
+export type Map = {
+  id: number;
+  location: string;
+  floor: number
 };
 
 type FocusElement = {
@@ -103,6 +110,7 @@ export const MapContext = createContext<MapContextProps>({
   focus: null,
   updateFocus: () => {},
   updateFocusPosition: () => {},
+  maps: [{id: 1, location: '', floor: 1}]
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
@@ -116,6 +124,23 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
   const [focus, setFocus] = useState<{element: Shape<ShapeConfig>, x?: number, y?: number } | null>(null);
+  const [maps, setMaps] = useState<Map[]>([{id: 1, location: 'Deskify HQ', floor: 1}]);
+
+  useEffect(() => {
+    const getMaps = async() => {
+      const { data, error } = await supabase
+      .from("Maps")
+      .select('id, location, floor')
+    if (error) {
+      console.log(error);
+    }
+    if(data) {
+      console.log(data)
+      setMaps(data)
+    }
+    }
+    getMaps()
+  }, [])
 
   const bookRoom = async(id: number, mapId: number) => {
     const { data, error } = await supabase
@@ -246,7 +271,8 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         updateFocusElement,
         focus,
         updateFocus,
-        updateFocusPosition
+        updateFocusPosition,
+        maps
       }}
     >
       {props.children}

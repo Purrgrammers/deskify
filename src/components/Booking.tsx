@@ -30,7 +30,9 @@ type BookingProps = {
     userId: number;
     deskId: number;
     roomId: number;
-    Maps: {address?:string;
+    Maps: {
+    id: number
+    location?:string;
     floor?: number;}
   };
 };
@@ -69,7 +71,7 @@ const Booking: React.FC<BookingProps> = ({ booking }) => {
           {booking.deskId ? booking.deskId : booking.roomId}
         </TableCell>
         <TableCell>
-          {booking.Maps.address}
+          {booking.Maps.location || `Map ${booking.Maps.id}`}
         </TableCell>
         <TableCell>
         {booking.Maps.floor}
