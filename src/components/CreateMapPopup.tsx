@@ -36,6 +36,7 @@ const CreateMapPopup = () => {
         backgroundColor: "white",
       }}
       className="popup"
+      onClick={(e) => e.stopPropagation()}
     >
       {editMode && (
         <RoomInfoForm
