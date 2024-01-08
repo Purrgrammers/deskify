@@ -217,6 +217,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                   scaleY={imageScale}
                   alt="floor plan"
                   name="image"
+                  preventDefault={false}
                 ></Image>
                 {rooms.map((room) => (
                   <Rect

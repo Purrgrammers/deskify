@@ -308,6 +308,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                     scaleX={imageScale}
                     scaleY={imageScale}
                     name="image"
+                    preventDefault={false}
                   ></Image>
                   {rooms.map((room) => (
                     <Rect

@@ -203,6 +203,7 @@ const BookingMap = ({
                     alt="booking map"
                     scaleX={imageScale}
                     scaleY={imageScale}
+                    preventDefault={false}
                   ></Image>
                   {rooms.map((room) => (
                     <Rect
