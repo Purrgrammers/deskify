@@ -35,14 +35,10 @@ Deskify is open-sourced under the MIT License.
 ## The Team
 
 ### Felicia Lydèn
-
 [![Felicia Lydèn](https://github.com/felicialyden.png?size=100)](https://github.com/felicialyden)
-_Owner_
 
 ### Izabela Marcinkowska
-
-[![Colleague's Name 1](https://github.com/izabela-marcinkowska.png?size=100)](https://github.com/izabela-marcinkowska)
-_Role or Description_
+[![Izabela Marcinkowska](https://github.com/izabela-marcinkowska.png?size=100)](https://github.com/izabela-marcinkowska)
 
 Feel free to contribute to Deskify, making office space management a breeze! 🌐💼🚀
 
