@@ -139,6 +139,10 @@ const BookingMap = ({
       seats: clickedRoom?.seats,
       additionalInfo: clickedRoom?.additionalInfo,
     });
+    const popup = document.querySelector('.popup')
+    if(popup) {
+      popup.classList.remove('popup-hidden')
+    }
   };
 
   const handleClickDesk = (target: Shape<ShapeConfig>, id: number) => {
@@ -150,6 +154,10 @@ const BookingMap = ({
     const x = target.attrs.x;
     const y = target.attrs.y;
     updateFocusElement({ type, id, booked, x, y });
+    const popup = document.querySelector('.popup')
+    if(popup) {
+      popup.classList.remove('popup-hidden')
+    }
   };
 
   const handleFocus = (

@@ -144,6 +144,10 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     } else {
       updateFocus(e.target as Shape<ShapeConfig>);
       setShowPopup(true);
+      const popup = document.querySelector('.popup')
+      if(popup) {
+        popup.classList.remove('popup-hidden')
+      }
     }
   };
 
@@ -177,6 +181,10 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     updateRooms(rooms);
     if (focus) {
       setShowPopup(true);
+      const popup = document.querySelector('.popup')
+      if(popup) {
+        popup.classList.remove('popup-hidden')
+      }
       updateFocusPosition(target.x(), target.y());
     }
   };
@@ -207,6 +215,10 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     updateDesks(desks);
     if (focus) {
       setShowPopup(true);
+      const popup = document.querySelector('.popup')
+      if(popup) {
+        popup.classList.remove('popup-hidden')
+      }
       updateFocusPosition(target.x(), target.y());
     }
   };

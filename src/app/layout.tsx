@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { SyntheticEvent } from "react";
 
 const inter = Montserrat({ subsets: ["latin"] });
 
@@ -16,6 +17,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  const handleClick = (e: SyntheticEvent) => {
+    console.log(e.target)
+  }
+
   return (
     <html lang="en">
       <body

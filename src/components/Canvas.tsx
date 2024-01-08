@@ -64,6 +64,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     }
     if (!focus) {
       setShowPopup(false);
+      
     }
   }, [focus]);
 
@@ -93,6 +94,10 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     if (focus) {
       setShowPopup(true);
       updateFocusPosition(target.x(), target.y());
+      const popup = document.querySelector('.popup')
+      if(popup) {
+        popup.classList.remove('popup-hidden')
+      }
     }
   };
 
@@ -123,6 +128,10 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     if (focus) {
       setShowPopup(true);
       updateFocusPosition(target.x(), target.y());
+      const popup = document.querySelector('.popup')
+      if(popup) {
+        popup.classList.remove('popup-hidden')
+      }
     }
   };
 
@@ -162,9 +171,14 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     ) {
       updateFocus(null);
       setShowPopup(false);
+
     } else {
       updateFocus(e.target as Shape<ShapeConfig>);
       setShowPopup(true);
+      const popup = document.querySelector('.popup')
+      if(popup) {
+        popup.classList.remove('popup-hidden')
+      }
     }
   };
 

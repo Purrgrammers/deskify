@@ -35,6 +35,7 @@ const CreateMapPopup = () => {
         zIndex: 10,
         backgroundColor: "white",
       }}
+      className="popup"
     >
       {editMode && (
         <RoomInfoForm

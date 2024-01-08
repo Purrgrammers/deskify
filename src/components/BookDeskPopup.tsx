@@ -38,7 +38,7 @@ const BookDeskPopup = ({mapId}: {mapId: number}) => {
         zIndex: 10,
         backgroundColor: "white",
       }}
-      className={popupHeight? 'popup-visible' : 'popup-hidden'}
+      className={popupHeight? 'popup-visible popup' : 'popup-hidden popup'}
       id="bookDeskPopup"
     >
       <div className="flex flex-col gap-1">
