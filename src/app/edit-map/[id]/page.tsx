@@ -15,7 +15,8 @@ const EditMap = () => {
   const id = path.replace("/edit-map/", "");
 
   const handleClick = (e: SyntheticEvent) => {
-    if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
+    if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas' && !(e.target as HTMLElement).classList.contains('lucide')){
+      console.log(e.target)
       const popup = document.querySelector('.popup')
       if(popup) {
         popup.classList.add('popup-hidden')

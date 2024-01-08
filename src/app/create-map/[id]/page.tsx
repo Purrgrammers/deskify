@@ -14,7 +14,7 @@ const CreateMap = () => {
   const id = path.replace("/create-map/", "");
 
   const handleClick = (e: SyntheticEvent) => {
-    if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
+    if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas' && !(e.target as HTMLElement).classList.contains('lucide')){
       const popup = document.querySelector('.popup')
       if(popup) {
         popup.classList.add('popup-hidden')
