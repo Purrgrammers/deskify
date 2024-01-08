@@ -48,7 +48,7 @@ const Bookings = () => {
     const fetchAllBookings = async () => {
       const { data, error } = await supabase
         .from("Bookings")
-        .select("*, Maps!inner(id, location, floor)")
+        .select("*, Maps!inner(id, location, floor), Rooms(id, name)")
         .order("date", { ascending: true })
         .gte("date", today);
       if (error) {
