@@ -131,6 +131,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
       const { data, error } = await supabase
       .from("Maps")
       .select('id, location, floor')
+      .order('id', { ascending: true })
     if (error) {
       console.log(error);
     }
