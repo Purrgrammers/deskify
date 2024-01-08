@@ -23,7 +23,7 @@ const Home = () => {
         description="Refine your office layout! Easily modify your existing map to adjust rooms and desks, ensuring your space evolves with your teams needs."
         btnText="Edit map"
         reverse={false}
-        href="edit-map/1"
+        href="edit-map/107"
       ></ActionCard>
     </main>
   );

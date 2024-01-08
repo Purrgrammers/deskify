@@ -10,7 +10,6 @@ import {
   Rect,
   Stage,
   Image,
-  useStrictMode,
   Transformer,
 } from "react-konva";
 import { KonvaEventObject } from "konva/lib/Node";
@@ -41,7 +40,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     width: 400,
     height: 400,
   });
-  const { bookings, focusElement, updateFocusElement } = useContext(MapContext);
+  const { updateFocusElement } = useContext(MapContext);
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
