@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import {
   FacilityInfo,
-  MapContext,
   MapContextProvider,
 } from "@/contexts/MapContext";
 import { Toaster } from "react-hot-toast";

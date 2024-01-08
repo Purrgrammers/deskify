@@ -1,8 +1,5 @@
 import ActionCard from "@/components/ActionCard";
-import manager from "../manager.png";
-import user from "../user.png";
 import floorplan from "../floorplan.jpg";
-import office from "../office.jpg";
 import newdesk from "../newdesk.jpg";
 
 const Home = () => {
@@ -21,7 +18,7 @@ const Home = () => {
         description="Choose your workspace! Select dates and pick from available rooms or desks through our interface. Book your ideal spot with just a few taps."
         btnText="Book space"
         reverse={false}
-        href="book-desk/1"
+        href="book-desk/107"
       ></ActionCard>
     </main>
   );

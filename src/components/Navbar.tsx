@@ -68,9 +68,9 @@ const Navbar = () => {
               <li className="border-b hover:border-gray-400 my-8 uppercase">
                 <Link
                   className={`link ${
-                    pathname === "/book-desk/1" ? "font-bold" : ""
+                    pathname === "/book-desk/107" ? "font-bold" : ""
                   }`}
-                  href="/book-desk/1"
+                  href="/book-desk/107"
                 >
                   Book space
                 </Link>
@@ -109,9 +109,9 @@ const Navbar = () => {
           <li>
             <Link
               className={`link ${
-                pathname === "/book-desk/1" ? "font-semibold" : ""
+                pathname === "/book-desk/107" ? "font-semibold" : ""
               }`}
-              href="/book-desk/1"
+              href="/book-desk/107"
             >
               Book space
             </Link>
