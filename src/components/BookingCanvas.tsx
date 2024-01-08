@@ -219,7 +219,7 @@ const BookingMap = ({
                           ? room.y - 120
                           : room.y - 120
                       }
-                      stroke={bookedRooms.includes(room.id) ? "red" : "green"}
+                      stroke={bookedRooms.includes(room.id) ? "#e53935" : "#43a047"}
                       onClick={(e) =>
                         handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                       }
@@ -255,7 +255,7 @@ const BookingMap = ({
                           ? desk.y - 120
                           : desk.y - 120
                       }
-                      stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
+                      stroke={bookedDesks.includes(desk.id) ? "#e53935" : "#43a047"}
                       fill="white"
                       onClick={(e) =>
                         handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
