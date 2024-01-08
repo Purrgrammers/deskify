@@ -32,7 +32,10 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const EditCanvas = ({ mapId }: { mapId: number }) => {
   const [showPopup, setShowPopup] = useState(false);
-  const [showHelpText, setShowHelpText] = useState<{type: string, x: number} | null>(null);
+  const [showHelpText, setShowHelpText] = useState<{
+    type: string;
+    x: number;
+  } | null>(null);
   const { focus, updateFocus, updateFocusPosition } = useContext(MapContext);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
@@ -96,7 +99,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     if (!image) {
       return;
     }
-      setImageScale(500 / image?.height);
+    setImageScale(500 / image?.height);
   }, [image, deviceDimensions]);
 
   useEffect(() => {
@@ -153,7 +156,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
 
   const handleDragStart = (target: Shape<ShapeConfig>) => {
     setShowPopup(false);
-    setShowHelpText(null)
+    setShowHelpText(null);
     console.log("triggad first");
     if (target.attrs.name === "room") {
       addRoom();
@@ -285,8 +288,8 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             onClick={(e) => handleClick(e)}
           >
             <div className="pl-4 lg:pl-10 flex gap-2">
-            <MapSelect mapId={mapId.toString()} path="edit-map"/>
-            <FloorSelect mapId={mapId.toString()}/>
+              <MapSelect mapId={mapId.toString()} path="edit-map" />
+              <FloorSelect mapId={mapId.toString()} />
             </div>
             <div
               className="flex flex-col md:items-center relative"
@@ -343,8 +346,11 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                           e.target.getStage() as StageType
                         ).container();
                         container.style.cursor = "pointer";
-                        if(e.target.attrs.y === 50){
-                          setShowHelpText({type: e.target.attrs.name, x: e.target.attrs.x})
+                        if (e.target.attrs.y === 50) {
+                          setShowHelpText({
+                            type: e.target.attrs.name,
+                            x: e.target.attrs.x,
+                          });
                         }
                       }}
                       onMouseLeave={(e) => {
@@ -352,8 +358,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                           e.target.getStage() as StageType
                         ).container();
                         container.style.cursor = "default";
-                        setShowHelpText(null)
-
+                        setShowHelpText(null);
                       }}
                     />
                   ))}
@@ -392,8 +397,11 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                           e.target.getStage() as StageType
                         ).container();
                         container.style.cursor = "pointer";
-                        if(e.target.attrs.y === 50){
-                          setShowHelpText({type: e.target.attrs.name, x: e.target.attrs.x})
+                        if (e.target.attrs.y === 50) {
+                          setShowHelpText({
+                            type: e.target.attrs.name,
+                            x: e.target.attrs.x,
+                          });
                         }
                       }}
                       onMouseLeave={(e) => {
@@ -401,7 +409,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                           e.target.getStage() as StageType
                         ).container();
                         container.style.cursor = "default";
-                        setShowHelpText(null)
+                        setShowHelpText(null);
                       }}
                     />
                   ))}
@@ -422,9 +430,11 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                 </Layer>
               </Stage>
               {showPopup && <CreateMapPopup />}
-              {showHelpText && <HelpTextPopup type={showHelpText.type} x={showHelpText.x}/>}
+              {showHelpText && (
+                <HelpTextPopup type={showHelpText.type} x={showHelpText.x} />
+              )}
               <div className="m-4 flex gap-4 self-end px-4 lg:px-10">
-                <Button variant="secondary" onClick={() => router.back()}>
+                <Button variant="outline" onClick={() => router.back()}>
                   Cancel
                 </Button>
                 <Button onClick={handleUpdateMap}>Update map</Button>
