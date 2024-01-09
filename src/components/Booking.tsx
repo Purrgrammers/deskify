@@ -1,17 +1,12 @@
 import {
-  Table,
-  TableBody,
-  TableCaption,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { BookingContext } from "@/contexts/BookingContext";
 import { createClient } from "@supabase/supabase-js";
 import { Trash2 } from "lucide-react";
 import { useContext } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -33,7 +28,12 @@ type BookingProps = {
     Maps: {
     id: number
     location?:string;
-    floor?: number;}
+    floor?: number;
+    }
+    Rooms?:{
+      id: number;
+      name?: string
+    }
   };
 };
 
@@ -68,7 +68,7 @@ const Booking: React.FC<BookingProps> = ({ booking }) => {
       <TableRow>
         <TableCell className="font-medium">{booking.date}</TableCell>
         <TableCell>
-          {booking.deskId ? booking.deskId : booking.roomId}
+          {booking.deskId ? booking.deskId : booking.Rooms?.name || booking.roomId}
         </TableCell>
         <TableCell>
           {booking.Maps.location || `Map ${booking.Maps.id}`}

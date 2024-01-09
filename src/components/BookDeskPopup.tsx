@@ -38,8 +38,9 @@ const BookDeskPopup = ({mapId}: {mapId: number}) => {
         zIndex: 10,
         backgroundColor: "white",
       }}
-      className={popupHeight? 'popup-visible' : 'popup-hidden'}
+      className={popupHeight? 'popup-visible popup' : 'popup-hidden popup'}
       id="bookDeskPopup"
+      onClick={(e) => e.stopPropagation()}
     >
       <div className="flex flex-col gap-1">
       <p className="text-sm">{focusElement?.name? `${focusElement?.name}: `: `${focusElement?.type} ${focusElement?.id}: `} <span className={focusElement?.booked? 'text-red-600': 'text-green-600'}>{focusElement?.booked? 'Booked': 'Available'}</span></p>

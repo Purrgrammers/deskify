@@ -139,6 +139,10 @@ const BookingMap = ({
       seats: clickedRoom?.seats,
       additionalInfo: clickedRoom?.additionalInfo,
     });
+    const popup = document.querySelector('.popup')
+    if(popup) {
+      popup.classList.remove('popup-hidden')
+    }
   };
 
   const handleClickDesk = (target: Shape<ShapeConfig>, id: number) => {
@@ -150,6 +154,10 @@ const BookingMap = ({
     const x = target.attrs.x;
     const y = target.attrs.y;
     updateFocusElement({ type, id, booked, x, y });
+    const popup = document.querySelector('.popup')
+    if(popup) {
+      popup.classList.remove('popup-hidden')
+    }
   };
 
   const handleFocus = (
@@ -219,7 +227,7 @@ const BookingMap = ({
                           ? room.y - 120
                           : room.y - 120
                       }
-                      stroke={bookedRooms.includes(room.id) ? "red" : "green"}
+                      stroke={bookedRooms.includes(room.id) ? "#e53935" : "#43a047"}
                       onClick={(e) =>
                         handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                       }
@@ -255,7 +263,7 @@ const BookingMap = ({
                           ? desk.y - 120
                           : desk.y - 120
                       }
-                      stroke={bookedDesks.includes(desk.id) ? "red" : "green"}
+                      stroke={bookedDesks.includes(desk.id) ? "#e53935" : "#43a047"}
                       fill="white"
                       onClick={(e) =>
                         handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)

@@ -3,6 +3,7 @@
 import { MapContextProvider } from "@/contexts/MapContext";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
+import { SyntheticEvent } from "react";
 import { Toaster } from "react-hot-toast";
 
 const EditCanvas = dynamic(() => import("@/components/EditCanvas"), {
@@ -13,9 +14,20 @@ const EditMap = () => {
   const path = usePathname();
   const id = path.replace("/edit-map/", "");
 
+  const handleClick = (e: SyntheticEvent) => {
+    if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
+      console.log(e.target)
+      const popup = document.querySelector('.popup')
+      if(popup) {
+        popup.classList.add('popup-hidden')
+        popup.classList.remove('popup-visible')
+      }
+    }
+  }
+
   return (
     <>
-      <div className="flex flex-col max-w-7xl mx-auto">
+      <div className="flex flex-col max-w-7xl mx-auto" onClick={(e) => handleClick(e)}>
         <MapContextProvider>
           <Toaster
             containerStyle={{

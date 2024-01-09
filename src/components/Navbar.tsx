@@ -4,7 +4,7 @@ import Image from "next/image";
 // import logo from "../logo.png";
 import logo from "../deskify.svg";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -15,8 +15,18 @@ const Navbar = () => {
     setIsNavOpen(false);
   }, [pathname]);
 
+  const handleClick = (e: SyntheticEvent) => {
+    if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
+      const popup = document.querySelector('.popup')
+      if(popup) {
+        popup.classList.add('popup-hidden')
+        popup.classList.remove('popup-visible')
+      }
+    }
+  }
+
   return (
-    <header className="flex justify-between px-4 mx-2 md:mx-6 lg:mx-12 mt-4 pb-6 border-b border-gray">
+    <header onClick={(e) => handleClick(e)}  className="flex justify-between px-4 mx-2 md:mx-6 lg:mx-12 mt-4 pb-6 border-b border-gray">
       <Link href="/">
         <Image src={logo} alt="logo" width={50} height={50} />
       </Link>
