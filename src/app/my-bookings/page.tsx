@@ -107,9 +107,9 @@ const Bookings = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[150px]">Date</TableHead>
-                  <TableHead>Desk</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Floor</TableHead>
+                  <TableHead className="w-[150px]">Desk</TableHead>
+                  <TableHead className="w-[150px]">Location</TableHead>
+                  <TableHead className="w-[150px]">Floor</TableHead>
                   <TableHead className="pl-0">Remove</TableHead>
                 </TableRow>
               </TableHeader>
@@ -132,9 +132,9 @@ const Bookings = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[150px]">Date</TableHead>
-                  <TableHead>Room</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Floor</TableHead>
+                  <TableHead className="w-[150px]">Room</TableHead>
+                  <TableHead className="w-[150px]">Location</TableHead>
+                  <TableHead className="w-[150px]">Floor</TableHead>
                   <TableHead className="pl-0">Remove</TableHead>
                 </TableRow>
               </TableHeader>
