@@ -46,8 +46,6 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   const router = useRouter();
 
   const trRef = useRef(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<StageType>(null);
 
   useEffect(() => {
     const getMapData = async () => {
@@ -262,13 +260,11 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             </div>
             <div
               className="flex flex-col md:items-center relative"
-              ref={containerRef}
             >
               <Stage
                 width={(image?.width as number) * imageScale || 400}
                 height={640}
                 name="stage"
-                ref={stageRef}
                 onPointerClick={(e) => handleFocus(e)}
                 id="createMapStage"
               >

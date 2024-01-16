@@ -32,9 +32,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   useStrictMode(true);
   const router = useRouter();
 
-  const trRef = useRef(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<StageType>(null);
+  const trRef = useRef<ShapeConfig>(null);
 
   useEffect(() => {
     const getImage = async () => {
@@ -52,9 +50,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
 
   useEffect(() => {
     if (focus) {
-      // @ts-expect-error just let me do it
       trRef.current?.nodes([focus.element]);
-      // @ts-expect-error just let me do it
       trRef.current?.getLayer().batchDraw();
     }
     if (!focus) {
@@ -200,7 +196,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
         ) : (
           <div
             className="flex flex-col relative md:items-center"
-            ref={containerRef}
           >
             <Stage
               name="stage"
@@ -208,7 +203,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
               width={(image?.width as number) * imageScale || 400}
               height={640}
               onPointerClick={(e) => handleFocus(e)}
-              ref={stageRef}
             >
               <Layer>
                 <Image

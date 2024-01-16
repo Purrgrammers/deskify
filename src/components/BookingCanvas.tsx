@@ -6,7 +6,7 @@ import { Layer, Path, Rect, Stage, Image } from "react-konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { Stage as StageType } from "konva/lib/Stage";
-import { MouseEvent, useContext, useEffect, useRef, useState } from "react";
+import { MouseEvent, useContext, useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
 import useImage from "use-image";
 import BookDeskPopup from "./BookDeskPopup";
@@ -75,9 +75,6 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     }
     setImageScale(500 / image?.height);
   }, [image]);
-
-  const stageRef = useRef<StageType>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleClickRoom = (target: Shape<ShapeConfig>, id: number) => {
     const booked = bookedRooms.includes(id);
@@ -154,14 +151,12 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
             </div>
             <div
               className="flex flex-col lg:items-center relative"
-              ref={containerRef}
             >
               <Stage
                 width={(image?.width as number) * imageScale || 400}
                 height={500}
                 name="stage"
                 id="bookDeskStage"
-                ref={stageRef}
                 onPointerClick={(e) => handleFocus(e)}
               >
                 <Layer>
