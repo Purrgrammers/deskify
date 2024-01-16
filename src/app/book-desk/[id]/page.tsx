@@ -1,10 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import {
-  FacilityInfo,
-  MapContextProvider,
-} from "@/contexts/MapContext";
+import { MapContextProvider } from "@/contexts/MapContext";
 import { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
 import { SyntheticEvent, useState } from "react";
@@ -16,11 +13,9 @@ const BookingCanvas = dynamic(() => import("@/components/BookingCanvas"), {
 const BookingPage = () => {
   const path = usePathname();
   const id = path.replace("/book-desk/", "");
-  const [facilityInfo, setFacilityInfo] = useState<FacilityInfo | null>();
 
   const handleClick = (e: SyntheticEvent) => {
     if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
-      console.log(e.target)
       const popup = document.querySelector('.popup')
       if(popup) {
         popup.classList.add('popup-hidden')
@@ -59,7 +54,6 @@ const BookingPage = () => {
         </div>
         <BookingCanvas
           mapId={Number(id)}
-          getFacilityInfo={(data: FacilityInfo) => setFacilityInfo(data)}
         ></BookingCanvas>
       </MapContextProvider>
     </div>

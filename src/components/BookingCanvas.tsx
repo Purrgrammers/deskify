@@ -20,13 +20,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const BookingMap = ({
-  mapId,
-  getFacilityInfo,
-}: {
-  mapId: number;
-  getFacilityInfo: (data: FacilityInfo) => void;
-}) => {
+const BookingMap = ({ mapId }: { mapId: number }) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
   const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
@@ -38,7 +32,7 @@ const BookingMap = ({
 
   useEffect(() => {
     const getMapData = async () => {
-      const { data, error } = await supabase
+      const { data , error } = await supabase
         .from("Maps")
         .select("*, Desks(*), Rooms(*)")
         .eq("id", mapId);
@@ -50,10 +44,6 @@ const BookingMap = ({
         setRooms(data[0].Rooms as Room[]);
         setDesks(data[0].Desks as Desk[]);
         setBackgroundImage(data[0].img);
-        getFacilityInfo({
-          location: data[0].location,
-          floor: data[0].floor,
-        });
       }
     };
     getMapData();
