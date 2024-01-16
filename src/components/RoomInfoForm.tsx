@@ -12,7 +12,7 @@ type RoomInfoProps = {
 }
 
 const RoomInfoForm = ({quitEditMode, id}: RoomInfoProps) => {
-    const { rooms, updateRooms, focus } = useContext(MapContext)
+    const { rooms, updateRooms } = useContext(MapContext)
     const [ roomInfo, setRoomInfo ] = useState<Room>()
 
     useEffect(() => {
