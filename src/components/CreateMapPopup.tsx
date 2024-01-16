@@ -7,12 +7,14 @@ const CreateMapPopup = () => {
   const { deleteRoom, deleteDesk, focusElement, updateFocusElement } = useContext(MapContext);
   const [editMode, setEditMode] = useState(false);
 
+  const { id, y, x, name } = (focusElement as FocusElementTransform).element.attrs
+
   const handleDelete = () => {
-    if ((focusElement as FocusElementTransform).element.attrs.name === "room") {
-      deleteRoom(Number((focusElement as FocusElementTransform).element.attrs.id));
+    if (name === "room") {
+      deleteRoom(Number(id));
     }
-    if ((focusElement as FocusElementTransform).element.attrs.name === "desk") {
-      deleteDesk(Number((focusElement as FocusElementTransform).element.attrs.id));
+    if (name === "desk") {
+      deleteDesk(Number(id));
     }
     updateFocusElement(undefined);
   };
@@ -27,8 +29,8 @@ const CreateMapPopup = () => {
     <div
       style={{
         position: "absolute",
-        top: ((focusElement as FocusElementTransform)?.y || (focusElement as FocusElementTransform)?.element.attrs.y) + offsetTop - 30,
-        left: ((focusElement as FocusElementTransform)?.x || (focusElement as FocusElementTransform)?.element.attrs.x) + offsetLeft,
+        top: ((focusElement as FocusElementTransform)?.y || y) + offsetTop - 30,
+        left: ((focusElement as FocusElementTransform)?.x || x) + offsetLeft,
         padding: "5px 5px",
         borderRadius: "3px",
         boxShadow: "0 0 3px grey",
@@ -41,12 +43,12 @@ const CreateMapPopup = () => {
       {editMode && (
         <RoomInfoForm
           quitEditMode={() => setEditMode(false)}
-          id={Number((focusElement as FocusElementTransform)?.element.attrs.id)}
+          id={Number(id)}
         />
       )}
       <div className="flex gap-2">
         <Trash2 size={16} className="trash-hover" onClick={handleDelete} />
-        {(focusElement as FocusElementTransform)?.element.attrs.name === "room" && (
+        {name === "room" && (
           <Pencil
             size={16}
             className="cursor-pointer hover:text-blue-800"
