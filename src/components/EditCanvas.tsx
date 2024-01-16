@@ -51,41 +51,21 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
 
   useEffect(() => {
     const getMapData = async () => {
-      const { data: roomData, error: roomError } = await supabase
-        .from("Rooms")
-        .select()
-        .eq("mapId", mapId);
-      if (roomError) {
-        console.log(roomError);
-      }
-      const { data: deskData, error: deskError } = await supabase
-        .from("Desks")
-        .select()
-        .eq("mapId", mapId);
-      if (deskError) {
-        console.log(deskError);
-      }
-      const { data: imgData, error: imgError } = await supabase
-        .from("Maps")
-        .select("img")
-        .eq("id", mapId);
-      if (imgError) {
-        console.log(imgError);
-      }
-      // setRooms(roomData as Room[]);
-      //   setDesks(deskData as Desk[]);
-      const newDesks = [...desks, ...(deskData as Desk[])];
-      const newRooms = [...rooms, ...(roomData as Room[])];
-
+      const { data , error } = await supabase
+      .from("Maps")
+      .select("*, Desks(*), Rooms(*)")
+      .eq("id", mapId);
+    if (data) {
+      const newDesks = [...desks, ...(data[0].Desks as Desk[])];
+      const newRooms = [...rooms, ...(data[0].Rooms as Room[])];
       updateDesks(newDesks as Desk[]);
       updateRooms(newRooms as Desk[]);
-      //   updateDesks(deskData as Desk[]);
-      //   updateRooms(roomData as Room[]);
-      //   setDesks((prev) => [...prev, deskData] as Desk[]);
-      if (imgData) {
-        setBackgroundImage(imgData[0].img);
-      }
-    };
+      setBackgroundImage(data[0].img);
+    } else {
+      console.log('Error getting map data from database', error)
+      toast.error('Could not get map data')
+    }
+  };
     getMapData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -1,6 +1,6 @@
 "use client";
 
-import { Desk, FacilityInfo, MapContext, Room } from "@/contexts/MapContext";
+import { Desk, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
 import { Layer, Path, Rect, Stage, Image } from "react-konva";
 import { KonvaEventObject } from "konva/lib/Node";
@@ -36,14 +36,13 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
         .from("Maps")
         .select("*, Desks(*), Rooms(*)")
         .eq("id", mapId);
-      if (error) {
-        console.log('Error getting map data from database', error)
-        toast.error('Could not get map data')
-      }
       if (data) {
         setRooms(data[0].Rooms as Room[]);
         setDesks(data[0].Desks as Desk[]);
         setBackgroundImage(data[0].img);
+      } else {
+        console.log('Error getting map data from database', error)
+        toast.error('Could not get map data')
       }
     };
     getMapData();
