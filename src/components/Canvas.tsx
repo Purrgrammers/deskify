@@ -254,7 +254,10 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                         });
                       }
                     }}
-                    onMouseLeave={(e) => handleMouseEvent(e)}
+                    onMouseLeave={(e) => {
+                      handleMouseEvent(e)
+                      setShowHelpText(null)
+                    }}
                   />
                 ))}
                 {desks.map((desk) => (
