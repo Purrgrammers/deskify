@@ -18,7 +18,6 @@ import toast from "react-hot-toast";
 
 const DatePicker = () => {
   const today = new Date()
-  // const [date, setDate] = useState<Date>(today);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const { date, updateBookings, updateDate, updateFocusElement } = useContext(MapContext);
 
@@ -28,7 +27,6 @@ const DatePicker = () => {
         return
       }
       const selectedDate = date?.toLocaleDateString("en-CA");
-      // updateDate(date)
       const { data, error } = await supabase
         .from("Bookings")
         .select()
