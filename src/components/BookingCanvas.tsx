@@ -12,9 +12,9 @@ import { Stage as StageType } from "konva/lib/Stage";
 import BookDeskPopup from "./BookDeskPopup";
 import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Label } from "./ui/label";
 import FloorSelect from "./FloorSelect";
+import toast from "react-hot-toast";
+import { ImageError } from "next/dist/server/image-optimizer";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -35,10 +35,6 @@ const BookingMap = ({
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const [deviceDimensions, setDeviceDimensions] = useState({
-    width: 400,
-    height: 400,
-  });
   const { bookings, focusElement, updateFocusElement, maps } = useContext(MapContext);
 
   useEffect(() => {
@@ -48,21 +44,24 @@ const BookingMap = ({
         .select()
         .eq("mapId", mapId);
       if (roomError) {
-        console.log(roomError);
+        console.log('Error getting rooms from database', roomError)
+        toast.error('Could not get rooms')
       }
       const { data: deskData, error: deskError } = await supabase
         .from("Desks")
         .select()
         .eq("mapId", mapId);
       if (deskError) {
-        console.log(deskError);
+        console.log('Error getting desks from database', deskError)
+        toast.error('Could not get desks')
       }
-      const { data: mapData, error: imgError } = await supabase
+      const { data: mapData, error: mapError } = await supabase
         .from("Maps")
         .select()
         .eq("id", mapId);
-      if (imgError) {
-        console.log(imgError);
+      if (mapError) {
+        console.log('Error getting map from database', mapError)
+        toast.error('Could not get map')
       }
       setRooms(roomData as Room[]);
       setDesks(deskData as Desk[]);
@@ -103,18 +102,7 @@ const BookingMap = ({
       return;
     }
       setImageScale(500 / image?.height);
-  }, [image, deviceDimensions]);
-
-  useEffect(() => {
-    setDeviceDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log(deviceDimensions);
-  }, [deviceDimensions]);
+  }, [image]);
 
   const stageRef = useRef<StageType>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -222,11 +210,7 @@ const BookingMap = ({
                       scaleX={room.scaleX}
                       scaleY={room.scaleY}
                       x={room.x}
-                      y={
-                        deviceDimensions.width > 768
-                          ? room.y - 120
-                          : room.y - 120
-                      }
+                      y={room.y - 120}
                       stroke={bookedRooms.includes(room.id) ? "#e53935" : "#43a047"}
                       onClick={(e) =>
                         handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
@@ -258,11 +242,7 @@ const BookingMap = ({
                       scaleX={desk.scaleX}
                       scaleY={desk.scaleY}
                       x={desk.x}
-                      y={
-                        deviceDimensions.width > 768
-                          ? desk.y - 120
-                          : desk.y - 120
-                      }
+                      y={desk.y - 120}
                       stroke={bookedDesks.includes(desk.id) ? "#e53935" : "#43a047"}
                       fill="white"
                       onClick={(e) =>

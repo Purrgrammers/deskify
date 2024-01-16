@@ -27,10 +27,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   const [imageScale, setImageScale] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [showHelpText, setShowHelpText] = useState<{type: string, x: number} | null>(null);
-  const [deviceDimensions, setDeviceDimensions] = useState({
-    width: 400,
-    height: 400,
-  });
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
@@ -73,14 +69,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       return;
     }
   setImageScale(500 / image?.height);
-  }, [image, deviceDimensions]);
-
-  useEffect(() => {
-    setDeviceDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  }, []);
+  }, [image]);
 
   const handleDraggedRoom = (target: Shape<ShapeConfig>, id: number) => {
     const draggedElementIndex = rooms.findIndex((room) => room.id === id);

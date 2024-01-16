@@ -39,10 +39,6 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const [deviceDimensions, setDeviceDimensions] = useState({
-    width: 400,
-    height: 400,
-  });
   const { updateFocusElement } = useContext(MapContext);
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
@@ -99,14 +95,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       return;
     }
     setImageScale(500 / image?.height);
-  }, [image, deviceDimensions]);
-
-  useEffect(() => {
-    setDeviceDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  }, []);
+  }, [image]);
 
   useEffect(() => {
     if (focus) {
@@ -119,17 +108,6 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       setShowPopup(false);
     }
   }, [focus]);
-
-  useEffect(() => {
-    setDeviceDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log(deviceDimensions);
-  }, [deviceDimensions]);
 
   const handleFocus = (
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
