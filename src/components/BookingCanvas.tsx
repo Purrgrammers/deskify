@@ -130,6 +130,18 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     }
   };
 
+  const handleMouseEvent = (e: KonvaEventObject<globalThis.MouseEvent>) => {
+    const container = (
+      e.target.getStage() as StageType
+    ).container();
+    if (e.type === 'mouseenter'){
+      container.style.cursor = "pointer";
+    } else {
+      container.style.cursor = "default";
+    }
+  }
+
+
   return (
     <>
       <div className="flex flex-col">
@@ -180,18 +192,9 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                       onPointerClick={(e) =>
                         handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                       }
-                      onMouseEnter={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "pointer";
-                      }}
-                      onMouseLeave={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "default";
-                      }}
+                      onMouseEnter={(e) => handleMouseEvent(e)}
+                      onMouseLeave={(e) => handleMouseEvent(e)}
+                      onMou
                     />
                   ))}
                   {desks.map((desk) => (
@@ -210,18 +213,8 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                       onPointerClick={(e) =>
                         handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
                       }
-                      onMouseEnter={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "pointer";
-                      }}
-                      onMouseLeave={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "default";
-                      }}
+                      onMouseEnter={(e) => handleMouseEvent(e)}
+                      onMouseLeave={(e) => handleMouseEvent(e)}
                     />
                   ))}
                 </Layer>

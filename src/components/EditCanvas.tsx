@@ -191,6 +191,17 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     }
   };
 
+  const handleMouseEvent = (e: KonvaEventObject<globalThis.MouseEvent>) => {
+    const container = (
+      e.target.getStage() as StageType
+    ).container();
+    if (e.type === 'mouseenter'){
+      container.style.cursor = "pointer";
+    } else {
+      container.style.cursor = "default";
+    }
+  }
+
   const handleUpdateMap = async () => {
     await supabase.from("Rooms").delete().eq("mapId", mapId);
     await supabase.from("Desks").delete().eq("mapId", mapId);
@@ -304,10 +315,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                         )
                       }
                       onMouseEnter={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "pointer";
+                        handleMouseEvent(e)
                         if (e.target.attrs.y === 50) {
                           setShowHelpText({
                             type: e.target.attrs.name,
@@ -316,10 +324,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                         }
                       }}
                       onMouseLeave={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "default";
+                        handleMouseEvent(e)
                         setShowHelpText(null);
                       }}
                     />
@@ -355,10 +360,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                         )
                       }
                       onMouseEnter={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "pointer";
+                        handleMouseEvent(e)
                         if (e.target.attrs.y === 50) {
                           setShowHelpText({
                             type: e.target.attrs.name,
@@ -367,10 +369,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                         }
                       }}
                       onMouseLeave={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "default";
+                        handleMouseEvent(e)
                         setShowHelpText(null);
                       }}
                     />
