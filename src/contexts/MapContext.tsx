@@ -121,7 +121,7 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [focusElement, setFocusElement] = useState<FocusElementBook | FocusElementTransform | undefined>();
   const [maps, setMaps] = useState<Map[]>([
-    { id: 1, location: "Deskify HQ", floor: 1 },
+    { id: 107, location: "Deskify HQ", floor: 3 },
   ]);
 
   useEffect(() => {
@@ -183,7 +183,6 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   };
 
   const updateFocusElement = (element: FocusElementBook | FocusElementTransform | undefined) => {
-    console.log(element)
     setFocusElement(element);
   };
 

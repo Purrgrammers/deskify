@@ -23,6 +23,7 @@ import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
 import FloorSelect from "./FloorSelect";
 import HelpTextPopup from "./HelpTextPopup";
+import { showPopup } from "@/utils/showPopup";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -30,7 +31,6 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const EditCanvas = ({ mapId }: { mapId: number }) => {
-  const [showPopup, setShowPopup] = useState(false);
   const [showHelpText, setShowHelpText] = useState<{
     type: string;
     x: number;
@@ -78,7 +78,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       // @ts-expect-error need to figure out type
       trRef.current?.nodes([focusElement.element]);
     } else {
-      setShowPopup(false);
+      showPopup(false)
     }
   }, [focusElement]);
 
@@ -91,15 +91,11 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       e.target.attrs.y === 50
     ) {
       updateFocusElement(undefined);
-      setShowPopup(false);
+      showPopup(false)
     } else {
       const newFocusElement = { ...focusElement, element: e.target as Shape<ShapeConfig>};
       updateFocusElement(newFocusElement);
-      setShowPopup(true);
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
-      }
+      showPopup(true)
     }
   };
 
@@ -110,7 +106,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   };
 
   const handleDragStart = (target: Shape<ShapeConfig>) => {
-    setShowPopup(false);
+    showPopup(false);
     setShowHelpText(null);
     console.log("triggad first");
     if (target.attrs.name === "room") {
@@ -132,11 +128,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     };
     updateRooms(rooms);
     if (focusElement) {
-      setShowPopup(true);
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
-      }
+      showPopup(true)
       updateFocusPosition(target.x(), target.y());
     }
   };
@@ -166,11 +158,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     };
     updateDesks(desks);
     if (focusElement) {
-      setShowPopup(true);
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
-      }
+      showPopup(true)
       updateFocusPosition(target.x(), target.y());
     }
   };
@@ -390,7 +378,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                   )}
                 </Layer>
               </Stage>
-              {showPopup && <CreateMapPopup />}
+              {focusElement && <CreateMapPopup />}
               {showHelpText && (
                 <HelpTextPopup type={showHelpText.type} x={showHelpText.x} />
               )}

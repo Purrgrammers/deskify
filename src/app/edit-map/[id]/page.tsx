@@ -1,6 +1,7 @@
 "use client";
 
 import { MapContextProvider } from "@/contexts/MapContext";
+import { showPopup } from "@/utils/showPopup";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { SyntheticEvent } from "react";
@@ -16,12 +17,7 @@ const EditMap = () => {
 
   const handleClick = (e: SyntheticEvent) => {
     if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
-      console.log(e.target)
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.add('popup-hidden')
-        popup.classList.remove('popup-visible')
-      }
+      showPopup(false)
     }
   }
 

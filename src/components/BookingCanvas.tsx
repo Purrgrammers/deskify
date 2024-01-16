@@ -14,6 +14,7 @@ import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
 import FloorSelect from "./FloorSelect";
 import toast from "react-hot-toast";
+import { showPopup } from "@/utils/showPopup";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -95,10 +96,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
       seats: clickedRoom?.seats,
       additionalInfo: clickedRoom?.additionalInfo,
     });
-    const popup = document.querySelector('.popup')
-    if(popup) {
-      popup.classList.remove('popup-hidden')
-    }
+    showPopup(true)
   };
 
   const handleClickDesk = (target: Shape<ShapeConfig>, id: number) => {
@@ -110,10 +108,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     const x = target.attrs.x;
     const y = target.attrs.y;
     updateFocusElement({ type, id, booked, x, y });
-    const popup = document.querySelector('.popup')
-    if(popup) {
-      popup.classList.remove('popup-hidden')
-    }
+    showPopup(true)
   };
 
   const handleFocus = (

@@ -5,6 +5,7 @@ import { MapContextProvider } from "@/contexts/MapContext";
 import { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
 import { SyntheticEvent } from "react";
+import { showPopup } from "@/utils/showPopup";
 
 const BookingCanvas = dynamic(() => import("@/components/BookingCanvas"), {
   ssr: false,
@@ -16,11 +17,7 @@ const BookingPage = () => {
 
   const handleClick = (e: SyntheticEvent) => {
     if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.add('popup-hidden')
-        popup.classList.remove('popup-visible')
-      }
+      showPopup(false)
     }
   }
 

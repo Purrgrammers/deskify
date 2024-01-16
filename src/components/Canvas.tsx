@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import CreateMapPopup from "./CreateMapPopup";
 import { BeatLoader } from "react-spinners";
 import HelpTextPopup from "./HelpTextPopup";
+import { showPopup } from "@/utils/showPopup";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -31,7 +32,6 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const [showPopup, setShowPopup] = useState(false);
   const [showHelpText, setShowHelpText] = useState<{
     type: string;
     x: number;
@@ -64,7 +64,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       // @ts-expect-error need to figure out type
       trRef.current?.nodes([focusElement.element]);
     } else {
-      setShowPopup(false);
+      showPopup(true)
     }
   }, [focusElement]);
 
@@ -84,12 +84,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     };
     updateRooms(rooms);
     if (focusElement) {
-      setShowPopup(true);
       updateFocusPosition(target.x(), target.y());
-      const popup = document.querySelector(".popup");
-      if (popup) {
-        popup.classList.remove("popup-hidden");
-      }
+      showPopup(true)
     }
   };
 
@@ -118,12 +114,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     };
     updateDesks(desks);
     if (focusElement) {
-      setShowPopup(true);
       updateFocusPosition(target.x(), target.y());
-      const popup = document.querySelector(".popup");
-      if (popup) {
-        popup.classList.remove("popup-hidden");
-      }
+      showPopup(true)
     }
   };
 
@@ -143,8 +135,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   };
 
   const handleDragStart = (target: Shape<ShapeConfig>) => {
-    setShowPopup(false);
     setShowHelpText(null);
+    showPopup(false)
     if (target.attrs.name === "room") {
       addRoom();
     }
@@ -162,15 +154,11 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       e.target.attrs.y === 50
     ) {
       updateFocusElement(undefined);
-      setShowPopup(false);
+      showPopup(false)
     } else {
       const newFocusElement = { ...focusElement, element: e.target as Shape<ShapeConfig>};
       updateFocusElement(newFocusElement);
-      setShowPopup(true);
-      const popup = document.querySelector(".popup");
-      if (popup) {
-        popup.classList.remove("popup-hidden");
-      }
+      showPopup(true)
     }
   };
 
@@ -257,7 +245,15 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                         room.id
                       )
                     }
-                    onMouseEnter={(e) => handleMouseEvent(e)}
+                    onMouseEnter={(e) => {
+                      handleMouseEvent(e)
+                      if (e.target.attrs.y === 50) {
+                        setShowHelpText({
+                          type: e.target.attrs.name,
+                          x: e.target.attrs.x,
+                        });
+                      }
+                    }}
                     onMouseLeave={(e) => handleMouseEvent(e)}
                   />
                 ))}
@@ -322,7 +318,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                 )}
               </Layer>
             </Stage>
-            {showPopup && <CreateMapPopup />}
+            {focusElement && <CreateMapPopup />}
             {showHelpText && (
               <HelpTextPopup type={showHelpText.type} x={showHelpText.x} />
             )}
