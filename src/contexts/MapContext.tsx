@@ -21,18 +21,16 @@ type MapContextProps = {
   updateDesks: (desks: Desk[]) => void;
   addDesk: () => void;
   deleteDesk: (id: number) => void;
-  bookings: Booking[]
-  updateBookings: (bookingData: Booking[]) => void
-  bookRoom: (id: number, mapId: number) => void
-  bookDesk: (id: number, mapId: number) => void
-  date: Date | undefined
-  updateDate: (date: Date) => void
-  focusElement: FocusElement | undefined
-  updateFocusElement: (element: FocusElement | undefined) => void
-  focus: {element: Shape<ShapeConfig>, x?: number, y?: number } | null,
-  updateFocus: (element: Shape<ShapeConfig> | null) => void
-  updateFocusPosition: (x: number, y: number) => void
-  maps: Map[]
+  bookings: Booking[];
+  updateBookings: (bookingData: Booking[]) => void;
+  bookRoom: (id: number, mapId: number) => void;
+  bookDesk: (id: number, mapId: number) => void;
+  date: Date | undefined;
+  updateDate: (date: Date) => void;
+  focusElement: FocusElementBook | FocusElementTransform | undefined;
+  updateFocusElement: (element: FocusElementBook | FocusElementTransform  | undefined) => void;
+  updateFocusPosition: (x: number, y: number) => void;
+  maps: Map[];
 };
 
 export type Room = {
@@ -46,7 +44,7 @@ export type Room = {
   name?: string;
   seats?: number;
   additionalInfo?: string;
-  mapId?: number
+  mapId?: number;
 };
 
 export type Desk = {
@@ -65,21 +63,16 @@ export type Booking = {
   userId: number;
   deskId?: number;
   roomId?: number;
-  date: Date
-};
-
-export type FacilityInfo = {
-  location: string;
-  floor: number;
+  date: Date;
 };
 
 export type Map = {
   id: number;
   location: string;
-  floor: number
+  floor: number;
 };
 
-type FocusElement = {
+export type FocusElementBook = {
   type: string;
   booked: boolean;
   id: number;
@@ -87,8 +80,14 @@ type FocusElement = {
   y: number;
   name?: string;
   seats?: number;
-  additionalInfo?: string
+  additionalInfo?: string;
 };
+
+export type FocusElementTransform = {
+  element: Shape<ShapeConfig>;
+  x?: number;
+  y?: number;
+}
 
 export const MapContext = createContext<MapContextProps>({
   rooms: [],
@@ -107,10 +106,8 @@ export const MapContext = createContext<MapContextProps>({
   updateDate: () => {},
   focusElement: undefined,
   updateFocusElement: () => {},
-  focus: null,
-  updateFocus: () => {},
   updateFocusPosition: () => {},
-  maps: [{id: 1, location: '', floor: 1}]
+  maps: [{ id: 1, location: "", floor: 1 }],
 });
 
 export const MapContextProvider = (props: MapContextProviderProps) => {
@@ -120,63 +117,72 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [desks, setDesks] = useState<Desk[]>([
     { id: 1, x: 80, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
   ]);
-  const [date, setDate] = useState<Date | undefined>();
+  const [date, setDate] = useState<Date>(new Date());
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
-  const [focus, setFocus] = useState<{element: Shape<ShapeConfig>, x?: number, y?: number } | null>(null);
-  const [maps, setMaps] = useState<Map[]>([{id: 1, location: 'Deskify HQ', floor: 1}]);
+  const [focusElement, setFocusElement] = useState<FocusElementBook | FocusElementTransform | undefined>();
+  const [maps, setMaps] = useState<Map[]>([
+    { id: 107, location: "Deskify HQ", floor: 3 },
+  ]);
 
   useEffect(() => {
-    const getMaps = async() => {
+    const getMaps = async () => {
       const { data, error } = await supabase
-      .from("Maps")
-      .select('id, location, floor')
-      .order('id', { ascending: true })
-    if (error) {
-      console.log(error);
-    }
-    if(data) {
-      console.log(data)
-      setMaps(data)
-    }
-    }
-    getMaps()
-  }, [])
-
-  const bookRoom = async(id: number, mapId: number) => {
-    const { data, error } = await supabase
-        .from("Bookings")
-        .insert({userId: 1, roomId: id, date: date?.toLocaleDateString("en-CA"), mapId})
-        .select()
-      if(error) {
-        toast.error("Error booking room");
-        console.log(error)
-      } else if (data) {
-        toast.success("Your room has been booked");
-        setBookings(prev => [...prev, data[0]])
+        .from("Maps")
+        .select("id, location, floor")
+        .order("id", { ascending: true });
+      if (data) {
+        setMaps(data);
+      } else {
+        console.log("Error getting maps", error);
+        toast.error("Could not get maps");
       }
-  }
+    };
+    getMaps();
+  }, []);
 
-  const bookDesk = async(id: number, mapId: number) => {
+  const bookRoom = async (id: number, mapId: number) => {
     const { data, error } = await supabase
-        .from("Bookings")
-        .insert({userId: 1, deskId: id, date: date?.toLocaleDateString("en-CA"), mapId})
-        .select()
-      if(error) {
-        toast.error("Error booking desk");
-        console.log(error)
-      } else if (data) {
-        toast.success("Your desk has been booked");
-        setBookings(prev => [...prev, data[0]])
-        console.log(data)
-      }
-  }
+      .from("Bookings")
+      .insert({
+        userId: 1,
+        roomId: id,
+        date: date?.toLocaleDateString("en-CA"),
+        mapId,
+      })
+      .select();
+    if (data) {
+      toast.success("Your room has been booked");
+      setBookings((prev) => [...prev, data[0]]);
+    } else {
+      toast.error("Error booking room");
+      console.log("Error booking room", error);
+    }
+  };
+
+  const bookDesk = async (id: number, mapId: number) => {
+    const { data, error } = await supabase
+      .from("Bookings")
+      .insert({
+        userId: 1,
+        deskId: id,
+        date: date?.toLocaleDateString("en-CA"),
+        mapId,
+      })
+      .select();
+    if (data) {
+      toast.success("Your desk has been booked");
+      setBookings((prev) => [...prev, data[0]]);
+    } else {
+      toast.error("Error booking desk");
+      console.log("Error booking desk", error);
+    }
+  };
 
   const updateBookings = (bookingData: Booking[]) => {
     setBookings(bookingData);
   };
 
-  const updateFocusElement = (element: FocusElement | undefined) => {
+  const updateFocusElement = (element: FocusElementBook | FocusElementTransform | undefined) => {
     setFocusElement(element);
   };
 
@@ -196,14 +202,14 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     setRooms((prev) => [
       ...prev,
       {
-        id: rooms[rooms.length-1].id + 1,
+        id: rooms[rooms.length - 1].id + 1,
         x: 20,
         y: 50,
         width: 50,
         height: 50,
         scaleX: 1,
         scaleY: 1,
-        mapId: 1
+        mapId: 1,
       },
     ]);
   };
@@ -212,44 +218,34 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     setDesks((prev) => [
       ...prev,
       {
-        id: desks[desks.length-1].id + 1,
+        id: desks[desks.length - 1].id + 1,
         x: 80,
         y: 50,
         width: 50,
         height: 50,
         scaleX: 1,
         scaleY: 1,
-        mapId: 1
+        mapId: 1,
       },
     ]);
   };
 
   const deleteRoom = (id: number) => {
-    const filteredRooms = rooms.filter((room) => room.id !== id)
-    setRooms(filteredRooms)
-  }
+    const filteredRooms = rooms.filter((room) => room.id !== id);
+    setRooms(filteredRooms);
+  };
 
   const deleteDesk = (id: number) => {
-    const filteredDesks = desks.filter((desk) => desk.id !== id)
-    setDesks(filteredDesks)
-  }
-
-  const updateFocus = (element: Shape<ShapeConfig> | null) => {
-    if(element === null){
-      setFocus(null)
-
-    } else {
-      const newFocus = {...focus, element}
-      setFocus(newFocus)
-    }
-  }
+    const filteredDesks = desks.filter((desk) => desk.id !== id);
+    setDesks(filteredDesks);
+  };
 
   const updateFocusPosition = (x: number, y: number) => {
-    if (focus){
-      const newFocus = {...focus, x, y}
-      setFocus(newFocus)
+    if (focusElement) {
+      const newFocus = { ...focusElement, x, y };
+      setFocusElement(newFocus);
     }
-  }
+  };
 
   return (
     <MapContext.Provider
@@ -270,10 +266,8 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         updateDate,
         focusElement,
         updateFocusElement,
-        focus,
-        updateFocus,
         updateFocusPosition,
-        maps
+        maps,
       }}
     >
       {props.children}

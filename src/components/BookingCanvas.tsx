@@ -1,33 +1,27 @@
 "use client";
 
-import { Desk, FacilityInfo, MapContext, Room } from "@/contexts/MapContext";
+import { Desk, FocusElementBook, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
-import { Shape, ShapeConfig } from "konva/lib/Shape";
-import { MouseEvent, useContext, useEffect, useRef, useState } from "react";
 import { Layer, Path, Rect, Stage, Image } from "react-konva";
-import DatePicker from "./DatePicker";
 import { KonvaEventObject } from "konva/lib/Node";
-import useImage from "use-image";
+import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { Stage as StageType } from "konva/lib/Stage";
+import { MouseEvent, useContext, useEffect, useState } from "react";
+import DatePicker from "./DatePicker";
+import useImage from "use-image";
 import BookDeskPopup from "./BookDeskPopup";
 import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Label } from "./ui/label";
 import FloorSelect from "./FloorSelect";
+import toast from "react-hot-toast";
+import { showPopup } from "@/utils/showPopup";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const BookingMap = ({
-  mapId,
-  getFacilityInfo,
-}: {
-  mapId: number;
-  getFacilityInfo: (data: FacilityInfo) => void;
-}) => {
+const BookingMap = ({ mapId }: { mapId: number }) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
   const [bookedDesks, setBookedDesks] = useState<(number | undefined)[]>([]);
@@ -35,43 +29,21 @@ const BookingMap = ({
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const [deviceDimensions, setDeviceDimensions] = useState({
-    width: 400,
-    height: 400,
-  });
-  const { bookings, focusElement, updateFocusElement, maps } = useContext(MapContext);
+  const { bookings, focusElement, updateFocusElement } = useContext(MapContext);
 
   useEffect(() => {
     const getMapData = async () => {
-      const { data: roomData, error: roomError } = await supabase
-        .from("Rooms")
-        .select()
-        .eq("mapId", mapId);
-      if (roomError) {
-        console.log(roomError);
-      }
-      const { data: deskData, error: deskError } = await supabase
-        .from("Desks")
-        .select()
-        .eq("mapId", mapId);
-      if (deskError) {
-        console.log(deskError);
-      }
-      const { data: mapData, error: imgError } = await supabase
+      const { data , error } = await supabase
         .from("Maps")
-        .select()
+        .select("*, Desks(*), Rooms(*)")
         .eq("id", mapId);
-      if (imgError) {
-        console.log(imgError);
-      }
-      setRooms(roomData as Room[]);
-      setDesks(deskData as Desk[]);
-      if (mapData) {
-        setBackgroundImage(mapData[0].img);
-        getFacilityInfo({
-          location: mapData[0].location,
-          floor: mapData[0].floor,
-        });
+      if (data) {
+        setRooms(data[0].Rooms as Room[]);
+        setDesks(data[0].Desks as Desk[]);
+        setBackgroundImage(data[0].img);
+      } else {
+        console.log('Error getting map data from database', error)
+        toast.error('Could not get map data')
       }
     };
     getMapData();
@@ -91,33 +63,18 @@ const BookingMap = ({
 
     if (
       focusElement &&
-      (filteredDesks.includes(focusElement?.id as number) ||
-        filteredRooms.includes(focusElement?.id as number))
+      (filteredDesks.includes((focusElement as FocusElementBook)?.id as number) ||
+        filteredRooms.includes((focusElement as FocusElementBook)?.id as number))
     ) {
-      focusElement.booked = true;
+      (focusElement as FocusElementBook).booked = true;
     }
   }, [bookings, focusElement]);
 
   useEffect(() => {
-    if (!image) {
-      return;
+    if (image) {
+      setImageScale(500 / image.height);
     }
-      setImageScale(500 / image?.height);
-  }, [image, deviceDimensions]);
-
-  useEffect(() => {
-    setDeviceDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log(deviceDimensions);
-  }, [deviceDimensions]);
-
-  const stageRef = useRef<StageType>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  }, [image]);
 
   const handleClickRoom = (target: Shape<ShapeConfig>, id: number) => {
     const booked = bookedRooms.includes(id);
@@ -139,10 +96,7 @@ const BookingMap = ({
       seats: clickedRoom?.seats,
       additionalInfo: clickedRoom?.additionalInfo,
     });
-    const popup = document.querySelector('.popup')
-    if(popup) {
-      popup.classList.remove('popup-hidden')
-    }
+    showPopup(true)
   };
 
   const handleClickDesk = (target: Shape<ShapeConfig>, id: number) => {
@@ -154,10 +108,7 @@ const BookingMap = ({
     const x = target.attrs.x;
     const y = target.attrs.y;
     updateFocusElement({ type, id, booked, x, y });
-    const popup = document.querySelector('.popup')
-    if(popup) {
-      popup.classList.remove('popup-hidden')
-    }
+    showPopup(true)
   };
 
   const handleFocus = (
@@ -173,6 +124,17 @@ const BookingMap = ({
       updateFocusElement(undefined);
     }
   };
+
+  const handleMouseEvent = (e: KonvaEventObject<globalThis.MouseEvent>) => {
+    const container = (
+      e.target.getStage() as StageType
+    ).container();
+    if (e.type === 'mouseenter'){
+      container.style.cursor = "pointer";
+    } else {
+      container.style.cursor = "default";
+    }
+  }
 
   return (
     <>
@@ -194,14 +156,12 @@ const BookingMap = ({
             </div>
             <div
               className="flex flex-col lg:items-center relative"
-              ref={containerRef}
             >
               <Stage
                 width={(image?.width as number) * imageScale || 400}
                 height={500}
                 name="stage"
                 id="bookDeskStage"
-                ref={stageRef}
                 onClick={(e) => handleFocus(e)}
                 onTap={(e) => handleFocus(e)}
               >
@@ -222,11 +182,7 @@ const BookingMap = ({
                       scaleX={room.scaleX}
                       scaleY={room.scaleY}
                       x={room.x}
-                      y={
-                        deviceDimensions.width > 768
-                          ? room.y - 120
-                          : room.y - 120
-                      }
+                      y={room.y - 120}
                       stroke={bookedRooms.includes(room.id) ? "#e53935" : "#43a047"}
                       onClick={(e) =>
                         handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
@@ -234,18 +190,9 @@ const BookingMap = ({
                       onTap={(e) =>
                         handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                       }
-                      onMouseEnter={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "pointer";
-                      }}
-                      onMouseLeave={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "default";
-                      }}
+                      onMouseEnter={(e) => handleMouseEvent(e)}
+                      onMouseLeave={(e) => handleMouseEvent(e)}
+                      onMou
                     />
                   ))}
                   {desks.map((desk) => (
@@ -258,11 +205,7 @@ const BookingMap = ({
                       scaleX={desk.scaleX}
                       scaleY={desk.scaleY}
                       x={desk.x}
-                      y={
-                        deviceDimensions.width > 768
-                          ? desk.y - 120
-                          : desk.y - 120
-                      }
+                      y={desk.y - 120}
                       stroke={bookedDesks.includes(desk.id) ? "#e53935" : "#43a047"}
                       fill="white"
                       onClick={(e) =>
@@ -271,18 +214,8 @@ const BookingMap = ({
                       onTap={(e) =>
                         handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
                       }
-                      onMouseEnter={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "pointer";
-                      }}
-                      onMouseLeave={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "default";
-                      }}
+                      onMouseEnter={(e) => handleMouseEvent(e)}
+                      onMouseLeave={(e) => handleMouseEvent(e)}
                     />
                   ))}
                 </Layer>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import logo from "../deskify.svg";
 import Link from "next/link";
 import { SyntheticEvent, useEffect, useState } from "react";
+import { showPopup } from "@/utils/showPopup";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -17,11 +18,7 @@ const Navbar = () => {
 
   const handleClick = (e: SyntheticEvent) => {
     if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.add('popup-hidden')
-        popup.classList.remove('popup-visible')
-      }
+      showPopup(false)
     }
   }
 

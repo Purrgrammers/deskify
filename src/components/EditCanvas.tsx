@@ -23,6 +23,7 @@ import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
 import FloorSelect from "./FloorSelect";
 import HelpTextPopup from "./HelpTextPopup";
+import { showPopup } from "@/utils/showPopup";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -30,106 +31,56 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const EditCanvas = ({ mapId }: { mapId: number }) => {
-  const [showPopup, setShowPopup] = useState(false);
   const [showHelpText, setShowHelpText] = useState<{
     type: string;
     x: number;
   } | null>(null);
-  const { focus, updateFocus, updateFocusPosition } = useContext(MapContext);
+  const { focusElement, updateFocusElement, updateFocusPosition } = useContext(MapContext);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const [deviceDimensions, setDeviceDimensions] = useState({
-    width: 400,
-    height: 400,
-  });
-  const { updateFocusElement } = useContext(MapContext);
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
   const router = useRouter();
 
   const trRef = useRef(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<StageType>(null);
 
   useEffect(() => {
     const getMapData = async () => {
-      const { data: roomData, error: roomError } = await supabase
-        .from("Rooms")
-        .select()
-        .eq("mapId", mapId);
-      if (roomError) {
-        console.log(roomError);
-      }
-      const { data: deskData, error: deskError } = await supabase
-        .from("Desks")
-        .select()
-        .eq("mapId", mapId);
-      if (deskError) {
-        console.log(deskError);
-      }
-      const { data: imgData, error: imgError } = await supabase
-        .from("Maps")
-        .select("img")
-        .eq("id", mapId);
-      if (imgError) {
-        console.log(imgError);
-      }
-      // setRooms(roomData as Room[]);
-      //   setDesks(deskData as Desk[]);
-      const newDesks = [...desks, ...(deskData as Desk[])];
-      const newRooms = [...rooms, ...(roomData as Room[])];
-
+      const { data , error } = await supabase
+      .from("Maps")
+      .select("*, Desks(*), Rooms(*)")
+      .eq("id", mapId);
+    if (data) {
+      const newDesks = [...desks, ...(data[0].Desks as Desk[])];
+      const newRooms = [...rooms, ...(data[0].Rooms as Room[])];
       updateDesks(newDesks as Desk[]);
       updateRooms(newRooms as Desk[]);
-      //   updateDesks(deskData as Desk[]);
-      //   updateRooms(roomData as Room[]);
-      //   setDesks((prev) => [...prev, deskData] as Desk[]);
-      if (imgData) {
-        setBackgroundImage(imgData[0].img);
-      }
-    };
+      setBackgroundImage(data[0].img);
+    } else {
+      console.log('Error getting map data from database', error)
+      toast.error('Could not get map data')
+    }
+  };
     getMapData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!image) {
-      return;
+    if (image) {
+      setImageScale(500 / image.height);
     }
-    setImageScale(500 / image?.height);
-  }, [image, deviceDimensions]);
+  }, [image]);
 
   useEffect(() => {
-    setDeviceDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  }, []);
-
-  useEffect(() => {
-    if (focus) {
-      // @ts-expect-error just let me do it
-      trRef.current?.nodes([focus.element]);
-      // @ts-expect-error just let me do it
-      trRef.current?.getLayer().batchDraw();
+    if (focusElement) {
+      // @ts-expect-error need to figure out type
+      trRef.current?.nodes([focusElement.element]);
+    } else {
+      showPopup(false)
     }
-    if (!focus) {
-      setShowPopup(false);
-    }
-  }, [focus]);
-
-  useEffect(() => {
-    setDeviceDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log(deviceDimensions);
-  }, [deviceDimensions]);
+  }, [focusElement]);
 
   const handleFocus = (
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
@@ -139,15 +90,12 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       e.target.attrs.name === "image" ||
       e.target.attrs.y === 50
     ) {
-      updateFocus(null);
-      setShowPopup(false);
+      updateFocusElement(undefined);
+      showPopup(false)
     } else {
-      updateFocus(e.target as Shape<ShapeConfig>);
-      setShowPopup(true);
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
-      }
+      const newFocusElement = { ...focusElement, element: e.target as Shape<ShapeConfig>};
+      updateFocusElement(newFocusElement);
+      showPopup(true)
     }
   };
 
@@ -158,7 +106,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   };
 
   const handleDragStart = (target: Shape<ShapeConfig>) => {
-    setShowPopup(false);
+    showPopup(false);
     setShowHelpText(null);
     console.log("triggad first");
     if (target.attrs.name === "room") {
@@ -179,12 +127,8 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       mapId,
     };
     updateRooms(rooms);
-    if (focus) {
-      setShowPopup(true);
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
-      }
+    if (focusElement) {
+      showPopup(true)
       updateFocusPosition(target.x(), target.y());
     }
   };
@@ -199,7 +143,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       y: target.attrs.y,
     };
     updateRooms(rooms);
-    if (focus) {
+    if (focusElement) {
       updateFocusPosition(target.x(), target.y());
     }
   };
@@ -213,12 +157,8 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       mapId,
     };
     updateDesks(desks);
-    if (focus) {
-      setShowPopup(true);
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
-      }
+    if (focusElement) {
+      showPopup(true)
       updateFocusPosition(target.x(), target.y());
     }
   };
@@ -233,10 +173,21 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       y: target.attrs.y,
     };
     updateDesks(desks);
-    if (focus) {
+    if (focusElement) {
       updateFocusPosition(target.x(), target.y());
     }
   };
+
+  const handleMouseEvent = (e: KonvaEventObject<globalThis.MouseEvent>) => {
+    const container = (
+      e.target.getStage() as StageType
+    ).container();
+    if (e.type === 'mouseenter'){
+      container.style.cursor = "pointer";
+    } else {
+      container.style.cursor = "default";
+    }
+  }
 
   const handleUpdateMap = async () => {
     await supabase.from("Rooms").delete().eq("mapId", mapId);
@@ -304,13 +255,11 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
             </div>
             <div
               className="flex flex-col md:items-center relative"
-              ref={containerRef}
             >
               <Stage
                 width={(image?.width as number) * imageScale || 400}
                 height={640}
                 name="stage"
-                ref={stageRef}
                 onClick={(e) => handleFocus(e)}
                 onTap={(e) => handleFocus(e)}
                 id="createMapStage"
@@ -354,10 +303,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                         )
                       }
                       onMouseEnter={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "pointer";
+                        handleMouseEvent(e)
                         if (e.target.attrs.y === 50) {
                           setShowHelpText({
                             type: e.target.attrs.name,
@@ -366,10 +312,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                         }
                       }}
                       onMouseLeave={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "default";
+                        handleMouseEvent(e)
                         setShowHelpText(null);
                       }}
                     />
@@ -405,10 +348,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                         )
                       }
                       onMouseEnter={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "pointer";
+                        handleMouseEvent(e)
                         if (e.target.attrs.y === 50) {
                           setShowHelpText({
                             type: e.target.attrs.name,
@@ -417,15 +357,12 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                         }
                       }}
                       onMouseLeave={(e) => {
-                        const container = (
-                          e.target.getStage() as StageType
-                        ).container();
-                        container.style.cursor = "default";
+                        handleMouseEvent(e)
                         setShowHelpText(null);
                       }}
                     />
                   ))}
-                  {focus && (
+                  {focusElement && (
                     <Transformer
                       ref={trRef}
                       rotateEnabled={false}
@@ -441,7 +378,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                   )}
                 </Layer>
               </Stage>
-              {showPopup && <CreateMapPopup />}
+              {focusElement && <CreateMapPopup />}
               {showHelpText && (
                 <HelpTextPopup type={showHelpText.type} x={showHelpText.x} />
               )}

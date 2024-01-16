@@ -3,8 +3,6 @@
 import ActionCard from "@/components/ActionCard";
 import editfloormap from "../../edit-floor-map.jpg";
 import pen from "../../pen.jpg";
-import { useEffect, useState } from "react";
-import { supabase } from "@/components/EditCanvas";
 
 const Home = () => {
 

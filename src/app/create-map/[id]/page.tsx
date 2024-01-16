@@ -1,13 +1,15 @@
 "use client";
 import { MapContextProvider } from "@/contexts/MapContext";
+import { showPopup } from "@/utils/showPopup";
 import dynamic from "next/dynamic";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { SyntheticEvent } from "react";
 import { Toaster } from "react-hot-toast";
 
-const Canvas = dynamic(() => import("@/components/Canvas"), {
+const CreateMapCanvas = dynamic(() => import("@/components/CreateMapCanvas"), {
   ssr: false,
 });
+
 
 const CreateMap = () => {
   const path = usePathname();
@@ -15,11 +17,7 @@ const CreateMap = () => {
 
   const handleClick = (e: SyntheticEvent) => {
     if((e.target as HTMLElement).tagName.toLowerCase() !== 'canvas'){
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.add('popup-hidden')
-        popup.classList.remove('popup-visible')
-      }
+      showPopup(false)
     }
   }
 
@@ -52,7 +50,7 @@ const CreateMap = () => {
             <p>Drag and drop bookable rooms and desks onto your map</p>
           </div>
           <div id="bookingWrapper" className="flex flex-col">
-            <Canvas mapId={Number(id)}></Canvas>
+            <CreateMapCanvas mapId={Number(id)}></CreateMapCanvas>
           </div>
         </MapContextProvider>
       </div>

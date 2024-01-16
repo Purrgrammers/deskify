@@ -1,6 +1,5 @@
 "use client";
 import { createClient } from "@supabase/supabase-js";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
@@ -9,7 +8,6 @@ import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
