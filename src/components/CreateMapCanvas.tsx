@@ -27,7 +27,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const Canvas = ({ mapId }: { mapId: number }) => {
+const CreateMapCanvas = ({ mapId }: { mapId: number }) => {
   const { focusElement, updateFocusElement, updateFocusPosition } = useContext(MapContext);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
@@ -338,4 +338,4 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   );
 };
 
-export default Canvas;
+export default CreateMapCanvas;

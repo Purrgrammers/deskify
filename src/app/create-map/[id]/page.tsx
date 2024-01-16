@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { SyntheticEvent } from "react";
 import { Toaster } from "react-hot-toast";
 
-const Canvas = dynamic(() => import("@/components/Canvas"), {
+const CreateMapCanvas = dynamic(() => import("@/components/CreateMapCanvas"), {
   ssr: false,
 });
 
@@ -50,7 +50,7 @@ const CreateMap = () => {
             <p>Drag and drop bookable rooms and desks onto your map</p>
           </div>
           <div id="bookingWrapper" className="flex flex-col">
-            <Canvas mapId={Number(id)}></Canvas>
+            <CreateMapCanvas mapId={Number(id)}></CreateMapCanvas>
           </div>
         </MapContextProvider>
       </div>
