@@ -163,8 +163,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 name="stage"
                 id="bookDeskStage"
                 ref={stageRef}
-                onClick={(e) => handleFocus(e)}
-                onTap={(e) => handleFocus(e)}
+                onPointerClick={(e) => handleFocus(e)}
               >
                 <Layer>
                   <Image

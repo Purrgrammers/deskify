@@ -289,8 +289,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                 height={640}
                 name="stage"
                 ref={stageRef}
-                onClick={(e) => handleFocus(e)}
-                onTap={(e) => handleFocus(e)}
+                onPointerClick={(e) => handleFocus(e)}
                 id="createMapStage"
               >
                 <Layer>

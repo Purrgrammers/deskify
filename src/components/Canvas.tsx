@@ -207,8 +207,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
               id="createMapStage"
               width={(image?.width as number) * imageScale || 400}
               height={640}
-              onClick={(e) => handleFocus(e)}
-              onTap={(e) => handleFocus(e)}
+              onPointerClick={(e) => handleFocus(e)}
               ref={stageRef}
             >
               <Layer>
