@@ -73,7 +73,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     if (!image) {
       return;
     }
-      setImageScale(500 / image?.height);
+    setImageScale(500 / image?.height);
   }, [image]);
 
   const stageRef = useRef<StageType>(null);
@@ -183,10 +183,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                       x={room.x}
                       y={room.y - 120}
                       stroke={bookedRooms.includes(room.id) ? "#e53935" : "#43a047"}
-                      onClick={(e) =>
-                        handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
-                      }
-                      onTap={(e) =>
+                      onPointerClick={(e) =>
                         handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                       }
                       onMouseEnter={(e) => {
@@ -216,10 +213,7 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                       y={desk.y - 120}
                       stroke={bookedDesks.includes(desk.id) ? "#e53935" : "#43a047"}
                       fill="white"
-                      onClick={(e) =>
-                        handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
-                      }
-                      onTap={(e) =>
+                      onPointerClick={(e) =>
                         handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
                       }
                       onMouseEnter={(e) => {

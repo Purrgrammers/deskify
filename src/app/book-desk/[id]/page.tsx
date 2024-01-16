@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { MapContextProvider } from "@/contexts/MapContext";
 import { Toaster } from "react-hot-toast";
 import { usePathname } from "next/navigation";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent } from "react";
 
 const BookingCanvas = dynamic(() => import("@/components/BookingCanvas"), {
   ssr: false,

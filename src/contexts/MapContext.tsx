@@ -68,11 +68,6 @@ export type Booking = {
   date: Date
 };
 
-export type FacilityInfo = {
-  location: string;
-  floor: number;
-};
-
 export type Map = {
   id: number;
   location: string;

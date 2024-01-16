@@ -1,7 +1,7 @@
 "use client";
 import { MapContextProvider } from "@/contexts/MapContext";
 import dynamic from "next/dynamic";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { SyntheticEvent } from "react";
 import { Toaster } from "react-hot-toast";
 
