@@ -3,7 +3,7 @@
 const HelpTextPopup = ({type, x}: {type: string, x: number}) => {
     const canvas = document.querySelector('#createMapStage')
     const offsetLeft = (canvas as HTMLDivElement)?.offsetLeft
-    const offsetTop =  (canvas as HTMLDivElement)?.offsetTop
+    const offsetTop = (canvas as HTMLDivElement)?.offsetTop
 
   return (
     <div

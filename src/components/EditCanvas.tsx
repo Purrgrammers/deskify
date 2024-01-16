@@ -69,18 +69,15 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   }, []);
 
   useEffect(() => {
-    if (!image) {
-      return;
+    if (image) {
+      setImageScale(500 / image.height);
     }
-    setImageScale(500 / image?.height);
   }, [image]);
 
   useEffect(() => {
     if (focus) {
-      // @ts-expect-error just let me do it
+      // @ts-expect-error need to figure out type
       trRef.current?.nodes([focus.element]);
-      // @ts-expect-error just let me do it
-      trRef.current?.getLayer().batchDraw();
     }
     if (!focus) {
       setShowPopup(false);

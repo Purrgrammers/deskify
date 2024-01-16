@@ -14,12 +14,13 @@ import { useContext, useEffect, useState } from "react";
 import { supabase } from "./BookingCanvas";
 import { MapContext } from "@/contexts/MapContext";
 import { Label } from "./ui/label";
+import toast from "react-hot-toast";
 
 const DatePicker = () => {
   const today = new Date()
-  const [date, setDate] = useState<Date>(today);
+  // const [date, setDate] = useState<Date>(today);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const { updateBookings, updateDate, updateFocusElement } = useContext(MapContext);
+  const { date, updateBookings, updateDate, updateFocusElement } = useContext(MapContext);
 
   useEffect(() => {
     const getBookings = async () => {
@@ -27,16 +28,17 @@ const DatePicker = () => {
         return
       }
       const selectedDate = date?.toLocaleDateString("en-CA");
-      updateDate(date)
+      // updateDate(date)
       const { data, error } = await supabase
         .from("Bookings")
         .select()
         .eq("date", selectedDate);
-      if (error) {
-        console.log(error);
-        return;
+      if (data) {
+        updateBookings(data);
+      } else {
+        toast.error('Could not get bookings for this date')
+        console.log('Error getting bookings from database', error);
       }
-      updateBookings(data);
     };
     getBookings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +67,7 @@ const DatePicker = () => {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={(e) => { setDate(e as Date); setIsCalendarOpen(false); updateFocusElement(undefined)}}
+          onSelect={(e) => { updateDate(e as Date); setIsCalendarOpen(false); updateFocusElement(undefined)}}
           initialFocus
           disabled={(date) => date.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)}
         />

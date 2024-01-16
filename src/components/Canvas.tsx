@@ -1,7 +1,14 @@
 "use client";
 import { MapContext } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
-import { Stage, Layer, Rect, Transformer, Path, Image, useStrictMode } from "react-konva";
+import {
+  Stage,
+  Layer,
+  Rect,
+  Transformer,
+  Path,
+  Image
+} from "react-konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { Stage as StageType } from "konva/lib/Stage";
@@ -25,14 +32,15 @@ const Canvas = ({ mapId }: { mapId: number }) => {
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
-  const [showHelpText, setShowHelpText] = useState<{type: string, x: number} | null>(null);
+  const [showHelpText, setShowHelpText] = useState<{
+    type: string;
+    x: number;
+  } | null>(null);
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
-  useStrictMode(true);
   const router = useRouter();
-
-  const trRef = useRef<ShapeConfig>(null);
+  const trRef = useRef(null);
 
   useEffect(() => {
     const getImage = async () => {
@@ -42,6 +50,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
         .eq("id", mapId);
       if (data) {
         setBackgroundImage(data[0].img);
+      } else {
+        console.log("Error getting image from database", error);
+        toast.error("Could not get image");
       }
     };
     getImage();
@@ -50,20 +61,17 @@ const Canvas = ({ mapId }: { mapId: number }) => {
 
   useEffect(() => {
     if (focus) {
+      // @ts-expect-error need to figure out type
       trRef.current?.nodes([focus.element]);
-      trRef.current?.getLayer().batchDraw();
-    }
-    if (!focus) {
+    } else {
       setShowPopup(false);
-      
     }
   }, [focus]);
 
   useEffect(() => {
-    if (!image) {
-      return;
+    if (image) {
+      setImageScale(500 / image.height);
     }
-  setImageScale(500 / image?.height);
   }, [image]);
 
   const handleDraggedRoom = (target: Shape<ShapeConfig>, id: number) => {
@@ -78,9 +86,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     if (focus) {
       setShowPopup(true);
       updateFocusPosition(target.x(), target.y());
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
+      const popup = document.querySelector(".popup");
+      if (popup) {
+        popup.classList.remove("popup-hidden");
       }
     }
   };
@@ -91,8 +99,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       ...rooms[transformedElementIndex],
       scaleX: target.attrs.scaleX,
       scaleY: target.attrs.scaleY,
-      x: target.attrs.x,
-      y: target.attrs.y,
+      x: target.x(),
+      y: target.y(),
     };
     updateRooms(rooms);
     if (focus) {
@@ -112,9 +120,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     if (focus) {
       setShowPopup(true);
       updateFocusPosition(target.x(), target.y());
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
+      const popup = document.querySelector(".popup");
+      if (popup) {
+        popup.classList.remove("popup-hidden");
       }
     }
   };
@@ -125,8 +133,8 @@ const Canvas = ({ mapId }: { mapId: number }) => {
       ...desks[transformedElementIndex],
       scaleX: target.attrs.scaleX,
       scaleY: target.attrs.scaleY,
-      x: target.attrs.x,
-      y: target.attrs.y,
+      x: target.x(),
+      y: target.y(),
     };
     updateDesks(desks);
     if (focus) {
@@ -136,7 +144,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
 
   const handleDragStart = (target: Shape<ShapeConfig>) => {
     setShowPopup(false);
-    setShowHelpText(null)
+    setShowHelpText(null);
     if (target.attrs.name === "room") {
       addRoom();
     }
@@ -155,13 +163,12 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     ) {
       updateFocus(null);
       setShowPopup(false);
-
     } else {
       updateFocus(e.target as Shape<ShapeConfig>);
       setShowPopup(true);
-      const popup = document.querySelector('.popup')
-      if(popup) {
-        popup.classList.remove('popup-hidden')
+      const popup = document.querySelector(".popup");
+      if (popup) {
+        popup.classList.remove("popup-hidden");
       }
     }
   };
@@ -173,19 +180,16 @@ const Canvas = ({ mapId }: { mapId: number }) => {
     const deskData = desks
       .filter((desk) => desk.y !== 50)
       .map(({ id, ...keepAttrs }) => keepAttrs);
-
-    const { error: roomError } = await supabase.from("Rooms").insert(roomData);
-    if (roomError) {
-      console.log("roomerror", roomError);
-      return;
+      
+    try {
+      await supabase.from("Rooms").insert(roomData);
+      await supabase.from("Desks").insert(deskData);
+      toast.success("Your bookable map was created!");
+      router.push(`/book-desk/${mapId}`, { scroll: false });
+    } catch (error) {
+      console.log("Error creating map", error);
+      toast.error("Map could not be created");
     }
-    const { error: deskError } = await supabase.from("Desks").insert(deskData);
-    if (deskError) {
-      console.log("deskerror", deskError);
-      return;
-    }
-    toast.success("Your bookable map was created!");
-    router.push(`/book-desk/${mapId}`, { scroll: false });
   };
 
   return (
@@ -194,9 +198,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
         {!backgroundImage ? (
           <BeatLoader className="justify-center pt-56" color="#ccc" />
         ) : (
-          <div
-            className="flex flex-col relative md:items-center"
-          >
+          <div className="flex flex-col relative md:items-center">
             <Stage
               name="stage"
               id="createMapStage"
@@ -247,8 +249,11 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                         e.target.getStage() as StageType
                       ).container();
                       container.style.cursor = "pointer";
-                      if(e.target.attrs.y === 50){
-                        setShowHelpText({type: e.target.attrs.name, x: e.target.attrs.x})
+                      if (e.target.attrs.y === 50) {
+                        setShowHelpText({
+                          type: e.target.attrs.name,
+                          x: e.target.attrs.x,
+                        });
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -256,7 +261,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                         e.target.getStage() as StageType
                       ).container();
                       container.style.cursor = "default";
-                      setShowHelpText(null)
+                      setShowHelpText(null);
                     }}
                   />
                 ))}
@@ -295,9 +300,12 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                         e.target.getStage() as StageType
                       ).container();
                       container.style.cursor = "pointer";
-                      if(e.target.attrs.y === 50){
-                        setShowHelpText({type: e.target.attrs.name, x: e.target.attrs.x})
-                        console.log(e.target.attrs)
+                      if (e.target.attrs.y === 50) {
+                        setShowHelpText({
+                          type: e.target.attrs.name,
+                          x: e.target.attrs.x,
+                        });
+                        console.log(e.target.attrs);
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -305,7 +313,7 @@ const Canvas = ({ mapId }: { mapId: number }) => {
                         e.target.getStage() as StageType
                       ).container();
                       container.style.cursor = "default";
-                      setShowHelpText(null)
+                      setShowHelpText(null);
                     }}
                   />
                 ))}
@@ -326,7 +334,9 @@ const Canvas = ({ mapId }: { mapId: number }) => {
               </Layer>
             </Stage>
             {showPopup && <CreateMapPopup />}
-            {showHelpText && <HelpTextPopup type={showHelpText.type} x={showHelpText.x}/>}
+            {showHelpText && (
+              <HelpTextPopup type={showHelpText.type} x={showHelpText.x} />
+            )}
             <div className="m-4 flex gap-4 self-end px-10 pb-10">
               <Button variant="secondary" onClick={() => router.back()}>
                 Back

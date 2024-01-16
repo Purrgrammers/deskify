@@ -70,10 +70,9 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
   }, [bookings, focusElement]);
 
   useEffect(() => {
-    if (!image) {
-      return;
+    if (image) {
+      setImageScale(500 / image.height);
     }
-    setImageScale(500 / image?.height);
   }, [image]);
 
   const handleClickRoom = (target: Shape<ShapeConfig>, id: number) => {
