@@ -1,20 +1,20 @@
-import { MapContext } from "@/contexts/MapContext";
+import { FocusElementTransform, MapContext } from "@/contexts/MapContext";
 import { Pencil, Trash2 } from "lucide-react";
 import { useContext, useState } from "react";
 import RoomInfoForm from "./RoomInfoForm";
 
 const CreateMapPopup = () => {
-  const { deleteRoom, deleteDesk, focus, updateFocus } = useContext(MapContext);
+  const { deleteRoom, deleteDesk, focusElement, updateFocusElement } = useContext(MapContext);
   const [editMode, setEditMode] = useState(false);
 
   const handleDelete = () => {
-    if (focus?.element.attrs.name === "room") {
-      deleteRoom(Number(focus.element.attrs.id));
+    if ((focusElement as FocusElementTransform).element.attrs.name === "room") {
+      deleteRoom(Number((focusElement as FocusElementTransform).element.attrs.id));
     }
-    if (focus?.element.attrs.name === "desk") {
-      deleteDesk(Number(focus.element.attrs.id));
+    if ((focusElement as FocusElementTransform).element.attrs.name === "desk") {
+      deleteDesk(Number((focusElement as FocusElementTransform).element.attrs.id));
     }
-    updateFocus(null);
+    updateFocusElement(undefined);
   };
 
   const canvas = document.querySelector("#createMapStage");
@@ -27,8 +27,8 @@ const CreateMapPopup = () => {
     <div
       style={{
         position: "absolute",
-        top: (focus?.y || focus?.element.attrs.y) + offsetTop - 30,
-        left: (focus?.x || focus?.element.attrs.x) + offsetLeft,
+        top: ((focusElement as FocusElementTransform)?.y || (focusElement as FocusElementTransform)?.element.attrs.y) + offsetTop - 30,
+        left: ((focusElement as FocusElementTransform)?.x || (focusElement as FocusElementTransform)?.element.attrs.x) + offsetLeft,
         padding: "5px 5px",
         borderRadius: "3px",
         boxShadow: "0 0 3px grey",
@@ -41,12 +41,12 @@ const CreateMapPopup = () => {
       {editMode && (
         <RoomInfoForm
           quitEditMode={() => setEditMode(false)}
-          id={Number(focus?.element.attrs.id)}
+          id={Number((focusElement as FocusElementTransform)?.element.attrs.id)}
         />
       )}
       <div className="flex gap-2">
         <Trash2 size={16} className="trash-hover" onClick={handleDelete} />
-        {focus?.element.attrs.name === "room" && (
+        {(focusElement as FocusElementTransform)?.element.attrs.name === "room" && (
           <Pencil
             size={16}
             className="cursor-pointer hover:text-blue-800"

@@ -35,11 +35,10 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
     type: string;
     x: number;
   } | null>(null);
-  const { focus, updateFocus, updateFocusPosition } = useContext(MapContext);
+  const { focusElement, updateFocusElement, updateFocusPosition } = useContext(MapContext);
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const { updateFocusElement } = useContext(MapContext);
   const { rooms, updateRooms, addRoom, desks, updateDesks, addDesk } =
     useContext(MapContext);
 
@@ -75,14 +74,13 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
   }, [image]);
 
   useEffect(() => {
-    if (focus) {
+    if (focusElement) {
       // @ts-expect-error need to figure out type
-      trRef.current?.nodes([focus.element]);
-    }
-    if (!focus) {
+      trRef.current?.nodes([focusElement.element]);
+    } else {
       setShowPopup(false);
     }
-  }, [focus]);
+  }, [focusElement]);
 
   const handleFocus = (
     e: KonvaEventObject<MouseEvent> | KonvaEventObject<Event>
@@ -92,10 +90,11 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       e.target.attrs.name === "image" ||
       e.target.attrs.y === 50
     ) {
-      updateFocus(null);
+      updateFocusElement(undefined);
       setShowPopup(false);
     } else {
-      updateFocus(e.target as Shape<ShapeConfig>);
+      const newFocusElement = { ...focusElement, element: e.target as Shape<ShapeConfig>};
+      updateFocusElement(newFocusElement);
       setShowPopup(true);
       const popup = document.querySelector('.popup')
       if(popup) {
@@ -132,7 +131,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       mapId,
     };
     updateRooms(rooms);
-    if (focus) {
+    if (focusElement) {
       setShowPopup(true);
       const popup = document.querySelector('.popup')
       if(popup) {
@@ -152,7 +151,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       y: target.attrs.y,
     };
     updateRooms(rooms);
-    if (focus) {
+    if (focusElement) {
       updateFocusPosition(target.x(), target.y());
     }
   };
@@ -166,7 +165,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       mapId,
     };
     updateDesks(desks);
-    if (focus) {
+    if (focusElement) {
       setShowPopup(true);
       const popup = document.querySelector('.popup')
       if(popup) {
@@ -186,7 +185,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
       y: target.attrs.y,
     };
     updateDesks(desks);
-    if (focus) {
+    if (focusElement) {
       updateFocusPosition(target.x(), target.y());
     }
   };
@@ -273,7 +272,8 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                 width={(image?.width as number) * imageScale || 400}
                 height={640}
                 name="stage"
-                onPointerClick={(e) => handleFocus(e)}
+                onClick={(e) => handleFocus(e)}
+                onTap={(e) => handleFocus(e)}
                 id="createMapStage"
               >
                 <Layer>
@@ -374,7 +374,7 @@ const EditCanvas = ({ mapId }: { mapId: number }) => {
                       }}
                     />
                   ))}
-                  {focus && (
+                  {focusElement && (
                     <Transformer
                       ref={trRef}
                       rotateEnabled={false}

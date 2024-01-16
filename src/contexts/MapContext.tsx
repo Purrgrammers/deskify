@@ -27,10 +27,8 @@ type MapContextProps = {
   bookDesk: (id: number, mapId: number) => void;
   date: Date | undefined;
   updateDate: (date: Date) => void;
-  focusElement: FocusElement | undefined;
-  updateFocusElement: (element: FocusElement | undefined) => void;
-  focus: { element: Shape<ShapeConfig>; x?: number; y?: number } | null;
-  updateFocus: (element: Shape<ShapeConfig> | null) => void;
+  focusElement: FocusElementBook | FocusElementTransform | undefined;
+  updateFocusElement: (element: FocusElementBook | FocusElementTransform  | undefined) => void;
   updateFocusPosition: (x: number, y: number) => void;
   maps: Map[];
 };
@@ -74,7 +72,7 @@ export type Map = {
   floor: number;
 };
 
-type FocusElement = {
+export type FocusElementBook = {
   type: string;
   booked: boolean;
   id: number;
@@ -84,6 +82,12 @@ type FocusElement = {
   seats?: number;
   additionalInfo?: string;
 };
+
+export type FocusElementTransform = {
+  element: Shape<ShapeConfig>;
+  x?: number;
+  y?: number;
+}
 
 export const MapContext = createContext<MapContextProps>({
   rooms: [],
@@ -102,8 +106,6 @@ export const MapContext = createContext<MapContextProps>({
   updateDate: () => {},
   focusElement: undefined,
   updateFocusElement: () => {},
-  focus: null,
-  updateFocus: () => {},
   updateFocusPosition: () => {},
   maps: [{ id: 1, location: "", floor: 1 }],
 });
@@ -115,14 +117,9 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
   const [desks, setDesks] = useState<Desk[]>([
     { id: 1, x: 80, y: 50, width: 50, height: 50, scaleX: 1, scaleY: 1 },
   ]);
-  const [date, setDate] = useState<Date | undefined>();
+  const [date, setDate] = useState<Date>(new Date());
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [focusElement, setFocusElement] = useState<FocusElement | undefined>();
-  const [focus, setFocus] = useState<{
-    element: Shape<ShapeConfig>;
-    x?: number;
-    y?: number;
-  } | null>(null);
+  const [focusElement, setFocusElement] = useState<FocusElementBook | FocusElementTransform | undefined>();
   const [maps, setMaps] = useState<Map[]>([
     { id: 1, location: "Deskify HQ", floor: 1 },
   ]);
@@ -185,7 +182,8 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     setBookings(bookingData);
   };
 
-  const updateFocusElement = (element: FocusElement | undefined) => {
+  const updateFocusElement = (element: FocusElementBook | FocusElementTransform | undefined) => {
+    console.log(element)
     setFocusElement(element);
   };
 
@@ -243,19 +241,10 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
     setDesks(filteredDesks);
   };
 
-  const updateFocus = (element: Shape<ShapeConfig> | null) => {
-    if (element === null) {
-      setFocus(null);
-    } else {
-      const newFocus = { ...focus, element };
-      setFocus(newFocus);
-    }
-  };
-
   const updateFocusPosition = (x: number, y: number) => {
-    if (focus) {
-      const newFocus = { ...focus, x, y };
-      setFocus(newFocus);
+    if (focusElement) {
+      const newFocus = { ...focusElement, x, y };
+      setFocusElement(newFocus);
     }
   };
 
@@ -278,8 +267,6 @@ export const MapContextProvider = (props: MapContextProviderProps) => {
         updateDate,
         focusElement,
         updateFocusElement,
-        focus,
-        updateFocus,
         updateFocusPosition,
         maps,
       }}

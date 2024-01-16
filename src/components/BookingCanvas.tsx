@@ -1,6 +1,6 @@
 "use client";
 
-import { Desk, MapContext, Room } from "@/contexts/MapContext";
+import { Desk, FocusElementBook, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
 import { Layer, Path, Rect, Stage, Image } from "react-konva";
 import { KonvaEventObject } from "konva/lib/Node";
@@ -62,10 +62,10 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
 
     if (
       focusElement &&
-      (filteredDesks.includes(focusElement?.id as number) ||
-        filteredRooms.includes(focusElement?.id as number))
+      (filteredDesks.includes((focusElement as FocusElementBook)?.id as number) ||
+        filteredRooms.includes((focusElement as FocusElementBook)?.id as number))
     ) {
-      focusElement.booked = true;
+      (focusElement as FocusElementBook).booked = true;
     }
   }, [bookings, focusElement]);
 
@@ -141,7 +141,6 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
     }
   }
 
-
   return (
     <>
       <div className="flex flex-col">
@@ -168,7 +167,8 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                 height={500}
                 name="stage"
                 id="bookDeskStage"
-                onPointerClick={(e) => handleFocus(e)}
+                onClick={(e) => handleFocus(e)}
+                onTap={(e) => handleFocus(e)}
               >
                 <Layer>
                   <Image
@@ -189,7 +189,10 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                       x={room.x}
                       y={room.y - 120}
                       stroke={bookedRooms.includes(room.id) ? "#e53935" : "#43a047"}
-                      onPointerClick={(e) =>
+                      onClick={(e) =>
+                        handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
+                      }
+                      onTap={(e) =>
                         handleClickRoom(e.target as Shape<ShapeConfig>, room.id)
                       }
                       onMouseEnter={(e) => handleMouseEvent(e)}
@@ -210,7 +213,10 @@ const BookingMap = ({ mapId }: { mapId: number }) => {
                       y={desk.y - 120}
                       stroke={bookedDesks.includes(desk.id) ? "#e53935" : "#43a047"}
                       fill="white"
-                      onPointerClick={(e) =>
+                      onClick={(e) =>
+                        handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
+                      }
+                      onTap={(e) =>
                         handleClickDesk(e.target as Shape<ShapeConfig>, desk.id)
                       }
                       onMouseEnter={(e) => handleMouseEvent(e)}
