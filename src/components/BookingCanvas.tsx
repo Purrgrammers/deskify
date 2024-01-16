@@ -2,19 +2,18 @@
 
 import { Desk, FacilityInfo, MapContext, Room } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
-import { Shape, ShapeConfig } from "konva/lib/Shape";
-import { MouseEvent, useContext, useEffect, useRef, useState } from "react";
 import { Layer, Path, Rect, Stage, Image } from "react-konva";
-import DatePicker from "./DatePicker";
 import { KonvaEventObject } from "konva/lib/Node";
-import useImage from "use-image";
+import { Shape, ShapeConfig } from "konva/lib/Shape";
 import { Stage as StageType } from "konva/lib/Stage";
+import { MouseEvent, useContext, useEffect, useRef, useState } from "react";
+import DatePicker from "./DatePicker";
+import useImage from "use-image";
 import BookDeskPopup from "./BookDeskPopup";
 import { BeatLoader } from "react-spinners";
 import MapSelect from "./MapSelect";
 import FloorSelect from "./FloorSelect";
 import toast from "react-hot-toast";
-import { ImageError } from "next/dist/server/image-optimizer";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -35,41 +34,25 @@ const BookingMap = ({
   const [backgroundImage, setBackgroundImage] = useState("");
   const [image] = useImage(backgroundImage);
   const [imageScale, setImageScale] = useState(1);
-  const { bookings, focusElement, updateFocusElement, maps } = useContext(MapContext);
+  const { bookings, focusElement, updateFocusElement } = useContext(MapContext);
 
   useEffect(() => {
     const getMapData = async () => {
-      const { data: roomData, error: roomError } = await supabase
-        .from("Rooms")
-        .select()
-        .eq("mapId", mapId);
-      if (roomError) {
-        console.log('Error getting rooms from database', roomError)
-        toast.error('Could not get rooms')
-      }
-      const { data: deskData, error: deskError } = await supabase
-        .from("Desks")
-        .select()
-        .eq("mapId", mapId);
-      if (deskError) {
-        console.log('Error getting desks from database', deskError)
-        toast.error('Could not get desks')
-      }
-      const { data: mapData, error: mapError } = await supabase
+      const { data, error } = await supabase
         .from("Maps")
-        .select()
+        .select("*, Desks(*), Rooms(*)")
         .eq("id", mapId);
-      if (mapError) {
-        console.log('Error getting map from database', mapError)
-        toast.error('Could not get map')
+      if (error) {
+        console.log('Error getting map data from database', error)
+        toast.error('Could not get map data')
       }
-      setRooms(roomData as Room[]);
-      setDesks(deskData as Desk[]);
-      if (mapData) {
-        setBackgroundImage(mapData[0].img);
+      if (data) {
+        setRooms(data[0].Rooms as Room[]);
+        setDesks(data[0].Desks as Desk[]);
+        setBackgroundImage(data[0].img);
         getFacilityInfo({
-          location: mapData[0].location,
-          floor: mapData[0].floor,
+          location: data[0].location,
+          floor: data[0].floor,
         });
       }
     };

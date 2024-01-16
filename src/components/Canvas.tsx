@@ -1,14 +1,13 @@
 "use client";
 import { MapContext } from "@/contexts/MapContext";
 import { createClient } from "@supabase/supabase-js";
+import { Stage, Layer, Rect, Transformer, Path, Image, useStrictMode } from "react-konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Shape, ShapeConfig } from "konva/lib/Shape";
+import { Stage as StageType } from "konva/lib/Stage";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Stage, Layer, Rect, Transformer, Path, Image } from "react-konva";
-import { useStrictMode } from "react-konva";
 import { Button } from "./ui/button";
 import useImage from "use-image";
-import { Stage as StageType } from "konva/lib/Stage";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import CreateMapPopup from "./CreateMapPopup";
